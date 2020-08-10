@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace SAMPortal.Models
+{
+    public class DashboardViewModels
+    {
+    }
+
+    public class NewCrewRegistrationViewModel
+    {
+        public string Position { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public string Birthday { get; set; }
+        public string Contact { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string Nation { get; set; }
+        public string BirthPlace { get; set; }
+
+        public IEnumerable<NationDTO> Nations { get; set; }
+        public IEnumerable<RankDTO> Ranks { get; set; }
+    }
+
+    public class NationDTO
+    {
+        public string Name { get; set; }
+        public string Iso3 { get; set; }
+    }
+
+    public class RankDTO
+    {
+        public string Rank { get; set; }
+        public string Description { get; set; }
+        public string RankDesc { get; set; }
+    }
+
+    public class CrewViewModel
+    {
+        public IEnumerable<CrewDTO> ListOfCrews { get; set; }
+       
+    }
+
+    public class CrewDTO
+    {
+        public string Position { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string Birthday { get; set; }
+        public string Contact { get; set; }
+        public string Nation { get; set; }
+        public string BirthPlace { get; set; }
+    }
+}

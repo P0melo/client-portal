@@ -1,0 +1,292 @@
+﻿$(document).ready(function () {
+
+    //temp
+    var companyId = 116;
+    var year = 2018;
+    //
+
+    $.ajax({
+        url: '/SAMPortal/api/CourseBooking/GetCourseList',
+        dataType: 'json',
+        type: 'get',
+        data: { companyId: companyId, year: year },
+        success: function (result) {
+            var content = "";
+            var data = result;
+            //course_list_tbl_tbody
+
+            for (var i = 0; i < data.length; i++) {
+                content += "<tr id='" + data[i].SchedID + "'><td><a>" + data[i].CourseName + "</a></td><td>" + (data[i].CourseDuration == null ? "N/A" : data[i].CourseDuration) + "</td><td>" + data[i].DateFrom.split('T')[0] +
+                    "</td><td>" + data[i].Slots + " / " + data[i].MaxCapacity + "</td><td><span id='enroll_crew'><i class='fa fa-plus'></i></span></td></tr>";
+            }
+
+            $('#course_list_tbl_tbody').html(content);
+            $('#course_list_tbl').DataTable();
+        }
+    });
+
+    var myEnrollmentTable = "";
+    var myEnrolledCrewTable = "";
+    $(document).on('click', '#enroll_crew', function () {
+        //var schedId = $(this).parent().parent().attr('id');
+        var schedId = $(this).parent().parent().attr('id');
+        var numberOfEnrollees = 0;
+
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
+            dataType: 'json',
+            type: 'get',
+            data: { schedId: schedId },
+            success: function (result) {
+                numberOfEnrollees = result;
+                $('#enroll_modal .modal-title').html(schedId + " - Enroll Crew");
+                $('.modal-body #message').html('Number of enrollees from other company: ' + numberOfEnrollees);
+
+                getEnrolleesAndCrewList(schedId);
+            }
+        });
+
+        $('#enroll_modal').modal();
+
+    });
+
+    var swapEnrollmentTable = "";
+    var mnnoForSwap = "";
+    var rankForSwap = "";
+    $(document).on('click', '#swap_crew', function () {
+        
+        mnnoForSwap = $(this).parent().prev().prev().prev().prev().html();
+        rankForSwap = $(this).parent().prev().prev().prev().html();
+
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetCrewListForEnrollment',
+            dataType: 'json',
+            type: 'get',
+            success: function (result) {
+                if (swapEnrollmentTable !== "") {
+                    $('#swap_enrollees_tbl tbody').html();
+                    swapEnrollmentTable.destroy();
+                }
+
+                var content = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    content += "<tr id='" + result[i].MNNO + "'><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                        (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + result[i].Contact + "</td><td><span id='swap_this_crew'><i class='fa fa-user-plus'></i></span></td></tr>";
+                }
+
+                $('#swap_enrollees_tbl tbody').html(content);
+
+                swapEnrollmentTable = $('#swap_enrollees_tbl').DataTable({ pageLength: 5, lengthChange: false });
+
+                $('#swap_enrollees').modal();
+            }
+        });
+    });
+
+    var enrollThisCrewParameters = [];
+    $(document).on('click', '#enroll_this_crew', function () {
+        var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0];    
+        var mnno = $(this).parent().parent().attr('id');
+        var contactNo = $(this).parent().prev().html();
+        var rank = $(this).parent().prev().prev().prev().html();
+
+        var parameters = [];
+        parameters[0] = schedId;
+        parameters[1] = mnno;
+        parameters[2] = rank;
+
+        enrollThisCrewParameters = parameters;
+        //enrollThisCrew(enrollThisCrewParameters);
+        $('#enroll_this_crew_warning .modal-body p').html('Are you sure you want to enroll this crew?');
+        $('#enroll_this_crew_warning').modal();
+    });
+
+    $(document).on('click', '#enroll_this_crew_warning_yes', function () {
+        enrollThisCrew(enrollThisCrewParameters);
+    });
+
+    function enrollThisCrew(parameters) {
+        $.ajax({
+            url: '/SAMPortal/CourseBooking/EnrollThisCrew',
+            dataType: 'json',
+            type: 'post',
+            data: { parameters: parameters },
+            success: function (result) {
+                if (result.data === 1) {
+                    //temp
+                    $('#enroll_success .modal-body p').html('Crew is successfully enrolled.');
+                    $('#enroll_success').modal();
+                    getEnrolleesAndCrewList(parameters[0]);
+                } else {
+                    $('#enroll_warning .modal-body p').html('This crew is already enrolled in this schedule.');
+                    $('#enroll_warning').modal();
+                }
+            }
+        });
+    }
+
+    $(document).on('click', '#course_list_tbl tr td a', function () {
+        var schedId = $(this).parent().parent().attr('id');
+        var numberOfEnrollees = 0;
+
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
+            dataType: 'json',
+            type: 'get',
+            data: {schedId: schedId },
+            success: function (result) {
+                numberOfEnrollees = result;
+                $('.modal-body #message').html('Number of enrollees from other company: ' + numberOfEnrollees);
+                $.ajax({
+                    url: '/SAMPortal/api/CourseBooking/GetEnrollees',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { schedId: schedId },
+                    success: function (result) {
+                        var content = "";
+
+                        for (var i = 0; i < result.length; i++) {
+                            content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td></tr>";
+                        }
+
+                        $('#course_enrollee_tbl_body').html(content);
+                        $('#enrollees_modal').modal();
+                    }
+                });
+            }
+        });
+    });
+
+    var swapThisCrewParameters = [];
+    $(document).on('click', '#swap_this_crew', function () {
+
+        var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0];
+        var mnno = $(this).parent().parent().attr('id');
+        var contactNo = $(this).parent().prev().html();
+        var rank = $(this).parent().prev().prev().prev().html();
+
+        var parameters = [];
+        parameters[0] = schedId;
+        parameters[1] = mnno;
+        parameters[2] = rank;
+        parameters[3] = mnnoForSwap;
+        parameters[4] = rankForSwap;
+
+        swapThisCrewParameters = parameters;
+
+        $('#swap_this_crew_warning .modal-body p').html("Are you sure you want to swap this crew?");
+        $('#swap_this_crew_warning').modal();
+    });
+
+    $(document).on('click', '#swap_this_crew_warning_yes', function () {
+        swapThisCrew(swapThisCrewParameters);
+    });
+
+    function swapThisCrew(parameters) {
+
+        $.ajax({
+            url: '/SAMPortal/CourseBooking/EnrollThisCrew',
+            dataType: 'json',
+            type: 'post',
+            data: { parameters: parameters },
+            success: function (result) {
+                if (result.data === 1) {
+                    //temp
+                    $('#enroll_success .modal-body p').html('Crew is successfully swapped.');
+                    $('#enroll_success').modal();
+                    getEnrollees(schedId);
+                } else {
+                    $('#enroll_warning .modal-body p').html('This crew is already enrolled in this schedule.');
+                    $('#enroll_warning').modal();
+
+                }
+            }
+        });
+    }
+
+    function getEnrollees(schedId) {
+        var content1 = "";
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetEnrollees',
+            type: 'get',
+            dataType: 'json',
+            data: { schedId: schedId },
+            success: function (result) {
+
+                myEnrolledCrewTable.destroy();
+
+                for (var i = 0; i < result.length; i++) {
+                    content1 += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                        (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td><td><span id='swap_crew'><i class='fa fa-exchange'></i></span></td></tr>";
+                }
+
+
+                //$('#enrollees_modal').modal();
+                $('#enrolled_crews_tbl tbody').html(content1);
+
+                myEnrolledCrewTable = $('#enrolled_crews_tbl').DataTable({ pageLength: 5, lengthChange: false, info: false });
+
+                /*myEnrolledCrewTable =*/
+
+            }
+        });
+
+    }
+
+    function getEnrolleesAndCrewList(schedId) {
+        var content1 = "";
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetEnrollees',
+            type: 'get',
+            dataType: 'json',
+            data: { schedId: schedId },
+            success: function (result) {
+                if (myEnrolledCrewTable !== "") {
+                    $('#enrolled_crews_tbl tbody').html();
+                    myEnrolledCrewTable.destroy();
+                }
+
+                for (var i = 0; i < result.length; i++) {
+                    content1 += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                        (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td><td><span id='swap_crew'><i class='fa fa-exchange'></i></span></td></tr>";
+                }
+
+
+                //$('#enrollees_modal').modal();
+                $('#enrolled_crews_tbl tbody').html(content1);
+
+                myEnrolledCrewTable = $('#enrolled_crews_tbl').DataTable({ pageLength: 5, lengthChange: false, info: false });
+
+                /*myEnrolledCrewTable =*/
+
+            },
+            complete: function (result) {
+                $.ajax({
+                    url: '/SAMPortal/api/CourseBooking/GetCrewListForEnrollment',
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (result) {
+                        if (myEnrollmentTable !== "") {
+                            $('#enroll_crew_tbl tbody').html();
+                            myEnrollmentTable.destroy();
+                        }
+
+                        var content = "";
+
+                        for (var i = 0; i < result.length; i++) {
+                            content += "<tr id='" + result[i].MNNO + "'><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + result[i].Contact + "</td><td><span id='enroll_this_crew'><i class='fa fa-user-plus'></i></span></td></tr>";
+                        }
+
+                        $('#enroll_crew_tbl tbody').html(content);
+
+                        myEnrollmentTable = $('#enroll_crew_tbl').DataTable({ pageLength: 5, lengthChange: false });
+                    }
+                });
+            }
+        });
+    }
+
+});

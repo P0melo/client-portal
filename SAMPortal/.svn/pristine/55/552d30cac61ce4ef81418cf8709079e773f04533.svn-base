@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<configuration>
+
+  <system.web>
+    <compilation debug="true" targetFramework="4.6.1" />
+    <httpRuntime targetFramework="4.6.1" />
+  </system.web>
+  <hotelJen>
+    <add key="single" value="5700" />
+    <add key="double" value="6500" />
+  </hotelJen>
+  <diamondHoel>
+    <add key="single" value="5900" />
+    <add key="double" value="6500" />
+  </diamondHoel>
+</configuration>

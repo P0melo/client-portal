@@ -1,0 +1,313 @@
+﻿$(document).ready(function () {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $('#meal_reservation').daterangepicker();
+
+    $(document).on('click', '#meal_search_btn', function () {
+        var mnno = $('#mnno_input').val();
+        //var date = new Date();
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetCrewDetails',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#rank_input').val(position);
+                    $('#name_input').val(name);
+
+                    $('#crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+
+                    getMealProvisionLog(mnno);
+
+                }
+            }
+        });
+    });
+    var clickedReferenceId = "";
+    $(document).on('click', '#reference_id_btn', function () {
+        var reference_id = $(this).html();
+        clickedReferenceId = reference_id;
+        getMealsProvisionByReference(reference_id);
+
+    });
+
+    $(document).on('click', '#meal_log_edit_btn', function () {
+        var isDisabled = $(this).attr('disabled');
+        if (isDisabled != 'disabled') {
+            $(this).css('display', 'none');
+            $(this).siblings().css('display', 'inline');
+            $('.meal_log_edit').prop('disabled', true);
+            $('.meal_log_edit').css('color', 'gray');
+            //$('#meal_log_save_btn').css('display', 'inline');
+
+            var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input');
+            var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input');
+            var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input');
+            var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input');
+            var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input');
+
+            breakfast_cb_log.prop('disabled', false);
+            morning_snack_cb_log.prop('disabled', false);
+            lunch_cb_log.prop('disabled', false);
+            afternoon_cb_log.prop('disabled', false);
+            dinner_cb_log.prop('disabled', false);
+        }
+    });
+
+    $(document).on('click', '#meal_log_cancel_btn', function () {
+        $(this).css('display', 'none');
+        $(this).siblings('#meal_log_edit_btn').css('display', 'inline');
+        $(this).siblings('#meal_log_save_btn').css('display', 'none');
+        $('.meal_log_edit').prop('disabled', false);
+        $('.meal_log_edit').css('color', 'black');
+
+        var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input');
+        var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input');
+        var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input');
+        var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input');
+        var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input');
+
+        breakfast_cb_log.prop('disabled', true);
+        morning_snack_cb_log.prop('disabled', true);
+        lunch_cb_log.prop('disabled', true);
+        afternoon_cb_log.prop('disabled', true);
+        dinner_cb_log.prop('disabled', true);
+
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetMealsProvisionByReference',
+            type: 'get',
+            dataType: 'json',
+            data: { referenceId: clickedReferenceId },
+            success: function (result) {
+                var tableContent = "";
+                $('#meal_modal .modal-body #meal_log_tbl tbody').html();
+
+                for (var i = 0; i < result.length; i++) {
+                    var id = result[i].Id;
+                    var fromDate = result[i].FromDate;
+                    var toDate = result[i].ToDate;
+                    var breakfast = result[i].Breakfast;
+                    var morningSnack = result[i].MorningSnack;
+                    var lunch = result[i].Lunch;
+                    var afternoonSnack = result[i].AfternoonSnack;
+                    var dinner = result[i].Dinner;
+
+                    tableContent += "<tr><td id='" + id + "'>" + id + "</td><td>" + formatDate(fromDate) + "</td><td>" + formatDate(toDate) + "</td><td id='#breakfast'>" + RenderCheckBox(breakfast, fromDate) + "</td>" +
+                        "<td>" + RenderCheckBox(morningSnack, fromDate) + "</td><td>" + RenderCheckBox(lunch, fromDate) + "</td><td>" + RenderCheckBox(afternoonSnack, fromDate) + "</td><td>" +
+                        RenderCheckBox(dinner, fromDate) + "</td><td>" + result[i].Reason + "</td><td>" + renderEditButton(fromDate) +
+                        "<span id='meal_log_save_btn'><i class='fa fa-save'></i></span>&nbsp;<span id='meal_log_cancel_btn'><i class='fa fa-close'></i></span></td></tr>";
+                }
+                $('#meal_modal .modal-body p').html('Note: You are not allowed to edit a record within 3 days before the start of the meal');
+                $('#meal_modal .modal-body #meal_log_tbl tbody').html(tableContent);
+            }
+        });
+
+    });
+
+    $(document).on('click', '#meal_log_save_btn', function () {
+        var id = $(this).closest('tr').find('td').html();
+
+        var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input').is(':checked');
+        var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input').is(':checked');
+        var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input').is(':checked');
+        var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input').is(':checked');
+        var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input').is(':checked');
+
+        var parameters = [id, breakfast_cb_log, morning_snack_cb_log, lunch_cb_log, afternoon_cb_log, dinner_cb_log];
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveMealLogEdit',
+            type: 'post',
+            dataType: 'json',
+            data: { parameters: parameters }
+        });
+
+        $(this).css('display', 'none');
+        $(this).siblings('#meal_log_edit_btn').css('display', 'inline');
+        $(this).siblings('#meal_log_cancel_btn').css('display', 'none');
+        $('.meal_log_edit').prop('disabled', false);
+        $('.meal_log_edit').css('color', 'black');
+
+        $(this).closest('tr').find(':nth-child(4) input').prop('disabled', true);
+        $(this).closest('tr').find(':nth-child(5) input').prop('disabled', true);
+        $(this).closest('tr').find(':nth-child(6) input').prop('disabled', true);
+        $(this).closest('tr').find(':nth-child(7) input').prop('disabled', true);
+        $(this).closest('tr').find(':nth-child(8) input').prop('disabled', true);
+
+    });
+
+    var saveMealProvistionParameter = [];
+    $(document).on('click', '#save_meal_btn', function (e) {
+        var mnno = $('#mnno_input').val();
+        var rank = $('#rank_input').val();
+        var name = $('#name_input').val();
+        var date = $('#meal_reservation').val();
+        var breakfast_cb = $('#breakfast_cb').prop('checked');
+        var am_snack_cb = $('#am_snack_cb').prop('checked');
+        var lunch_cb = $('#lunch_cb').prop('checked');
+        var pm_snack_cb = $('#pm_snack_cb').prop('checked');
+        var dinner_cb = $('#dinner_cb').prop('checked');
+        var reason = $('#reason_input').val();
+
+        var dateDiff = getDateDiff(date);
+
+        if (dateDiff > 30) {
+            $('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
+            $('.modal-warning').modal();
+        } else {
+            if (mnno === "" || rank === "" || name === "" || reason.trim() === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
+                $('#meal_err_msg').css('display', 'block');
+            } else {
+                $('#meal_err_msg').css('display', 'none');
+                saveMealProvistionParameter = [mnno, rank, name, date, reason, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
+
+                $('#modal_warning_meal .modal-body p').html("Are you sure you want to submit?");
+                $('#modal_warning_meal').modal();
+            }
+        }
+
+    });
+
+    $(document).on('click', '#modal_warning_meal_yes', function () {
+        saveMealProvision(saveMealProvistionParameter);
+    });
+
+    function saveMealProvision(saveMealProvistionParameter) {
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveMealProvision',
+            type: 'post',
+            dataType: 'json',
+            data: { parameters: saveMealProvistionParameter },
+            success: function (result) {
+                if (result.data == 1) {
+                    $('.modal-success .modal-body p').html("Meal Request Successful!");
+                    $('.modal-success').modal();
+                }
+
+                getMealProvisionLog(saveMealProvistionParameter[0]/*mnno*/);
+            }
+        });
+    }
+
+    function getMealsProvisionByReference(reference_id) {
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetMealsProvisionByReference',
+            type: 'get',
+            dataType: 'json',
+            data: { referenceId: reference_id },
+            success: function (result) {
+                var tableContent = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    var id = result[i].Id;
+                    var fromDate = result[i].FromDate;
+                    var toDate = result[i].ToDate;
+                    var breakfast = result[i].Breakfast;
+                    var morningSnack = result[i].MorningSnack;
+                    var lunch = result[i].Lunch;
+                    var afternoonSnack = result[i].AfternoonSnack;
+                    var dinner = result[i].Dinner;
+
+                    tableContent += "<tr><td id='" + id + "'>" + id + "</td><td>" + formatDate(fromDate) + "</td><td>" + formatDate(toDate) + "</td><td id='#breakfast'>" + RenderCheckBox(breakfast, fromDate) + "</td>" +
+                        "<td>" + RenderCheckBox(morningSnack, fromDate) + "</td><td>" + RenderCheckBox(lunch, fromDate) + "</td><td>" + RenderCheckBox(afternoonSnack, fromDate) + "</td><td>" +
+                        RenderCheckBox(dinner, fromDate) + "</td><td>" + result[i].Reason + "</td><td>" + renderEditButton(fromDate) +
+                        "<span id='meal_log_save_btn'><i class='fa fa-save'></i></span>&nbsp;<span id='meal_log_cancel_btn'><i class='fa fa-close'></i></span></td></tr>";
+                }
+                $('#meal_modal .modal-body p').html('Note: You are not allowed to edit a record within 3 days before the start of the meal');
+                $('#meal_modal .modal-body #meal_log_tbl tbody').html(tableContent);
+                $('#meal_modal').modal();
+            }
+        });
+    }
+
+
+    function renderEditButton(fromDate) {
+        var dateToday = new Date();
+        dateToday.setHours(0);
+        dateToday.setMinutes(0);
+        dateToday.setSeconds(0);
+        var fDate = new Date(fromDate);
+
+        var dateDiff = fDate - dateToday;
+        var intDiff = Math.round(dateDiff / (1000 * 60 * 60 * 24));
+
+        if (intDiff > 3) {
+            return "<span id='meal_log_edit_btn' class='meal_log_edit'><i class='fa fa-edit'></i></span>";
+        } else {
+            return "<span id='meal_log_edit_btn' class='meal_log_edit' disabled><i class='fa fa-edit'></i></span>";
+        }
+    }
+
+    function RenderCheckBox(checked) {
+        var checkedValue = "";
+        if (checked == 1) {
+            checkedValue = "checked";
+        }
+
+        return "<input type='checkbox' " + checkedValue + " disabled='true'/>";
+    }
+
+    function getDateDiff(date) {
+        var splitDate = date.split(' - ');
+
+        var newDateFrom = new Date(splitDate[0]);
+        var newDateTo = new Date(splitDate[1]);
+
+        var dateDifference = new Date(newDateTo - newDateFrom);
+        var intDifference = Math.round((dateDifference / (1000 * 60 * 60 * 24)));
+        return intDifference;
+    }
+
+
+    function formatDate(data, redirect) {
+
+        if (data == null) {
+            return "";
+        }
+
+        if (redirect) {
+            return data.replace(/\//g, "-");
+        }
+
+        var result = data.replace(/[^0-9 +]/g, '');
+
+        var date = new Date(data);
+
+        return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+    }
+
+    function getMealProvisionLog(mnno) {
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetMealProvisionLog',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                var content = "";
+                for (var i = 0; i < result.length; i++) {
+                    content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + formatDate(result[i].FromDate) + "</td><td id='toDate'>" + formatDate(result[i].ToDate) +
+                        "<td id='reason'>" + result[i].Reason + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
+                }
+
+                $("#meal_tbl tbody").html(content);
+                $('#meal_tbl_div').css('display', 'block');
+            }
+        });
+    }
+
+});

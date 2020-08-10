@@ -1,0 +1,5 @@
+﻿@model SAMPortal.Models.LinkModel
+
+    <textarea id="register_lnk" class="form-control col-xs-12">@Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery,string.Empty)/SAMPortal/Account/Register/@Model.link</textarea>
+    
+    <p class="form-group"><span>Note: The link provided above will expire in 24 hours</span></p>

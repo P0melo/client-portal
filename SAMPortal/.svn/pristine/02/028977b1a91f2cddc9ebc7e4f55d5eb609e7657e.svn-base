@@ -1,0 +1,101 @@
+﻿using MySql.Data.MySqlClient;
+using SAMPortal.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SAMPortal.Controllers
+{
+    [Authorize]
+    public class CourseBookingController : Controller
+    {
+        private officecadetprogramEntities _context;
+        private dbidentityEntities _usercontext;
+        private Logging logging;
+
+        public CourseBookingController()
+        {
+            _context = new officecadetprogramEntities();
+            _usercontext = new dbidentityEntities();
+            logging = new Logging();
+        }
+
+        public ActionResult CourseList()
+        {
+            return View();
+        }
+
+        public ActionResult EnrollThisCrew(params string[] parameters /*string mnno, string rank, string schedId, string action*/ )
+        {
+            int flag = 0;
+
+            var user = User.Identity.Name;
+
+            var userDetail = _usercontext.users.Where(m => m.Email == user).Select(m => new{ m.CompanyId, m.CompanyName, m.Id}).FirstOrDefault();
+
+            int groupId = 0;
+
+            if (userDetail.CompanyName.ToString().Contains("TEEKAY") || userDetail.CompanyName.ToString().Contains("Teekay") || userDetail.CompanyName.ToString().Contains("TeeKay"))
+            {
+                groupId = 31;
+            }
+            else
+            {
+                groupId = 30;
+            }
+
+            var data = _context.Database.SqlQuery<CourseEnrollees>("select sd.MNNO, c.Rank, c.LName, c.FName, c.MName, c.ContactNo as Contact, c.Employer from tblscheddata sd " +
+                "join tblcrew c on sd.MNNo = c.MNNo where SchedID = " + parameters[0] + " and c.MNNo = '" + parameters[1] + "'").ToList();
+
+            if (data.Count == 0) //check if crew is already enrolled 
+            {
+                if (parameters.Length == 3)
+                {
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tblscheddata (SchedId, MNNo, GroupId, Scheduler_no, DateScheduled, Employer, BatchNo, CrewRank)" +
+                                                " VALUE(@schedid, @mnno, @groupid, @schedulerno, @datescheduled, @employer, @batchno, @crewrank)",
+                                                new MySqlParameter("@schedid", parameters[0]),
+                                                new MySqlParameter("@mnno", parameters[1]),
+                                                new MySqlParameter("@groupid", groupId),
+                                                new MySqlParameter("@schedulerno", userDetail.Id),
+                                                new MySqlParameter("@datescheduled", DateTime.Now),
+                                                new MySqlParameter("@employer", userDetail.CompanyId),
+                                                new MySqlParameter("@batchno", 141),
+                                                new MySqlParameter("@crewrank", parameters[2])); //always 141 because external
+
+                    //for logging
+                    string[] logparameters = { "schedid:"+parameters[0], "mnno:"+parameters[1], "groupid:"+groupId, "schedulerno:" + userDetail.Id, "datescheduled:" + DateTime.Now,
+                                                "employer:" + userDetail.CompanyId, "batchno:" + 141, "crewrank:" + parameters[2] };
+                    string logdata = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "EnrollThisCrew", logdata);
+                }
+                else if (parameters.Length > 3)
+                {
+                    _context.Database.ExecuteSqlCommand("UPDATE tblscheddata SET MNNo = @mnno, DateScheduled = @datescheduled, CrewRank = @crewrank " +
+                        "WHERE MNNo = @mnnoforswap and CrewRank = @rankforswap and SchedId = @schedid",
+                        new MySqlParameter("@schedid", parameters[0]),
+                        new MySqlParameter("@mnno", parameters[1]),
+                        new MySqlParameter("@crewrank", parameters[2]),
+                        new MySqlParameter("@mnnoforswap", parameters[3]),
+                        new MySqlParameter("@rankforswap", parameters[4]),
+                        new MySqlParameter("@datescheduled", DateTime.Now));
+
+                    //for logging
+                    string[] logparameters = { "schedid:" + parameters[0], "mnno:" + parameters[1], "crewrank:" + parameters[2], "mnnoforswap:" + parameters[3], "rankforswap:" + parameters[4],
+                                               "datescheduled:" + DateTime.Now };
+                    string logdata = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "EnrollThisCrew", logdata);
+                }
+                
+
+                flag = 1;
+            }
+
+            var jsonResult = Json(new { data = flag },
+                             JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+    }
+}

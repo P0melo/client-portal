@@ -1,0 +1,37 @@
+﻿@using AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+    @Html.AntiForgeryToken()
+    }
+
+        <li class="dropdown user user-menu">
+
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+                <span class="hidden-xs"><i class="fa fa-user">&nbsp;</i>@User.Identity.Name</span>
+
+            </a>
+            <ul class="dropdown-menu">
+                <li class="user-body"><a href="@Url.Action("Index", "Manage")"><i class="fa fa-cog"></i> <span>Manage your account</span></a></li>
+                <li class="user-footer">
+                    <div class="pull-right">
+                        <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+
+        <!-- Control Sidebar Toggle Button -->
+        @*<li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+        </li>*@
+}
+else
+{
+   @*<li class="hidden-xs">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+   <li class="hidden-xs">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+}

@@ -1,0 +1,46 @@
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Web.Mvc;
+
+namespace SAMPortal
+{
+    public class Logging: Controller
+    {
+        private officecadetprogramEntities _context;
+        public Logging()
+        {
+            _context = new officecadetprogramEntities();
+        }
+
+        public string ConvertToLoggingParameter(string[] data)
+        {
+            string convertedData = "";
+
+            for (var i = 0; i <= data.Length; i++)
+            {
+                if (i == data.Length)
+                {
+                    return convertedData;
+                }
+                else
+                {
+                    convertedData += data[i] + "|";
+                }
+            }
+
+            return "";
+        }
+
+        public void Log(string user, string logEvent, string data) 
+        {
+            _context.Database.ExecuteSqlCommand("INSERT INTO tblsamportallogs (Event, Description, User, Timestamp) VALUES(@event, @description, @user, @timestamp)",
+                new MySqlParameter("event", logEvent),
+                new MySqlParameter("description", data),
+                new MySqlParameter("user", user),
+                new MySqlParameter("timestamp", DateTime.Now)
+            );
+
+        }
+
+    }
+}

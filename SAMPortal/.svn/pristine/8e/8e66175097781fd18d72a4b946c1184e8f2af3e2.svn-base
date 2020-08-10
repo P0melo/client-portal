@@ -1,0 +1,379 @@
+﻿/*body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}*/
+
+/* Set padding to keep content from hitting the edges */
+/*.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}*/
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+/*.dl-horizontal dt {
+    white-space: normal;
+}*/
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+/*UMTC Logo*/
+.umtc-logo {
+    height: 55px;
+    margin-left: -16px;
+    width: 100%;
+}
+
+.umtc-logo-circle {
+    width: 100%;
+    max-width: 40px;
+    height: auto;
+}
+
+.bg1, .bg2, .bg3, .bg4, .bg5 {
+    /* The image used */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#home_banner {
+    /*background-image: url('../Content/images/05.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: absolute;*/
+    height: 100%;
+}
+
+/*@media screen and (max-width: 1080px){
+    #home_banner{
+        padding-top: 300px;
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}*/
+
+/*#box-content {
+    font-size: 24px;
+    padding: 18px;
+}*/
+
+@media screen and (max-width: 1024px) {
+    #home_banner {
+        padding-top: 100px;
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #home_banner {
+        padding-top: 64px;
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    #home_banner {
+        padding-top: 64px;
+        height: 100%;
+    }
+}
+
+/*@media screen and (max-height: 568px){
+    #box-content {
+        font-size: 18px;
+    }
+}*/
+
+@media screen and (min-width: 1025px) {
+    #home_banner {
+        padding: 100px;
+        padding-top: 50px;
+    }
+}
+
+#home_nav {
+    background-color: red;
+    margin: 0;
+    border-radius: 0;
+    height: 50px;
+}
+
+#home_footer {
+    background-image: url('../Content/images/cloud_and_waves.jpg');
+    margin: 0;
+    border-radius: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    height: 150px;
+    padding: 15px;
+    color: #0077b3;
+}
+
+    #home_footer h4 {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    #home_footer p {
+        margin-bottom: 0;
+    }
+
+#company_logo {
+    width: 200px;
+    height: auto;
+}
+
+.main_content {
+    height: 100%;
+}
+
+#dashboard_btn {
+    padding-top: 100px;
+    text-align: center;
+}
+
+    #dashboard_btn a {
+        padding: 20px;
+        font-size: 24px;
+    }
+
+/*select.form-control + .chosen-container.chosen-container-single .chosen-single {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: grey;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-image: none;
+}
+
+select.form-control + .chosen-container.chosen-container-single .chosen-single div {
+    top: 4px;
+    color: #000;
+}
+
+select.form-control + .chosen-container .chosen-drop {
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+    margin: 2px 0 0;
+}
+
+select.form-control + .chosen-container .chosen-search input[type=text] {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    background-image: none;
+}
+
+select.form-control + .chosen-container .chosen-results {
+    margin: 2px 0 0;
+    padding: 5px 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #fff;
+    margin-bottom: 5px;
+}
+
+select.form-control + .chosen-container .chosen-results li,
+select.form-control + .chosen-container .chosen-results li.active-result {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333;
+    white-space: nowrap;
+    background-image: none;
+}
+
+select.form-control + .chosen-container .chosen-results li:hover,
+select.form-control + .chosen-container .chosen-results li.active-result:hover,
+select.form-control + .chosen-container .chosen-results li.highlighted {
+    color: #FFF;
+    text-decoration: none;
+    background-color: #428BCA;
+    background-image: none;
+}
+
+select.form-control + .chosen-container-multi .chosen-choices {
+    display: block;
+    width: 100%;
+    min-height: 34px;
+    padding: 6px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    background-image: none;
+}
+
+select.form-control + .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    height: auto;
+    padding: 5px 0;
+}
+
+select.form-control + .chosen-container-multi .chosen-choices li.search-choice {
+    background-image: none;
+    padding: 3px 24px 3px 5px;
+    margin: 0 6px 0 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    background-color: #FFF;
+    border-color: #CCC;
+}
+
+select.form-control + .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+    top: 8px;
+    right: 6px;
+}
+
+select.form-control + .chosen-container-multi.chosen-container-active .chosen-choices,
+select.form-control + .chosen-container.chosen-container-single.chosen-container-active .chosen-single,
+select.form-control + .chosen-container .chosen-search input[type=text]:focus {
+    border-color: #66AFE9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+select.form-control + .chosen-container-multi .chosen-results li.result-selected {
+    display: list-item;
+    color: #ccc;
+    cursor: default;
+    background-color: white;
+}*/
+
+#meal_tbl_div {
+    display: none;
+}
+
+#meal_tbl tr td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#meal_tbl thead {
+    font-weight: bolder;
+}
+
+#reference_id_btn {
+    text-decoration: underline;
+}
+
+#meal_log_edit_btn:hover, #meal_log_cancel_btn:hover, #meal_log_save_btn:hover, #reference_id_btn:hover {
+    cursor: pointer;
+}
+
+#meal_modal .modal-content{
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+#meal_log_cancel_btn, #meal_log_save_btn {
+    display: none;
+}
+
+#meal_log_tbl tr td, #meal_log_tbl thead th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#meal_modal .modal-body p {
+    font-size: smaller;
+}
+
+#accomodation_err_msg{
+    display: none;
+}
+
+#save_meal_btn {
+    margin-top: 5px;
+}
+
+#save_accomodation_btn, #view_accomodation_btn, #view_rates_btn, #save_off_site_btn, #off_site_rates_and_inclusions_btn {
+    margin: 5px;
+}
+
+pre{
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+}
+
+#rates_and_inclusion_tbl th, #rates_and_inclusion_tbl td, #off_site_rates_and_inclusion_tbl th, 
+#off_site_rates_and_inclusion_tbl td, #transportation_rates_tbl th, #transportation_rates_tbl td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#off_site_rates_and_inclusions_modal .modal-body p {
+    margin: 10px;
+    font-size: smaller;
+}
+
+#off_site_modal_form {
+    text-align: center;
+}
+
+#off_site_accommodation_save_btn, #save_transportation_btn {
+    margin-left: 10px;
+}

@@ -1,0 +1,102 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+    //===set breadcrumbs
+    $('.content-header h1').html("On Site Accommodation");
+    $('.content-header ol #home_lnk').html('<a href="/SAMPortal/"><i class="fa fa-home"></i> Home</a>');
+    $('.content-header ol #current_page').html("Accommodation");
+    //===
+    $('#accomodation_date').daterangepicker();
+
+    $(document).on('click', '#accomodation_search_btn', function () {
+        var mnno = $('#accomodation_mnno_input').val();
+        getCrewDetails(mnno, 'accomodation');
+    });
+
+    $(document).on('click', '#view_accomodation_btn', function () {
+        $('#rooms_modal').modal();
+    });
+
+    $(document).on('click', '#view_rates_btn', function () {
+        $('#rates_and_inclusions_modal').modal();
+    });
+
+    var saveAccommodationParameters = [];
+    $(document).on('click', '#save_accomodation_btn', function () {
+        var mnno = $('#accomodation_mnno_input').val();
+        var rank = $('#accomodation_rank_input').val();
+        var name = $('#accomodation_name_input').val();
+        var date = $('#accomodation_date').val();
+        var reservation_type = $('#reservation_type option:selected').val();
+        var room_type = $('#room_type option:selected').val();
+        var payment = $('#mode_of_payment option:selected').val();
+        var reason = $('#accomodation_reason option:selected').val();
+        var remarks = $('#accomodation_remarks_input').val();
+
+        if (mnno === "" || rank === "" || name === "" || remarks.trim() === "") {
+            $('#accomodation_err_msg').css('display', 'block');
+        } else {
+
+            $('#modal_warning_accommodation_submit .modal-body p').html("Are you sure you want to submit?");
+            $('#modal_warning_accommodation_submit').modal();
+
+            $('#accomodation_err_msg').css('display', 'none');
+
+            saveAccommodationParameters = [mnno, rank, name, date, reservation_type, payment, reason, remarks, room_type];
+            //saveAccomodation(saveAccommodationParameters);
+        }
+
+    });
+
+    $(document).on('click', '#modal_warning_accommodation_submit_yes', function () {
+        saveAccomodation(saveAccommodationParameters);
+    });
+
+    function saveAccomodation(parameters) {
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveAccomodation',
+            type: 'post',
+            dataType: 'json',
+            data: { parameters: parameters },
+            success: function (result) {
+                if (result.data === 1) {
+                    $('.modal-success .modal-body p').html("Accommodation Request Successful!");
+                    $('.modal-success').modal();
+                }
+
+            }
+        });
+    }
+
+    $('.modal-success').on('hidden.bs.modal', function () {
+        window.location.reload();
+    });
+
+    function getCrewDetails(mnno, htmlId) {
+
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetCrewDetails',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#' + htmlId + '_rank_input').val(position);
+                    $('#' + htmlId + '_name_input').val(name);
+
+                    $('#' + htmlId + '_crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#' + htmlId + '_crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+                }
+            }
+        });
+    }
+});

@@ -1,0 +1,22 @@
+﻿
+@*@model SAMPortal.Models.OffSiteAccommodationStatusViewModel*@
+
+<table id="review_transportation_tbl" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Mnno</th>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Vehicle</th>
+            <th>Date Booked</th>
+            <th>Date</th>
+            <th>View</th>
+        </tr>
+    </thead>
+    <tbody id="review_transportation_tbl_body"></tbody>
+</table>
+
+@section Scripts{
+
+}

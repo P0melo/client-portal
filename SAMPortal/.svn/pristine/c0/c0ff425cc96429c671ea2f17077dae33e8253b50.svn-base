@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pad margin no-print">
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+
+        <h3><i class="fa fa-edit"></i> &nbsp;Forms</h3>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title col-xs-12">Crew List</h3>
+                        <div class="box-tools pull-right">
+                            <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                        </div>
+                    </div>
+                    <div id="crew_list" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title col-xs-12">New Crew Registration</h3>
+                        <div class="box-tools pull-right">
+                            <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                        </div>
+                    </div>
+                    <div id="new_crew_registration" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title col-xs-12">Meals</h3>
+                        <div class="box-tools pull-right">
+                            <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                        </div>
+                    </div>
+                    <div id="meals" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title col-xs-12">Accomodation</h3>
+                        <div class="box-tools pull-right">
+                            <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                        </div>
+                    </div>
+                    <div id="accomodation" class="box-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.StatusMessage</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/dashboard.js"></script>
+    @if (ViewBag.StatusMessage != "")
+    {
+        <script>
+            $('.modal').modal();
+        </script>
+    }
+}
+

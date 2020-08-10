@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using MySql.Data.MySqlClient;
+using SAMPortal.DTO;
+using SAMPortal.Models;
+
+namespace SAMPortal.Controllers
+{
+    public class AdministrationController : Controller
+    {
+        private officecadetprogramEntities _cadetContext;
+        private dbidentityEntities _context;
+
+        public AdministrationController()
+        {
+            _context = new dbidentityEntities();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize(Roles="Administrator")]
+        public ActionResult RegisteredAccounts()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult GenerateLink()
+        {
+            _cadetContext = new officecadetprogramEntities();
+
+            var result = _cadetContext.tbltpcompanies.Select(m => new Company{ CompanyId = m.companyID, CompanyName = m.companyName}).ToList();
+
+            var ListOfCompanies = new Companies
+            {
+                ListOfCompanies = result
+            };
+
+            return View(ListOfCompanies);
+        }
+
+        public ActionResult GetRegisteredAccountsForReview()
+        {
+            var result = _context.users.Where(m => m.LockoutEnabled == true && m.EmailConfirmed == true).Select(m => new ReviewAccounts { Email = m.Email, Name = m.FirstName + " " + m.LastName, Company = m.CompanyName, CompanyId = m.CompanyId }).ToList();
+
+            var jsonResult = Json(new { data = result },
+                  JsonRequestBehavior.AllowGet);
+            for (var i = 0; i < 1000000; i++)
+            {
+                //for Pace test
+            }
+
+            return jsonResult;
+        }
+
+        public ActionResult ReviewAction(string email, int action)
+        {
+            var data = 0;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("UPDATE users SET LockoutEnabled = "+action+" WHERE email=@email",
+                            new MySqlParameter("email", email));
+
+                    data = 1;
+                }
+                catch(Exception)
+                {
+                    data = 0;
+                }
+            }
+
+            var jsonResult = Json(new { data },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult Partial(int id)
+        {
+
+            var data = id;
+
+            var giud = Int2Guid(data);
+
+            var ticks = DateTime.Now.Ticks;
+
+            var result = new LinkModel
+            {
+                link = giud + "/" + ticks
+            };
+
+            return PartialView("_Link", result );
+        }
+
+        public ActionResult GetLink(Companies model)
+        {
+            
+            var data = model.ListId;
+
+            var giud = Int2Guid(data);
+
+            var ticks = DateTime.Now.Ticks;
+
+            var result = new LinkModel
+            {
+                link = giud + "/" + ticks
+            };
+            return PartialView("_Link", result);
+        }
+
+        public static Guid Int2Guid(int value)
+        {
+            byte[] bytes = new byte[16];
+            BitConverter.GetBytes(value + 66826682).CopyTo(bytes,4);
+            return new Guid(bytes);
+        }
+
+        public ActionResult GetPartialOfGenerateLink()
+        {
+            _cadetContext = new officecadetprogramEntities();
+
+            var result = _cadetContext.tbltpcompanies.Select(m => new Company { CompanyId = m.companyID, CompanyName = m.companyName }).ToList();
+
+            var ListOfCompanies = new Companies
+            {
+                ListOfCompanies = result
+            };
+
+            return PartialView("_GenerateLink", ListOfCompanies);
+        }
+
+        public ActionResult GetPartialOfReviewRegisteredAccounts()
+        {
+
+            return PartialView("_RegisteredAccounts");
+        }
+    }
+
+}

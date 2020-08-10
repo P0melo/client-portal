@@ -1,0 +1,214 @@
+﻿@*@using SAMPortal.Models
+    @model NewCrewRegistrationViewModel*@
+
+@*@using (Html.BeginForm("SaveMealProvision", "Api/Dashboard", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {*@
+@*<div class="callout callout-info">
+    <h3><i class="fa fa-spoon"></i> &nbsp;Meals</h3>
+</div>*@
+
+<div class="box box-solid">
+    <div id="meals" class="box-body">
+        <br />
+        <div class="col-md-12 col-lg-5 form-group" id="crew_picture">
+            <img class="img img-responsive" src="~/Content/images/default.jpg" />
+        </div>
+
+        <div class="col-lg-7 form-group">
+            <label for="mnno" class="col-md-2 control-label">MNNO</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <div class="input-group">
+                    <input id="mnno_input" type="text" class="form-control" />
+                    <span id="meal_search_btn" class="input-group-btn">
+                        <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 form-group">
+            <label for="rank" class="col-md-2 control-label">Rank</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <input id="rank_input" type="text" class="form-control" style="border-radius: 3px;" />
+            </div>
+        </div>
+        <div class="col-lg-7 form-group">
+            <label for="name" class="col-md-2 control-label">Name</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <input id="name_input" type="text" class="form-control" style="border-radius: 3px;" />
+            </div>
+        </div>
+        <div class="col-lg-7 form-group">
+            <label for="meal_provision" class="col-md-2 control-label">Date</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="meal_reservation">
+                </div>
+            </div>
+            <!-- /.input group -->
+        </div>
+
+
+        <div class="form-group col-lg-7">
+            <label for="mnno" class="col-md-2 control-label">Reason</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />
+            </div>
+        </div>
+
+        <div class="form-horizontal col-xs12 col-lg-7">
+            <div class="col-xs-12">
+                <div class="col-xs-offset-1 col-xs-12 checkbox">
+                    <label>
+                        <input id="breakfast_cb" type="checkbox">
+                        Breakfast
+                    </label>
+                </div>
+
+                <div class="col-xs-offset-1 col-xs-12 checkbox">
+                    <label>
+                        <input id="am_snack_cb" type="checkbox">
+                        Morning Snack
+                    </label>
+                </div>
+
+                <div class="col-xs-offset-1 col-xs-12 checkbox">
+                    <label>
+                        <input id="lunch_cb" type="checkbox">
+                        Lunch
+                    </label>
+                </div>
+
+                <div class="col-xs-offset-1 col-xs-12 checkbox">
+                    <label>
+                        <input id="pm_snack_cb" type="checkbox">
+                        Afternoon Snack
+                    </label>
+                </div>
+
+                <div class="col-xs-offset-1 col-xs-12 checkbox">
+                    <label>
+                        <input id="dinner_cb" type="checkbox">
+                        Dinner
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <div class="form-group col-sm-12">
+                <span id="meal_err_msg" style="color: red; display: none">**Fields must not be left blank</span>
+                <button type="button" id="save_meal_btn" class="btn btn-default pull-right">Submit</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12" id="meal_tbl_div">
+            <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+                <thead>
+                    <tr>
+                        <td colspan="5">Meal Provision Log</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">No</td>
+                        <td colspan="2">Meal Date</td>
+                        <td rowspan="2">Reason</td>
+                        <td rowspan="2">Reference ID</td>
+                    </tr>
+                    <tr>
+                        <td>From</td>
+                        <td>To</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="modal modal-success fade" id="modal-success">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_close_btn" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-default fade in" id="meal_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Meal Provisions Log</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <table id="meal_log_tbl" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Id</th>
+                            <th colspan="2">Meal Date</th>
+                            <th rowspan="2">B</th>
+                            <th rowspan="2">MS</th>
+                            <th rowspan="2">L</th>
+                            <th rowspan="2">AS</th>
+                            <th rowspan="2">D</th>
+                            <th rowspan="2">Reason</th>
+                        </tr>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_warning_meal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_warning_meal_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/Meals.js"></script>
+}

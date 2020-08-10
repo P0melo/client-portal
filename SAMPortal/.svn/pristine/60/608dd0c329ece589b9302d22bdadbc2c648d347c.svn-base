@@ -1,0 +1,157 @@
+﻿@* @{
+        ViewBag.Title = "Register";
+    }
+
+    <h2>@ViewBag.Title.</h2>
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Create a new account.</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Register" />
+            </div>
+        </div>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+@model SAMPortal.Models.RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>UMTC Portal | Register</title>
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/ico" href="~/Content/images/umtc_logo_icon.ico" />
+    <link rel="icon" type="image/x-icon" href="~/Content/images/umtc_logo_icon.ico" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+
+<body class="hold-transition login-page">
+    <div class="register-box">
+        <div class="register-box-body">
+            <div style="text-align: center">
+                <img style="width:240px" src="@Url.Content("~/Content/images/umtc_logo_with_white_bg.png")" />
+            </div>
+            <hr />
+            <p class="login-box-msg">Register an account.</p>
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group has-feedback" id="feedback_summary">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.Company, new { Id = "company", @class = "form-control", disabled = "disabled", value = TempData["CompanyName"] })
+                    @Html.ValidationMessageFor(m => m.Company, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Fist Name" })
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password", @id = "password_txtbox" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                </div>
+
+                @*<div class="row">
+                    <div class="col-xs-7"><span id="show_rule" class="fa fa-question-circle pull-right"></span></div>
+                    <div class="col-xs-5">
+                        <button type="submit" value="Register" class="btn btn-primary btn-block btn-flat">Register</button>
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-xs-12">
+                        <input type="submit" value="Register" class="pull-right btn btn-primary btn-flat" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div id="dialog" title="Rule" hidden>
+        <p>1. Password should be atleast 6 characters.</p>
+        <p>2. Password should have at least 1 special character.</p>
+        <p>3. Password should have at least 1 upper and lower case letter.</p>
+        <p>4. Password should have at least 1 digit (0 - 9)</p>
+    </div>
+
+    <div class="fadein">
+        <div class="bg1" style="background-image: url('../../../Content/images/05.jpg')"></div>
+        <div class="bg2" style="background-image: url('../../../Content/images/02.jpg'); display: none"></div>
+        <div class="bg3" style="background-image: url('../../../Content/images/03.jpg'); display: none"></div>
+        <div class="bg4" style="background-image: url('../../../Content/images/04.jpg'); display: none"></div>
+        <div class="bg5" style="background-image: url('../../../Content/images/01.jpg'); display: none"></div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/admin-lte/js")
+    @Scripts.Render("~/Scripts/register.js");
+</body>
+</html>
+

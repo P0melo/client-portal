@@ -1,0 +1,22 @@
+﻿@model SAMPortal.Models.OffSiteAccommodationStatusViewModel
+
+<table id="off_site_accomodation_tbl" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Mnno</th>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Hotel</th>
+            <th>Room</th>
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
+            <th>Company</th>
+            <th>Mode Of Payment</th>
+        </tr>
+    </thead>
+    <tbody id="off_site_accomodation_tbl_body"></tbody>
+</table>
+
+@section Scripts{
+
+}

@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<a id="newCrewRegistration_lnk" class="acards" href="@Url.Action("NewCrewRegistration", "Forms")">
+    <div class="col-xs-3">
+        <div class="box box-solid cards_div">
+            <div class="box-body" id="box-content">
+                <div class="cards">
+                    <span class="fa fa-user-plus card_icon"></span>
+                    <hr />
+                    <h3>Register New Crew</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<a id="course_list_lnk" class="acards" href="@Url.Action("CourseList", "CourseBooking")">
+    <div class="col-xs-3">
+        <div class="box box-solid cards_div">
+            <div class="box-body" id="box-content">
+                <div class="cards">
+                    <span class="fa fa-book card_icon"></span>
+                    <hr />
+                    <h3>Course Reservation</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<a id="dashboard_lnk" href="@Url.Action("Accommodation", "Forms")" class="acards">
+    <div class="col-xs-3">
+        <div class="box box-solid cards_div">
+            <div class="box-body" id="box-content">
+                <div class="cards">
+                    <span class="fa fa-hotel card_icon"></span>
+                    <hr />
+                    <h3>On Site Accommodation</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<a id="dashboard_lnk" href="@Url.Action("OffSiteAccommodation", "Forms")" class="acards">
+    <div class="col-xs-3">
+        <div class="box box-solid cards_div">
+            <div class="box-body" id="box-content">
+                <div class="cards">
+                    <span class="fa fa-suitcase card_icon"></span>
+                    <hr />
+                    <h3>Off Site Accommodation</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<a id="meal_lnk" class="acards" href="@Url.Action("Meals", "Forms")">
+    <div class="col-xs-3">
+        <div class="box box-solid cards_div">
+            <div class="box-body" id="box-content">
+                <div class="cards">
+                    <span class="fa fa-spoon card_icon"></span>
+                    <hr />
+                    <h3>Meals Arrangement</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<a id="transportation_lnk" class="acards" href="@Url.Action("Transportation", "Forms")">
+    <div>
+        <div class="col-xs-3">
+            <div class="box box-solid cards_div">
+                <div class="box-body" id="box-content">
+                    <div class="cards">
+                        <span class="fa fa-bus card_icon"></span>
+                        <hr />
+                        <h3>Transportation Arrangement</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+@*<div class="modal" id="accommodation_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="off_site_modal_form"></form>
+                <br />
+                <label>Reason of Stay: </label>
+                <input style="width: 50%" type="text" class="form-control" id="reason_of_stay_input" />
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section scripts{
+    <script src="~/Scripts/Home.js"></script>
+}
+
+
+
+

@@ -1,0 +1,73 @@
+﻿
+<div class="box box-solid">
+    <div class="box-body">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                @using (Html.BeginForm("ContactUs", "Forms", FormMethod.Post, new { @class = "", role = "form" }))
+                {
+                    <div class="form-group col-sm-12">
+                        @Html.Label("Subject")
+                        @Html.TextBox("CustomerSubject", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-12">
+                        @Html.Label("Comment", new { @class = "form-group" })
+                        @Html.TextArea("CustomerComment", new { @class = "textarea", rows = "10", style = "width:100%;background-color:#f8f8f8" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="form-group col-sm-12">
+            <div class="form-group col-sm-12">
+                <button class="btn btn-default pull-right" type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning" id="warning_certificates_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="warning_certificates_modal_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-success" id="success_certificates_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/customerfeedback")
+}
+

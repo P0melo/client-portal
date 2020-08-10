@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div id="home_banner">
+    <div class="main_content">
+        <div id="company">
+            <div class="col-xs-12 col-md-3">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3>The Company</h3>
+                    </div>
+                    <div class="box-body" id="box-content">
+                        <img class="img-responsive" src="../SAMPortal/Content/images/05.jpg" />
+                        <p>United Marine Training Center (UMTC) named Marlow Navigation Training Center (MNTC) since 1999—develops seafarers into highly skilled and capable marine professionals who are well-equipped to face challenges onboard, and be great assets to their company and the whole maritime industry.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="facilities">
+            <div class="col-xs-12 col-md-3">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3>Facilities</h3>
+                    </div>
+                    <div class="box-body" id="box-content">
+                        <img class="img-responsive" src="../SAMPortal/Content/images/01.jpg" />
+                        <p>The UMTC Complex houses a number of state-of-the-art equipment and facilities to fully prepare our cadets and trainees for real-life scenarios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="courses">
+            <div class="col-xs-12 col-md-3">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3>Courses</h3>
+                    </div>
+                    <div class="box-body" id="box-content">
+                        <img class="img-responsive" src="../SAMPortal/Content/images/02.jpg" />
+                        <p>United Marine Training Center’s training portfolio covers over 80 courses, including Deck, Engine, Culinary, General Courses, and STCW Courses. Our Cadet Training Program has one of the most relevant curriculums worldwide. We help design and customize training programs to suit a company’s specific needs as well.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="events_and_promos">
+            <div class="col-xs-12 col-md-3">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3>Events and Promos</h3>
+                    </div>
+                    <div class="box-body" id="box-content">
+                        <img class="img-responsive" src="../SAMPortal/Content/images/03.jpg" />
+                        <p>Keep abreast of the most recent happenings and developments in UMTC and the industry, and check out the latest promotional offers we have for you.  </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" id="dashboard_btn">
+                <a href="#" class="btn btn-danger">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="footer fixed" id="home_footer">
+        <h4>United Marine Training Cener, Inc.</h4>
+        <p>2120 Leon Guinto St, 1004 Malate, Manila, Philippines</p>
+        <div class="col-md-12"><span style="padding-left: 25px;padding-right: 25px;">T +632 981 66 82</span><span style="padding-left: 25px;padding-right: 25px;">F +632 981 66 01</span></div>
+        <div class="col-md-12"><span style="padding-left: 25px;padding-right: 25px;">info@umtc.com.ph</span><span style="padding-left: 25px;padding-right: 25px;">www.umtc.com.ph</span></div>
+    </div>*@
+
+@section scripts{
+    <script src="~/Scripts/Home.js"></script>
+}
+
+
+
+

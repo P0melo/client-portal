@@ -1,0 +1,111 @@
+﻿using MySql.Data.MySqlClient;
+using SAMPortal.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Mvc;
+
+namespace SAMPortal.Controllers.Api
+{
+    [System.Web.Http.Authorize]
+    public class DashboardController : ApiController
+    {
+        private officecadetprogramEntities _context;
+        private dbidentityEntities _usercontext;
+
+        public DashboardController()
+        {
+            _context = new officecadetprogramEntities();
+            _usercontext = new dbidentityEntities();
+        }
+
+        //GET: /api/GetCrewList
+        public IHttpActionResult GetCrewList()
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(m => m.Email == user).Select(m => m.CompanyId).FirstOrDefault();
+
+            var data = _context.tblcrews.Where(m => m.Employer == company).Select(m => new Crew
+            {
+                Mnno = m.MNNO,
+                Position = m.Rank,
+                Name = string.Concat(m.LName, ", ", m.FName, " ", m.MName),
+                Nation = m.Nationality,
+                Birthday = m.BDate.ToString(),
+                BirthPlace = m.BPlace,
+                Contact = m.ContactNo,
+                Gender = m.Gender
+            }).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetCrewDetailsForMeal(string mnno)
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(m => m.Email == user).Select(m => m.CompanyId).FirstOrDefault();
+
+            var data = _context.tblcrews.Where(m => m.Employer == company && m.MNNO == mnno).Select(m => new MealProvision
+            {
+                Position = m.Rank,
+                Name = m.LName + ", " + m.FName + " " + m.MName,
+                Mnno = m.MNNO
+            }).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetMealProvisionLog(string mnno)
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(m => m.Email == user).Select(m => m.CompanyId).FirstOrDefault();
+
+            var data = _context.Database.SqlQuery<MealProvisionLog>("SELECT meal_id as Id, MIN(meal_date_from) as FromDate, max(meal_date_from) as ToDate, meal_reason as Reason, " +
+                                                             "reference_id as ReferenceId FROM tblmeal_provision WHERE Mnno = '" + mnno + "' GROUP BY reference_id").ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetMealsProvisionByReference(string referenceId)
+        {
+            var data = _context.tblmeal_provision.Where(m => m.reference_id== referenceId).Select(m => new MealProvisionLog
+            {
+                Id = m.meal_id,
+                Breakfast = m.meal_b,
+                MorningSnack = m.meal_ms,
+                Lunch = m.meal_l,
+                AfternoonSnack = m.meal_as,
+                Dinner = m.meal_d,
+                FromDate = m.meal_date_from,
+                ToDate = m.meal_date_to,
+                Reason = m.meal_reason,
+            }).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetCrewDetailsForAccomodation(string mnno)
+        {
+
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(m => m.Email == user).Select(m => m.CompanyId).FirstOrDefault();
+
+            var data = _context.tblcrews.Where(m => m.Employer == company && m.MNNO == mnno).Select(m => new MealProvision
+            {
+                Position = m.Rank,
+                Name = m.LName + ", " + m.FName + " " + m.MName,
+                Mnno = m.MNNO
+            }).ToList();
+
+            return Ok(data);
+        }
+
+    }
+}

@@ -1,0 +1,49 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $('#off_site_date').daterangepicker();
+
+    $(document).on('click', '#off_site_rates_and_inclusions_btn', function () {
+        $('#off_site_rates_and_inclusions_modal').modal();
+    });
+
+    $(document).on('click', '#save_off_site_btn', function () {
+        var mnno = $('#off_site_mnno_input').val();
+        var rank = $('#off_site_rank_input').val();
+        var name = $('#off_site_name_input').val();
+        var date = $('#off_site_date').val();
+        var hotel = $('#off_site_hotel_name option:selected').val();
+        var room_type = $('#off_site_room_type option:selected').val();
+        var payment = $('#off_site_mode_of_payment option:selected').val();
+        var reason = $('#off_site_reason option:selected').val();
+        var remarks = $('#off_site_remarks_input').val();
+
+        if (mnno === "" || rank === "" || date === "" || remarks.trim() === "") {
+            $('#off_site_err_msg').css('display', 'block');
+        } else {
+            $('#off_site_err_msg').css('display', 'none');
+
+            var parameters = [mnno, rank, name, date, hotel, room_type, payment, reason, remarks];
+
+            $.ajax({
+                url: '/SAMPortal/Forms/SaveOffSiteAccomodation',
+                type: 'post',
+                dataType: 'json',
+                data: { parameters: parameters },
+                success: function (result) {
+                    if (result.data == 1) {
+                        $('.modal-success .modal-body p').html("Accommodation Request Successful!");
+                        $('.modal-success').modal();
+                    }
+
+                }
+            });
+        }
+    });
+
+    $('.modal-success').on('hidden.bs.modal', function () {
+        window.location.reload();
+    });
+
+});

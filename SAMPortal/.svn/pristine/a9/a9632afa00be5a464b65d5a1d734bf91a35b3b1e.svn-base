@@ -1,0 +1,140 @@
+﻿$(document).ready(function () {
+    $('#dashboard_lnk').parent().addClass('active');
+    $(function () {
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfNewCrewRegistration',
+            type: 'get',
+            success: function (result) {
+                $('#new_crew_registration').html(result);
+            },
+            complete: function () {
+                $(function () {
+                    $('#datepicker').datepicker();
+                });
+
+                $.ajax({
+                    url: '/SAMPortal/Dashboard/GetNationalityList',
+                    type: 'get',
+                    success: function (result) {
+
+                        $("#new_crew_registration #nationality").select2({ theme: "bootstrap", placeholder: "Select Nation" });
+
+                        $("#new_crew_registration #position").select2({ theme: "bootstrap", placeholder: "Select Position" });
+
+                        $('.select2-container--bootstrap .select2-selection--single').css('padding-top', '10px');
+                    }
+                });
+            }
+        });
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfCrewList',
+            type: 'get',
+            success: function (result) {
+
+                //var content = "";
+
+                //for (var i = 0; i < result.data.length; i++) {
+                //    content += "<tr><td>" + result.data[i].position + "</td><td>" + result.data[i].Name + "</td><td>" + result.data[i].Nation + "</td><td>" + result.data[i].Birthday +
+                //        "</td><td>" + result.data[i].Birthplace + "</td><td>" + result.data[i].contact + "</td><td>" + result.data[i].Gender + "</td></tr>"
+                //}
+
+                $('#crew_list').html(result);
+                getCrewList();
+            }
+        });
+    });
+
+    function getCrewList() {
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetCrewList',
+            type: 'get',
+            success: function (result) {
+                var content = "";
+
+                for (var i = 0; i < result.data.length; i++) {
+                    content += "<tr><td>" + result.data[i].Position + "</td><td>" + result.data[i].Name + "</td><td>" + (result.data[i].Nation == null ? "" : result.data[i].Nation) + "</td><td>" + result.data[i].Birthday +
+                        "</td><td>" + result.data[i].BirthPlace + "</td><td>" + result.data[i].Contact + "</td><td>" + result.data[i].Gender + "</td></tr>"
+                }
+
+                $('#crew_list_tbl_tbody').html(content);
+                $('#crew_list_tbl').DataTable();
+            }
+        });
+    }
+
+    $(document).on('click', '#request_btn', function (e) {
+
+        var firstName = 0;
+        var position = 0;
+        var lastName = 0;
+        var middleName = 0;
+        var nationality = 0;
+        var datepicker = 0;
+        var birthPlace = 0
+        var contact = 0;
+
+        if ($('#FirstName').val() == "") {
+            $('#FirstName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#FirstName').css('border-color', '#ccc');
+        }
+
+        if ($('#position option:selected').val() == "") {
+            $('#position + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#position + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#LastName').val() == "") {
+            $('#LastName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#LastName').css('border-color', '#ccc');
+        }
+
+        if ($('#MiddleName').val() == "") {
+            $('#MiddleName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#MiddleName').css('border-color', '#ccc');
+        }
+
+        if ($('#nationality option:selected').val() == "") {
+            $('#nationality + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#nationality + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#datepicker').val() == "") {
+            $('#datepicker').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#datepicker').css('border-color', '#ccc');
+        }
+
+        if ($('#BirthPlace').val() == "") {
+            $('#BirthPlace').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#BirthPlace').css('border-color', '#ccc');
+        }
+
+        if ($('#Contact').val() == "") {
+            $('#Contact').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            $('#Contact').css('border-color', '#ccc');
+        }
+
+        if (firstName == 1 && position == 1 && lastName == 1 && middleName == 1 && nationality == 1 && datepicker == 1 && birthPlace == 1 && contact == 1) {
+            $('#new_crew_registration_err_msg').css('display', 'none');
+        } else {
+            $('#new_crew_registration_err_msg').css('display', 'block');
+        }
+
+    })
+});

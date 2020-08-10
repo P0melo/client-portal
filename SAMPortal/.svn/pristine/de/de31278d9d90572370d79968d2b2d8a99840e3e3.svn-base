@@ -1,0 +1,139 @@
+﻿@*@using SAMPortal.Models
+    @model NewCrewRegistrationViewModel*@
+
+<div class="col-md-12 col-lg-5 form-group" id="off_site_crew_picture">
+    <img class="img img-responsive" src="~/Content/images/default.jpg" />
+</div>
+
+<div class="col-lg-7 form-group">
+    <label for="off_site_mnno" class="col-md-2 control-label">MNNO</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <div class="input-group">
+            <input id="off_site_mnno_input" type="text" class="form-control" />
+            <span id="off_site_search_btn" class="input-group-btn">
+                <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="off_site_rank" class="col-md-2 control-label">Rank</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="off_site_rank_input" type="text" class="form-control" style="border-radius: 3px;" />
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="off_site_name" class="col-md-2 control-label">Name</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="off_site_name_input" type="text" class="form-control" style="border-radius: 3px;" />
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="off_site_hotel" class="col-md-2 control-label">Hotel</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="off_site_hotel_name" class="form-control">
+            @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfHotels"]); i++)
+            {
+                <option value="@System.Configuration.ConfigurationManager.AppSettings["hotel" + (i + 1)]">
+                    @System.Configuration.ConfigurationManager.AppSettings["hotel" + (i + 1)]
+                </option>
+            }
+        </select>
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="off_site_room_type" class="col-md-2 control-label">Room</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="off_site_room_type" class="form-control">
+            <option value="1">
+                Single (deluxe room)
+            </option>
+            <option value="2">
+                Double (deluxe room)
+            </option>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 form-group">
+    <label for="off_site_date" class="col-md-2 control-label">Date</label>
+    <div class="col-xs-12 col-md-12 col-lg-4">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <input type="text" class="form-control pull-right" id="off_site_date">
+        </div>
+
+    </div>
+    <p style="padding-top: 5px;" class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
+    <!-- /.input group -->
+</div>
+
+<div class="col-lg-12 form-group">
+    <label for="off_site_mode_of_payment" class="col-md-2 control-label">Payment</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="off_site_mode_of_payment" class="form-control">
+            <option value="0">
+                Company Sponsored
+            </option>
+            <option value="1">
+                Personal Account
+            </option>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 form-group">
+    <label for="off_site_reason" class="col-md-2 control-label">Reason</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="off_site_reason" class="form-control">
+            <option value="1">
+                In House Training
+            </option>
+            <option value="6">
+                Paying Crew
+            </option>
+        </select>
+    </div>
+</div>
+<div class="form-group col-lg-12">
+    <label for="off_site_remarks" class="col-md-2 control-label">Remarks</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="off_site_remarks_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />
+    </div>
+</div>
+
+<div class="form-group col-sm-12">
+    <div class="form-group col-lg-12">
+        <span id="off_site_err_msg" style="color: red; display: none">**Remarks cannot be left blank</span>
+        <button type="button" id="save_off_site_btn" class="btn btn-default pull-right">Reserve Crew</button>
+        <button type="button" id="off_site_rates_and_inclusions_btn" class="btn btn-default pull-right">Rates and Inclusions</button>
+    </div>
+</div>
+
+@*<div class="col-sm-12" id="meal_tbl_div">
+        <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+            <thead>
+                <tr>
+                    <td colspan="5">Meal Provision Log</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">No</td>
+                    <td colspan="2">Meal Date</td>
+                    <td rowspan="2">Reason</td>
+                    <td rowspan="2">Reference ID</td>
+                </tr>
+                <tr>
+                    <td>From</td>
+                    <td>To</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>*@
+
+
+@section Scripts{
+
+}
+
+

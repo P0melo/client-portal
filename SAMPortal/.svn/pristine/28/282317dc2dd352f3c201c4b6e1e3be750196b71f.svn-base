@@ -1,0 +1,7 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $('#accomodation_date').daterangepicker();
+
+});

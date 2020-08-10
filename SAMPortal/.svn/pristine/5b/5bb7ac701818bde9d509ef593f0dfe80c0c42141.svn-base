@@ -1,0 +1,395 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using MySql.Data.MySqlClient;
+using SAMPortal.DTO;
+using SAMPortal.Models;
+
+namespace SAMPortal.Controllers
+{
+    [Authorize(Roles = "Administrator")]
+    public class AdministrationController : Controller
+    {
+        private officecadetprogramEntities _cadetContext;
+        private dbidentityEntities _context;
+        private Logging logging;
+
+        public AdministrationController()
+        {
+            _context = new dbidentityEntities();
+            _cadetContext = new officecadetprogramEntities();
+            logging = new Logging();
+        }
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult RegisteredAccounts()
+        {
+            return View();
+        }
+
+        public ActionResult GetPartialOfReviewTransportationRequests()
+        {
+            return PartialView("_ReviewTransportationRequests");
+        }
+
+        public ActionResult GenerateLink()
+        {
+            _cadetContext = new officecadetprogramEntities();
+
+            var result = _cadetContext.tbltpcompanies.Select(m => new Company { CompanyId = m.companyID, CompanyName = m.companyName }).ToList();
+
+            var ListOfCompanies = new Companies
+            {
+                ListOfCompanies = result
+            };
+
+            return View(ListOfCompanies);
+        }
+
+        public ActionResult GetRegisteredAccountsForReview()
+        {
+            var result = _context.users.Where(m => m.LockoutEnabled == true && m.EmailConfirmed == true).Select(m => new ReviewAccounts { Email = m.Email, Name = m.FirstName + " " + m.LastName, Company = m.CompanyName, CompanyId = m.CompanyId }).ToList();
+
+            var jsonResult = Json(new { data = result },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult ReviewAction(string email, int action)
+        {
+            var data = 0;
+
+            var user = User.Identity.Name;
+
+            var guid = GetGUID(email);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (action == 0)
+                    {
+                        _context.Database.ExecuteSqlCommand("UPDATE users SET LockoutEnabled = " + action + " WHERE email=@email",
+                                new MySqlParameter("email", email));
+
+                        _context.Database.ExecuteSqlCommand("INSERT INTO userroles(UserId, RoleId) VALUES (@userid, @roleid)",
+                            new MySqlParameter("@userid", guid),
+                            new MySqlParameter("@roleid", 1));
+                        
+                        //For Logging
+                        string[] logparameters = { "LockoutEnabled:" + action, "email:" + email, "INSERTED REGULAR USER:" + guid };
+                        string data1 = logging.ConvertToLoggingParameter(logparameters);
+                        logging.Log(user, "ReviewAction", data1);
+                    }
+                    else
+                    {
+                        _context.Database.ExecuteSqlCommand("DELETE FROM users WHERE email = @email",
+                            new MySqlParameter("email", email));
+
+                        string[] logparameters = { "DELETED NEW USER REQUEST", "email:" + email };
+                        string data1 = logging.ConvertToLoggingParameter(logparameters);
+                        logging.Log(user, "ReviewAction", data1);
+                    }
+
+                    data = 1;
+                }
+                catch (Exception)
+                {
+                    data = 0;
+                }
+            }
+
+            var jsonResult = Json(new { data },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult Partial(int id)
+        {
+            var user = User.Identity.Name;
+
+            var data = id;
+
+            var giud = Int2Guid(data);
+
+            var ticks = DateTime.Now.Ticks;
+
+            var result = new LinkModel
+            {
+                link = giud + "/" + ticks
+            };
+
+            //For Logging
+            string[] logparameters = { "link:" + result.link };
+            string data1 = logging.ConvertToLoggingParameter(logparameters);
+            logging.Log(user, "GetLink", data1);
+
+            return PartialView("_Link", result);
+        }
+
+        public ActionResult GetLink(Companies model)
+        {
+
+            var data = model.ListId;
+
+            var giud = Int2Guid(data);
+
+            var ticks = DateTime.Now.Ticks;
+
+            var result = new LinkModel
+            {
+                link = giud + "/" + ticks
+            };
+
+            return PartialView("_Link", result);
+        }
+
+        public static Guid Int2Guid(int value)
+        {
+            byte[] bytes = new byte[16];
+            BitConverter.GetBytes(value + 66826682).CopyTo(bytes, 4);
+            return new Guid(bytes);
+        }
+
+        public ActionResult GetPartialOfGenerateLink()
+        {
+            var result = _cadetContext.tbltpcompanies.Select(m => new Company { CompanyId = m.companyID, CompanyName = m.companyName }).ToList();
+
+            var ListOfCompanies = new Companies
+            {
+                ListOfCompanies = result
+            };
+
+            return PartialView("_GenerateLink", ListOfCompanies);
+        }
+
+        public ActionResult GetPartialOfReviewRegisteredAccounts()
+        {
+
+            return PartialView("_RegisteredAccounts");
+        }
+
+        public ActionResult GetPartialOfReviewNewCrewRequest()
+        {
+            return PartialView("_ReviewNewCrewRequest");
+        }
+
+        public ActionResult GetPartialOfOffSiteAccommodationRequest()
+        {
+            var result = _cadetContext.tbloff_site_status.Select(m => new OffSiteStatus { Id = m.Id, Name = m.Name }).ToList();
+
+            var ListOfStatus = new OffSiteAccommodationStatusViewModel
+            {
+                Option = result
+            };
+
+            return PartialView("_ReviewOffSiteAccommodationRequests", ListOfStatus);
+        }
+
+        public ActionResult GetImage(string imageName)
+        {
+            string imagePath = "../Pictures/" + imageName + ".jpeg";
+            byte[] array = System.IO.File.ReadAllBytes(imagePath);
+            var result = array;
+            var jsonResult = Json(new { data = result },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        //[rank, lastName, firstName, middleInitial, nation, birthday, birthplace, contact, gender, company, recordId]
+        public ActionResult ApproveNewCrew(params string[] parameters)
+        {
+            string rank = parameters[0];
+            string recordId = parameters[10];
+            string lastName = parameters[1];
+            string firstName = parameters[2];
+            string middleInitial = parameters[3];
+            string nation = parameters[4];
+            string birthday = parameters[5];
+            string birthplace = parameters[6];
+            string contactNo = parameters[7];
+            string gender = parameters[8];
+            string company = parameters[9];
+
+            var companyId = _cadetContext.tbltpcompanies.Where(m => m.companyName == company).Select(m => new { m.companyID }).FirstOrDefault();
+
+            var mnno = _cadetContext.keygennoyears.Where(m => m.seqID == "TPSerial").Select(m => new { m.KeySequence }).FirstOrDefault();
+
+            var user = User.Identity.Name;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _cadetContext.Database.ExecuteSqlCommand("INSERT INTO tblcrew (MNNO, Rank, LName, FName, MName, BDate, BPlace, Gender, Employer, Nationality, ContactNo)" +
+                        "VALUE (@mnno, @rank, @lname, @fname, @mname, @bdate, @bplace, @gender, @employer, @nationality, @contactno)",
+                        new MySqlParameter("@mnno", "TP0" + mnno.KeySequence),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@lname", lastName),
+                        new MySqlParameter("@fname", firstName),
+                        new MySqlParameter("@mname", middleInitial),
+                        new MySqlParameter("@bdate", birthday),
+                        new MySqlParameter("@bplace", birthplace),
+                        new MySqlParameter("@gender", gender),
+                        new MySqlParameter("@employer", companyId.companyID),
+                        new MySqlParameter("@nationality", nation),
+                        new MySqlParameter("@contactno", contactNo)
+                     );
+
+                    //For Logging
+                    string[] logparameters = {"mnno:" + "TP0" + mnno.KeySequence, "rank:"+rank, "lname:" + lastName, "fname:"+firstName, "mname:"+middleInitial, "bdate:"+birthday, "bplace:"+birthplace,
+                                              "gender:"+gender, "employer:"+companyId.companyID, "nationality:"+nation, "contactno:"+contactNo };
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "ApproveNewCrew", data);
+
+                    _cadetContext.Database.ExecuteSqlCommand("UPDATE keygennoyear SET KeySequence = '" + (mnno.KeySequence + 1) + "' WHERE seqID = 'TPSerial'");
+                    //For Logging
+                    string[] logparameters2 = { "KeySequence:" + (mnno.KeySequence + 1) };
+                    string data2 = logging.ConvertToLoggingParameter(logparameters2);
+                    logging.Log(user, "KeySequenceChange", data2);
+
+                    _cadetContext.Database.ExecuteSqlCommand("DELETE FROM tblnewcrewrequest WHERE Id = '" + recordId + "'");
+                    //For Logging
+                    string[] logparameters3 = { "recordId:" + recordId };
+                    string data3 = logging.ConvertToLoggingParameter(logparameters3);
+                    logging.Log(user, "DeleteNewCrewRequestFromQueue", data3);
+
+
+                }
+                catch (Exception e)
+                {
+                    var exception = Json(new { data = e.Message },
+                  JsonRequestBehavior.AllowGet);
+
+                    return exception;
+                }
+            }
+
+            var jsonResult = Json(new { data = "" },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult DenyNewCrew(int recordId)
+        {
+            var user = User.Identity.Name;
+            var flag = 0; ;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _cadetContext.Database.ExecuteSqlCommand("DELETE FROM tblnewcrewrequest WHERE Id = '" + recordId + "'");
+
+                    //For Logging
+                    string[] logparameters3 = { "recordId:" + recordId };
+                    string data3 = logging.ConvertToLoggingParameter(logparameters3);
+                    logging.Log(user, "DenyNewCrew", data3);
+
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    var exception = Json(new { data = e.Message },
+                  JsonRequestBehavior.AllowGet);
+
+                    return exception;
+                }
+            }
+
+            var jsonResult = Json(new { data = flag },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+
+        }
+
+        public ActionResult UpdateOffSiteStatusId(int statusId, int recordId)
+        {
+            var flag = 0;
+            var user = User.Identity.Name;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tbloff_site_reservation SET Status = '" + statusId + "' WHERE Id = '" + recordId + "'");
+                    //For Logging
+                    string[] logparameters = { "statusId:" + statusId, "recordId:" + recordId };
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "UpdateOffSiteStatusId", data);
+
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    var exception = Json(new { data = e.Message },
+                  JsonRequestBehavior.AllowGet);
+
+                    return exception;
+                }
+            }
+
+            var jsonResult = Json(new { data = flag },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult CompleteTransportationRequest(int recordId)
+        {
+            var flag = 0;
+            var user = User.Identity.Name;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Status = 'Completed' WHERE Id = '" + recordId + "'");
+
+                    //For Logging
+                    string[] logparameters = { "recordId:" + recordId, "status:Completed"  };
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "CompleteTransportationRequest", data);
+
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    var exception = Json(new { data = e.Message },
+                  JsonRequestBehavior.AllowGet);
+
+                    return exception;
+                }
+            }
+
+            var jsonResult = Json(new { data = flag },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public string GetGUID(string email)
+        {
+
+            var guid = "";
+
+            guid = _context.users.Where(m => m.Email == email).Select(m => m.Id).FirstOrDefault();
+
+            return guid;
+        }
+    }
+
+}

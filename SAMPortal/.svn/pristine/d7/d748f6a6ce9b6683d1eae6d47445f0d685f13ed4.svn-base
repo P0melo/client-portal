@@ -1,0 +1,22 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $.ajax({
+        url: '/SAMPortal/Forms/NewCrewRegistration',
+        type: 'get',
+        success: function (result) {
+            $('#new_crew_registration').html(result);
+        },
+        complete: function () {
+            $(function () {
+                $('#datepicker').datepicker();
+            });
+            $("#new_crew_registration #nationality").select2({ theme: "bootstrap", placeholder: "Select Nation" });
+
+            $("#new_crew_registration #position").select2({ theme: "bootstrap", placeholder: "Select Position" });
+
+            $('.select2-container--bootstrap .select2-selection--single').css('padding-top', '10px');
+        }
+    });
+});

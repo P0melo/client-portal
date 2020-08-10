@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f795954da11945348a41b4eb3333b685" Name="Diagram1">
+        <EntityTypeShape EntityType="officecadetprogramModel.culinarytraineeinfo_copy" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.esdi_vtblcbtrecords" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.esdi_vtblcbtrecords_logs" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.keygennoyear" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_enrolled" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_general_remarks" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_individual_merit_points" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_individual_remarks" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_merits_category" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_merits_demerits" Width="1.5" PointX="14.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_merits_list" Width="1.5" PointX="14.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_offense_category" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_offense_list" Width="1.5" PointX="14.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatch_offense_records" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbatchassignment" Width="1.5" PointX="16.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbehavioral_asessment_gen_remark" Width="1.5" PointX="16.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbehavioral_assessment" Width="1.5" PointX="8.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblbookergroup" Width="1.5" PointX="10.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcbtsched" Width="1.5" PointX="5.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcbtscheddetail" Width="1.5" PointX="8" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcbttraining" Width="1.5" PointX="5.75" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcontinent" Width="1.5" PointX="5.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcountry" Width="1.5" PointX="8" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcourse_curriculum" Width="1.5" PointX="16.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcrew" Width="1.5" PointX="0.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcrew_otherinfo" Width="1.5" PointX="12.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblcrew_trainingbooking_reason" Width="1.5" PointX="14.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbldorm_fees" Width="1.5" PointX="16.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbldorm_reservation_bank" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbldormbed" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbldormbooking" Width="1.5" PointX="18.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblhotel_guest_remark_type" Width="1.5" PointX="18.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblicrrtracker" Width="1.5" PointX="18.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblloghistory" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblmeal_fees" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblmeal_log" Width="1.5" PointX="20.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblnewcrewrequest" Width="1.5" PointX="20.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbloff_site_reservation" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbloff_site_status" Width="1.5" PointX="8.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblrank" Width="1.5" PointX="10.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblrecord_movement" Width="1.5" PointX="20.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblsamportallog" Width="1.5" PointX="20.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblscheddata" Width="1.5" PointX="6" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblschedule" Width="1.5" PointX="3.75" PointY="40.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblschedule_registration_ofcrew" Width="1.5" PointX="20.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tblspecialcourserequest" Width="1.5" PointX="12.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbltpcompany" Width="1.5" PointX="14.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbltraining_attendees" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbltrainingclassification" Width="1.5" PointX="22.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbltraining" Width="1.5" PointX="1.5" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbltransportation" Width="1.5" PointX="3" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="officecadetprogramModel.tbluser" Width="1.5" PointX="22.75" PointY="8.75" IsExpanded="true" />
+        <AssociationConnector Association="officecadetprogramModel.tblcbtscheddetails_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.tblcbtscheddetails_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.tblcountries_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.fk_dorm_reservation_mnno" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.fk_mnno" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.fk_transportation_mnno" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.tblscheddata_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.tblscheddata_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="officecadetprogramModel.tblschedule_ibfk_1" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

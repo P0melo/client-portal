@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Course Reservation</h3>
+        @*<div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>*@
+    </div>
+    <div class="box-body">
+        <a id="newCrewRegistration_lnk" class="acards" href="@Url.Action("NewCrewRegistration", "Forms")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-user-plus card_icon"></span>
+                            <hr />
+                            <h5>Register New Crew</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="course_list_lnk" class="acards" href="@Url.Action("CourseList", "CourseBooking")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-book card_icon"></span>
+                            <hr />
+                            <h5>Course Booking</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="dashboard_lnk" href="@Url.Action("OnSiteAccommodation", "Forms")" class="acards">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-hotel card_icon"></span>
+                            <hr />
+                            <h5>On-Site Accommodation</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="dashboard_lnk" href="@Url.Action("OffSiteAccommodation", "Forms")" class="acards">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-suitcase card_icon"></span>
+                            <hr />
+                            <h5>Off-Site Accommodation</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+
+        <a id="meal_lnk" class="acards" href="@Url.Action("Meals", "Forms")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-spoon card_icon"></span>
+                            <hr />
+                            <h5>Meals Arrangement</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a id="transportation_lnk" class="acards" href="@Url.Action("Transportation", "Forms")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid box-default cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-bus card_icon"></span>
+                            <hr />
+                            <h5>Transportation Arrangement</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Management</h3>
+    </div>
+    <div class="box-body">
+        @*<a id="companyProfile_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-id-card-o card_icon"></span>
+                            <hr />
+                            <h5>Company Profile</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="certificates_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-certificate card_icon"></span>
+                            <hr />
+                            <h5>Certificates</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="reports_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-bar-chart-o card_icon"></span>
+                            <hr />
+                            <h5>Reports</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="customerFeedbacks_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-comment-o card_icon"></span>
+                            <hr />
+                            <h5>Customer Feedback</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="accountStatement_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-file-o card_icon"></span>
+                            <hr />
+                            <h5>Account Statement</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="downloads_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-download card_icon"></span>
+                            <hr />
+                            <h5>Downloads</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <a id="contactUs_lnk" class="acards" href="@Url.Action("UnderConstruction", "Home")">
+            <div class="col-xs-6 col-md-2 cards_container">
+                <div class="box box-solid cards_div">
+                    <div class="box-body" id="box-content">
+                        <div class="cards">
+                            <span class="fa fa-phone card_icon"></span>
+                            <hr />
+                            <h5>Contact Us</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>*@
+
+        @if (User.IsInRole("Regular"))
+        {
+            <a id="yourRequests_lnk" class="acards" href="@Url.Action("Requests", "Forms")">
+                <div class="col-xs-6 col-md-2 cards_container">
+                    <div class="box box-solid cards_div">
+                        <div class="box-body" id="box-content">
+                            <div class="cards">
+                                <span class="fa fa-list card_icon"></span>
+                                <hr />
+                                <h5>Your Requests</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <a id="administration_lnk" class="acards" href="@Url.Action("Index", "Administration")">
+                <div class="col-xs-6 col-md-2 cards_container">
+                    <div class="box box-solid cards_div">
+                        <div class="box-body" id="box-content">
+                            <div class="cards">
+                                <span class="fa fa-cog card_icon"></span>
+                                <hr />
+                                <h5>Administration</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/home")
+}
+
+
+
+

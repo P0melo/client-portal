@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="officecadetprogramModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="keygennoyear">
+    <Key>
+      <PropertyRef Name="seqID" />
+    </Key>
+    <Property Name="seqID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="KeySequence" Type="Int32" />
+    <Property Name="Id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblbatch">
+    <Key>
+      <PropertyRef Name="batchNo" />
+    </Key>
+    <Property Name="batchNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="batchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="batchYear" Type="Int16" />
+    <Property Name="rank" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="batchDesc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="trainingStarted" Type="DateTime" />
+    <Property Name="trainingEnded" Type="DateTime" />
+    <Property Name="category" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="display_batch" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="class" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="curriculum_used" Type="Int32" />
+    <Property Name="display_to_matrix" Type="Int32" />
+    <Property Name="ordering_batch" Type="Int32" />
+    <Property Name="recruitment_use" Type="Int32" />
+    <Property Name="external_batch" Type="Int32" />
+    <Property Name="batch_for_cadetship" Type="Int32" />
+    <Property Name="next_batch_id" Type="Int32" />
+    <Property Name="opn_display" Type="Int32" />
+    <Property Name="last_batch_id" Type="Int32" />
+    <Property Name="merit_starting_points" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblbatch_enrolled">
+    <Key>
+      <PropertyRef Name="numSeq" />
+    </Key>
+    <Property Name="numSeq" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="batchNo" Type="Int32" Nullable="false" />
+    <Property Name="mnno" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblbatch_general_remarks">
+    <Key>
+      <PropertyRef Name="bgr_id" />
+    </Key>
+    <Property Name="bgr_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bgr_batchno" Type="Int32" />
+    <Property Name="bgr_general_remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="bgr_dateinserted" Type="DateTime" />
+    <Property Name="bgr_insertedby" Type="Int32" />
+    <Property Name="bgr_lastupdated" Type="DateTime" />
+    <Property Name="bgr_lastupdatedby" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblbatch_individual_merit_points">
+    <Key>
+      <PropertyRef Name="crew_merits_id" />
+    </Key>
+    <Property Name="crew_merits_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cm_batchno" Type="Int32" />
+    <Property Name="cm_mnno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cm_merits_id" Type="Int32" />
+    <Property Name="cm_remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="cm_points" Type="Int32" />
+    <Property Name="cm_insertedby" Type="Int32" />
+    <Property Name="cm_dateinserted" Type="DateTime" />
+    <Property Name="cm_updatedby" Type="Int32" />
+    <Property Name="cm_datelastupdated" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblbatch_individual_remarks">
+    <Key>
+      <PropertyRef Name="bir_id" />
+    </Key>
+    <Property Name="bir_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bir_mnno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="bir_batchno" Type="Int32" />
+    <Property Name="bir_remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="bir_dateinserted" Type="DateTime" />
+    <Property Name="bir_insertedby" Type="Int32" />
+    <Property Name="bir_lastupdated" Type="DateTime" />
+    <Property Name="bir_lastupdateby" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblbatch_merits_category">
+    <Key>
+      <PropertyRef Name="merits_id" />
+    </Key>
+    <Property Name="merits_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="merits_category_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblbatch_merits_demerits">
+    <Key>
+      <PropertyRef Name="batch_merits_id" />
+    </Key>
+    <Property Name="batch_merits_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bm_batchno" Type="Int32" />
+    <Property Name="bm_type" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="bm_merits_point" Type="Int32" />
+    <Property Name="bm_remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="bm_insertedby" Type="Int32" />
+    <Property Name="bm_dateinserted" Type="DateTime" />
+    <Property Name="bm_updatedby" Type="Int32" />
+    <Property Name="bm_datelastupdated" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblbatch_merits_list">
+    <Key>
+      <PropertyRef Name="merits_list_id" />
+    </Key>
+    <Property Name="merits_list_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="merits_names" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="merits_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="active_merits" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblbatch_offense_category">
+    <Key>
+      <PropertyRef Name="cat_offense_id" />
+    </Key>
+    <Property Name="cat_offense_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="offense_category" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="offense_demerit_points" Type="Int32" />
+    <Property Name="offense_order" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblbatch_offense_list">
+    <Key>
+      <PropertyRef Name="offense_id" />
+    </Key>
+    <Property Name="offense_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="offense_category" Type="Int32" />
+    <Property Name="offense_name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblbatch_offense_records">
+    <Key>
+      <PropertyRef Name="offense_record_id" />
+    </Key>
+    <Property Name="offense_record_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="or_mnno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="or_batchno" Type="Int32" />
+    <Property Name="or_offense_category" Type="Int32" />
+    <Property Name="or_offense_id" Type="Int32" />
+    <Property Name="or_offense_remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="or_insertedby" Type="Int32" />
+    <Property Name="or_dateinserted" Type="DateTime" />
+    <Property Name="or_updatedby" Type="Int32" />
+    <Property Name="or_dateupdated" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblbatchassignment">
+    <Key>
+      <PropertyRef Name="AppNo" />
+    </Key>
+    <Property Name="AppNo" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BatchName" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateAssigned" Type="DateTime" Nullable="false" />
+    <Property Name="ETD" Type="DateTime" />
+    <Property Name="Vessel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="USVisa" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Availability" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblbehavioral_asessment_gen_remark">
+    <Key>
+      <PropertyRef Name="bhvr_gen_rmrk_id" />
+      <PropertyRef Name="bhvr_gen_mnno" />
+    </Key>
+    <Property Name="bhvr_gen_rmrk_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bhvr_gen_mnno" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="first_block_gen_remark" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="latest_encoder_a" Type="Int32" />
+    <Property Name="date_last_updated_a" Type="DateTime" />
+    <Property Name="second_block_gen_remark" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="latest_encoder_b" Type="Int32" />
+    <Property Name="date_last_updated_b" Type="DateTime" />
+    <Property Name="third_block_gen_remark" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="latest_encoder_c" Type="Int32" />
+    <Property Name="date_last_updated_c" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblbehavioral_assessment">
+    <Key>
+      <PropertyRef Name="bapt_id" />
+    </Key>
+    <Property Name="bapt_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="bapt_mnno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="bapt_schedid" Type="Int32" />
+    <Property Name="gen_conduct" Type="Int32" />
+    <Property Name="bapt_comm" Type="Int32" />
+    <Property Name="bapt_init" Type="Int32" />
+    <Property Name="bapt_assert" Type="Int32" />
+    <Property Name="bapt_comment" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="bapt_encoder" Type="Int32" />
+    <Property Name="bapt_datecoded" Type="DateTime" />
+    <Property Name="bapt_batci_remark" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblcourse_curriculum">
+    <Key>
+      <PropertyRef Name="cur_id" />
+    </Key>
+    <Property Name="cur_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cur_year" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cur_dept" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cur_first_blk" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="cur_second_blk" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="cur_third_blk" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="cur_ver" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblcrew">
+    <Key>
+      <PropertyRef Name="MNNO" />
+    </Key>
+    <Property Name="MNNO" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Rank" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="LName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="BDate" Type="DateTime" />
+    <Property Name="BPlace" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Gender" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="Employer" Type="Int32" />
+    <Property Name="CrewStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Nationality" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AvailabilityDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="cyprus_group" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="sub_cy_grp" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="AssignedVessel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="CC_SignOffDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="LineUpDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="SignOnDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="EOCDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="LastVessel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="LastSignOnDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="LastSignOffDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TrainingStartDate" Type="DateTime" />
+    <Property Name="TrainingEndDate" Type="DateTime" />
+    <Property Name="MealProvision" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedBy" Type="Int32" />
+    <Property Name="CurriculumUsed" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="AppliedToMarlow" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="Locked_to_group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Cmpny_Owner" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="EnteredBy" Type="Int32" />
+    <Property Name="Accounted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Record_Locked" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="ExternalID" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="AccessPasswrd" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="num_onboard" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="cadetship_stats" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblscheddatas" Relationship="Self.tblscheddata_ibfk_2" FromRole="tblcrew" ToRole="tblscheddata" />
+  </EntityType>
+  <EntityType Name="tblrank">
+    <Key>
+      <PropertyRef Name="rank" />
+    </Key>
+    <Property Name="rank" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="department" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="rank_level" Type="Int32" />
+    <Property Name="elect_class" Type="Int32" />
+    <Property Name="main_rank" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblscheddata">
+    <Key>
+      <PropertyRef Name="RecordNo" />
+    </Key>
+    <Property Name="RecordNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SchedID" Type="Int32" Nullable="false" />
+    <Property Name="MNNo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CertNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="SerialNo" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="Score" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Marking" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="GroupID" Type="Int32" />
+    <Property Name="Scheduler_no" Type="Int32" />
+    <Property Name="DateScheduled" Type="DateTime" />
+    <Property Name="Export" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="CertStatus" Type="Int32" />
+    <Property Name="CertRecBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CertUpBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CertEndTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CertEndorsedTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="registrationNo" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+    <Property Name="paymentMode" Type="Int32" />
+    <Property Name="courseFee" Type="Single" />
+    <Property Name="pesoFee" Type="Single" />
+    <Property Name="PaymentRecBy" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CertValidity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TrainorComment" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="AssignedGroupId" Type="Int32" />
+    <Property Name="DateCertGenerated" Type="DateTime" />
+    <Property Name="ReassignedOPNGrp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CrewRank" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="BatchNo" Type="Int32" />
+    <Property Name="Employer" Type="Int32" />
+    <Property Name="MarkRemarks" Type="Int32" />
+    <Property Name="previous_mnno" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblcrew" Relationship="Self.tblscheddata_ibfk_2" FromRole="tblscheddata" ToRole="tblcrew" />
+    <NavigationProperty Name="tblschedule" Relationship="Self.tblscheddata_ibfk_1" FromRole="tblscheddata" ToRole="tblschedule" />
+  </EntityType>
+  <EntityType Name="tblschedule">
+    <Key>
+      <PropertyRef Name="SchedID" />
+    </Key>
+    <Property Name="SchedID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TrainingID" Type="Int32" Nullable="false" />
+    <Property Name="RoomNo" Type="Int32" Nullable="false" />
+    <Property Name="TrainerID" Type="Int32" />
+    <Property Name="DateFrom" Type="DateTime" />
+    <Property Name="DateTo" Type="DateTime" />
+    <Property Name="TimeFrom" Type="Time" />
+    <Property Name="TimeTo" Type="Time" />
+    <Property Name="MaxCapacity" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ToShow" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="BatchNo" Type="Int32" />
+    <Property Name="ToOpen" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ClassShift" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="PracticalClass" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CertUploaded" Type="Int32" />
+    <Property Name="CertDownloaded" Type="Int32" />
+    <Property Name="DateCertExported" Type="DateTime" />
+    <Property Name="BookerGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MNPICreated_Schedule" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblscheddatas" Relationship="Self.tblscheddata_ibfk_1" FromRole="tblschedule" ToRole="tblscheddata" />
+    <NavigationProperty Name="tbltraining" Relationship="Self.tblschedule_ibfk_1" FromRole="tblschedule" ToRole="tbltrainings" />
+  </EntityType>
+  <EntityType Name="tbltpcompany">
+    <Key>
+      <PropertyRef Name="companyID" />
+    </Key>
+    <Property Name="companyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="companyCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="companyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="companyShortName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="companyLocation" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="companyEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="contactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="contactPersonPos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="companyContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="terms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="courseDiscount" Type="Int32" />
+    <Property Name="MOA" Type="Int32" />
+    <Property Name="IMEC" Type="Int32" />
+    <Property Name="TIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbltraining_attendees">
+    <Key>
+      <PropertyRef Name="Attendance_id" />
+    </Key>
+    <Property Name="Attendance_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SchedID" Type="Int32" />
+    <Property Name="SchedDate" Type="DateTime" />
+    <Property Name="TimeFrom" Type="Time" />
+    <Property Name="TimeTo" Type="Time" />
+    <Property Name="RoomNo" Type="Int32" />
+    <Property Name="TrainerID" Type="Int32" />
+    <Property Name="TrainerID2" Type="Int32" />
+    <Property Name="Attendees" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Absent" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="TimeChecked" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tbltraining">
+    <Key>
+      <PropertyRef Name="SubjectCode" />
+    </Key>
+    <Property Name="SubjectCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubjectArea" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="SubjectName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Subject_Shortname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Training_classification" Type="Int32" />
+    <Property Name="web_display_courses" Type="Int32" />
+    <Property Name="Calendar_view_grp" Type="Int32" />
+    <Property Name="ThirdPartyOffer" Type="Int32" />
+    <Property Name="Vsble_CDandD" Type="Int32" />
+    <Property Name="STCW_courses" Type="Int32" />
+    <Property Name="DisplaySubject" Type="Int32" />
+    <Property Name="YearsValid" Type="Int32" />
+    <Property Name="OpeningMonths" Type="Int32" />
+    <Property Name="CourseCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="NoHours" Type="Single" />
+    <Property Name="CourseDuration" Type="Single" />
+    <Property Name="AssignedRoom" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="PassingMarks_Type" Type="Int32" />
+    <Property Name="PassingMarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="PassingMarks_Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Min" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Max" Type="Int32" />
+    <Property Name="CourseFee" Type="Single" />
+    <Property Name="PublishRate" Type="Single" />
+    <Property Name="EntryStandards" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="Prerequisite" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="CourseOwner" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="AssignedInstructor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Assessor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Supervisor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="AccreditationExpirationDate" Type="DateTime" />
+    <Property Name="RequestingCompany" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="OnDemandOnly" Type="Int32" />
+    <Property Name="ResponsibleUser" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="OpenTP" Type="Int32" />
+    <Property Name="UtilizationCount" Type="Int32" />
+    <Property Name="Classification" Type="Int32" />
+    <Property Name="MatrixCourse" Type="Int32" />
+    <Property Name="CertIssued" Type="Int32" />
+    <Property Name="Accreditor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="DocumentFormat" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Cadet_crse_clsfctn" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="certAllowedNoGrade" Type="Int32" />
+    <Property Name="OnQuartSchedDispOnly" Type="Int32" />
+    <Property Name="IMTT_sub" Type="Int32" />
+    <Property Name="OnTheDayBooking" Type="Int32" />
+    <Property Name="CulinaryOrdering" Type="Int32" />
+    <Property Name="cdt_crse_dsply_matrix" Type="Int32" />
+    <Property Name="bus_act_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="ETOOrdering" Type="Int32" />
+    <Property Name="MainCourse" Type="Int32" />
+    <Property Name="SubCourseClassification" Type="Int32" />
+    <Property Name="PaidCourse" Type="Int32" />
+    <Property Name="POTP_allowed_courses" Type="Int32" />
+    <Property Name="MNPI_cert_to_display" Type="Int32" />
+    <Property Name="TrainingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TrainingGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Report_Course_Display" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AllowedConflictTraining" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="UseTimeRestriction" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="issue_certificate" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="with_bhve_asstmnt" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="opn_scheduling" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblschedules" Relationship="Self.tblschedule_ibfk_1" FromRole="tbltrainings" ToRole="tblschedule" />
+  </EntityType>
+  <EntityType Name="tbluser">
+    <Key>
+      <PropertyRef Name="userno" />
+    </Key>
+    <Property Name="userno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="pass" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="web_pass" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="active_accnt" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="accessname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="u_rank" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="u_lname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="u_fname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="randd_access" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="accessmode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="oncall" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="groupID" Type="Int32" />
+    <Property Name="cdtrecord" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="batchass" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="uploadgrades" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cdtmonitor" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="groupreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="batchreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="schoreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="poolreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="adsreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="writtensched" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="culrecord" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="crewrecord" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="culbatch" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="culmon" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="createschedule" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cbtschedule" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="viewparticipants" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="specialtraining" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="classes" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cbttraining" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="culbatchreport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="culmasterlist" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="matrix_report" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="matrix_report_high" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="print_cert" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="assign_cert" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="outside_access" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="outside_access_matrix" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="dorm_booking" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="delete_record" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="hotel_booking" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="trainee_record" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="external_record" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="mnrecord" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="operation" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="thirdparty" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="dormitory" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="report" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="marketReport" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="paymentSummary" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="dataexchange" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="reopen_grading" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="hotel_dorm_reporting" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="external_booking" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cashier" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="dwnld_cert" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="mtrx_meal_prov" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="UserCompany" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ViewAttendance" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cadet_records" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="mtrx_cdt_records_v" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="cadet_course_booking" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="deck_engine_access" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="user_class" Type="Int32" />
+    <Property Name="crew_regrouping" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="a_directory_full_control" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="b_qa_full_ctrl" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="c_courses_full_control" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="trainees_info_locked" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="recruitment_booking" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="sales_mod" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="training_coordinator" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="booking_group" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="audit_trail" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="company_access" Type="Int32" />
+    <Property Name="cy_intended_report" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="emp_id" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="user_pos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="um_booker_group" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="helpdesk_access" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="grade_display_access" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="opn_schedule_creator" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="opn_schedule_instructor" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="behavioral_access" Type="Int32" />
+  </EntityType>
+  <Association Name="tblscheddata_ibfk_2">
+    <End Role="tblcrew" Type="Self.tblcrew" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="tblscheddata" Type="Self.tblscheddata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblcrew">
+        <PropertyRef Name="MNNO" />
+      </Principal>
+      <Dependent Role="tblscheddata">
+        <PropertyRef Name="MNNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="tblscheddata_ibfk_1">
+    <End Role="tblschedule" Type="Self.tblschedule" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="tblscheddata" Type="Self.tblscheddata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblschedule">
+        <PropertyRef Name="SchedID" />
+      </Principal>
+      <Dependent Role="tblscheddata">
+        <PropertyRef Name="SchedID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="tblschedule_ibfk_1">
+    <End Role="tbltrainings" Type="Self.tbltraining" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="tblschedule" Type="Self.tblschedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbltrainings">
+        <PropertyRef Name="SubjectCode" />
+      </Principal>
+      <Dependent Role="tblschedule">
+        <PropertyRef Name="TrainingID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="officecadetprogramEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="keygennoyears" EntityType="Self.keygennoyear" />
+    <EntitySet Name="tblbatches" EntityType="Self.tblbatch" />
+    <EntitySet Name="tblbatch_enrolled" EntityType="Self.tblbatch_enrolled" />
+    <EntitySet Name="tblbatch_general_remarks" EntityType="Self.tblbatch_general_remarks" />
+    <EntitySet Name="tblbatch_individual_merit_points" EntityType="Self.tblbatch_individual_merit_points" />
+    <EntitySet Name="tblbatch_individual_remarks" EntityType="Self.tblbatch_individual_remarks" />
+    <EntitySet Name="tblbatch_merits_category" EntityType="Self.tblbatch_merits_category" />
+    <EntitySet Name="tblbatch_merits_demerits" EntityType="Self.tblbatch_merits_demerits" />
+    <EntitySet Name="tblbatch_merits_list" EntityType="Self.tblbatch_merits_list" />
+    <EntitySet Name="tblbatch_offense_category" EntityType="Self.tblbatch_offense_category" />
+    <EntitySet Name="tblbatch_offense_list" EntityType="Self.tblbatch_offense_list" />
+    <EntitySet Name="tblbatch_offense_records" EntityType="Self.tblbatch_offense_records" />
+    <EntitySet Name="tblbatchassignments" EntityType="Self.tblbatchassignment" />
+    <EntitySet Name="tblbehavioral_asessment_gen_remark" EntityType="Self.tblbehavioral_asessment_gen_remark" />
+    <EntitySet Name="tblbehavioral_assessment" EntityType="Self.tblbehavioral_assessment" />
+    <EntitySet Name="tblcourse_curriculum" EntityType="Self.tblcourse_curriculum" />
+    <EntitySet Name="tblcrews" EntityType="Self.tblcrew" />
+    <EntitySet Name="tblranks" EntityType="Self.tblrank" />
+    <EntitySet Name="tblscheddatas" EntityType="Self.tblscheddata" />
+    <EntitySet Name="tblschedules" EntityType="Self.tblschedule" />
+    <EntitySet Name="tbltpcompanies" EntityType="Self.tbltpcompany" />
+    <EntitySet Name="tbltraining_attendees" EntityType="Self.tbltraining_attendees" />
+    <EntitySet Name="tbltrainings" EntityType="Self.tbltraining" />
+    <EntitySet Name="tblusers" EntityType="Self.tbluser" />
+    <AssociationSet Name="tblscheddata_ibfk_2" Association="Self.tblscheddata_ibfk_2">
+      <End Role="tblcrew" EntitySet="tblcrews" />
+      <End Role="tblscheddata" EntitySet="tblscheddatas" />
+    </AssociationSet>
+    <AssociationSet Name="tblscheddata_ibfk_1" Association="Self.tblscheddata_ibfk_1">
+      <End Role="tblschedule" EntitySet="tblschedules" />
+      <End Role="tblscheddata" EntitySet="tblscheddatas" />
+    </AssociationSet>
+    <AssociationSet Name="tblschedule_ibfk_1" Association="Self.tblschedule_ibfk_1">
+      <End Role="tbltrainings" EntitySet="tbltrainings" />
+      <End Role="tblschedule" EntitySet="tblschedules" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

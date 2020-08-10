@@ -1,0 +1,56 @@
+﻿using System.Web;
+using System.Web.Optimization;
+
+namespace SAMPortal
+{
+    public class BundleConfig
+    {
+        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        public static void RegisterBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.validate*"));
+
+            // Use the development version of Modernizr to develop with and learn from. Then, when you're
+            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+                        "~/Scripts/modernizr-*"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/respond.js"));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/jquery-ui-themes-1.12.1/jquery-ui.css",
+                      "~/Content/site.css",
+                      "~/admin-lte/css/AdminLTE.css",
+                      "~/admin-lte/css/skins/skin-red.css",
+                      "~/admin-lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css",
+                      "~/admin-lte/bower_components/bootstrap/dist/css/bootstrap.min.css",
+                      "~/admin-lte/bower_components/font-awesome/css/font-awesome.min.css",
+                      "~/admin-lte/bower_components/Ionicons/css/ionicons.min.css",
+                      "~/admin-lte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+                      "~/admin-lte/plugins/pace/pace.css",
+                      "~/Content/select2-4.0.6-rc.1/dist/css/select2.min.css",
+                      "~/Content/select2-4.0.6-rc.1/dist/css/select2-bootstrap.min.css",
+                      "~/DataTables/datatables.min.css"
+                      ));
+
+            bundles.Add(new ScriptBundle("~/admin-lte/js").Include(
+             "~/admin-lte/js/adminlte.js",
+             "~/admin-lte/plugins/fastclick/fastclick.js",
+             "~/admin-lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js",
+             "~/admin-lte/bower_components/PACE/pace.js",
+             "~/admin-lte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+             "~/Content/select2-4.0.6-rc.1/dist/js/select2.min.js",
+             "~/DataTables/datatables.min.js",
+             "~/Scripts/userscript.js"
+             ));
+
+        }
+    }
+}

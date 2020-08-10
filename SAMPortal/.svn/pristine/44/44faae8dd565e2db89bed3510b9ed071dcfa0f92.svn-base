@@ -1,0 +1,544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="officecadetprogramModelStoreContainer" CdmEntityContainer="officecadetprogramEntities">
+    <EntitySetMapping Name="keygennoyears">
+      <EntityTypeMapping TypeName="officecadetprogramModel.keygennoyear">
+        <MappingFragment StoreEntitySet="keygennoyear">
+          <ScalarProperty Name="seqID" ColumnName="seqID" />
+          <ScalarProperty Name="KeySequence" ColumnName="KeySequence" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatches">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch">
+        <MappingFragment StoreEntitySet="tblbatch">
+          <ScalarProperty Name="batchNo" ColumnName="batchNo" />
+          <ScalarProperty Name="batchName" ColumnName="batchName" />
+          <ScalarProperty Name="batchYear" ColumnName="batchYear" />
+          <ScalarProperty Name="rank" ColumnName="rank" />
+          <ScalarProperty Name="batchDesc" ColumnName="batchDesc" />
+          <ScalarProperty Name="trainingStarted" ColumnName="trainingStarted" />
+          <ScalarProperty Name="trainingEnded" ColumnName="trainingEnded" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="display_batch" ColumnName="display_batch" />
+          <ScalarProperty Name="class" ColumnName="class" />
+          <ScalarProperty Name="curriculum_used" ColumnName="curriculum_used" />
+          <ScalarProperty Name="display_to_matrix" ColumnName="display_to_matrix" />
+          <ScalarProperty Name="ordering_batch" ColumnName="ordering_batch" />
+          <ScalarProperty Name="recruitment_use" ColumnName="recruitment_use" />
+          <ScalarProperty Name="external_batch" ColumnName="external_batch" />
+          <ScalarProperty Name="batch_for_cadetship" ColumnName="batch_for_cadetship" />
+          <ScalarProperty Name="next_batch_id" ColumnName="next_batch_id" />
+          <ScalarProperty Name="opn_display" ColumnName="opn_display" />
+          <ScalarProperty Name="last_batch_id" ColumnName="last_batch_id" />
+          <ScalarProperty Name="merit_starting_points" ColumnName="merit_starting_points" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_enrolled">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_enrolled">
+        <MappingFragment StoreEntitySet="tblbatch_enrolled">
+          <ScalarProperty Name="numSeq" ColumnName="numSeq" />
+          <ScalarProperty Name="batchNo" ColumnName="batchNo" />
+          <ScalarProperty Name="mnno" ColumnName="mnno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_general_remarks">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_general_remarks">
+        <MappingFragment StoreEntitySet="tblbatch_general_remarks">
+          <ScalarProperty Name="bgr_id" ColumnName="bgr_id" />
+          <ScalarProperty Name="bgr_batchno" ColumnName="bgr_batchno" />
+          <ScalarProperty Name="bgr_general_remarks" ColumnName="bgr_general_remarks" />
+          <ScalarProperty Name="bgr_dateinserted" ColumnName="bgr_dateinserted" />
+          <ScalarProperty Name="bgr_insertedby" ColumnName="bgr_insertedby" />
+          <ScalarProperty Name="bgr_lastupdated" ColumnName="bgr_lastupdated" />
+          <ScalarProperty Name="bgr_lastupdatedby" ColumnName="bgr_lastupdatedby" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_individual_merit_points">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_individual_merit_points">
+        <MappingFragment StoreEntitySet="tblbatch_individual_merit_points">
+          <ScalarProperty Name="crew_merits_id" ColumnName="crew_merits_id" />
+          <ScalarProperty Name="cm_batchno" ColumnName="cm_batchno" />
+          <ScalarProperty Name="cm_mnno" ColumnName="cm_mnno" />
+          <ScalarProperty Name="cm_merits_id" ColumnName="cm_merits_id" />
+          <ScalarProperty Name="cm_remarks" ColumnName="cm_remarks" />
+          <ScalarProperty Name="cm_points" ColumnName="cm_points" />
+          <ScalarProperty Name="cm_insertedby" ColumnName="cm_insertedby" />
+          <ScalarProperty Name="cm_dateinserted" ColumnName="cm_dateinserted" />
+          <ScalarProperty Name="cm_updatedby" ColumnName="cm_updatedby" />
+          <ScalarProperty Name="cm_datelastupdated" ColumnName="cm_datelastupdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_individual_remarks">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_individual_remarks">
+        <MappingFragment StoreEntitySet="tblbatch_individual_remarks">
+          <ScalarProperty Name="bir_id" ColumnName="bir_id" />
+          <ScalarProperty Name="bir_mnno" ColumnName="bir_mnno" />
+          <ScalarProperty Name="bir_batchno" ColumnName="bir_batchno" />
+          <ScalarProperty Name="bir_remarks" ColumnName="bir_remarks" />
+          <ScalarProperty Name="bir_dateinserted" ColumnName="bir_dateinserted" />
+          <ScalarProperty Name="bir_insertedby" ColumnName="bir_insertedby" />
+          <ScalarProperty Name="bir_lastupdated" ColumnName="bir_lastupdated" />
+          <ScalarProperty Name="bir_lastupdateby" ColumnName="bir_lastupdateby" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_merits_category">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_merits_category">
+        <MappingFragment StoreEntitySet="tblbatch_merits_category">
+          <ScalarProperty Name="merits_id" ColumnName="merits_id" />
+          <ScalarProperty Name="merits_category_name" ColumnName="merits_category_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_merits_demerits">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_merits_demerits">
+        <MappingFragment StoreEntitySet="tblbatch_merits_demerits">
+          <ScalarProperty Name="batch_merits_id" ColumnName="batch_merits_id" />
+          <ScalarProperty Name="bm_batchno" ColumnName="bm_batchno" />
+          <ScalarProperty Name="bm_type" ColumnName="bm_type" />
+          <ScalarProperty Name="bm_merits_point" ColumnName="bm_merits_point" />
+          <ScalarProperty Name="bm_remarks" ColumnName="bm_remarks" />
+          <ScalarProperty Name="bm_insertedby" ColumnName="bm_insertedby" />
+          <ScalarProperty Name="bm_dateinserted" ColumnName="bm_dateinserted" />
+          <ScalarProperty Name="bm_updatedby" ColumnName="bm_updatedby" />
+          <ScalarProperty Name="bm_datelastupdated" ColumnName="bm_datelastupdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_merits_list">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_merits_list">
+        <MappingFragment StoreEntitySet="tblbatch_merits_list">
+          <ScalarProperty Name="merits_list_id" ColumnName="merits_list_id" />
+          <ScalarProperty Name="merits_names" ColumnName="merits_names" />
+          <ScalarProperty Name="merits_description" ColumnName="merits_description" />
+          <ScalarProperty Name="active_merits" ColumnName="active_merits" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_offense_category">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_offense_category">
+        <MappingFragment StoreEntitySet="tblbatch_offense_category">
+          <ScalarProperty Name="cat_offense_id" ColumnName="cat_offense_id" />
+          <ScalarProperty Name="offense_category" ColumnName="offense_category" />
+          <ScalarProperty Name="offense_demerit_points" ColumnName="offense_demerit_points" />
+          <ScalarProperty Name="offense_order" ColumnName="offense_order" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_offense_list">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_offense_list">
+        <MappingFragment StoreEntitySet="tblbatch_offense_list">
+          <ScalarProperty Name="offense_id" ColumnName="offense_id" />
+          <ScalarProperty Name="offense_category" ColumnName="offense_category" />
+          <ScalarProperty Name="offense_name" ColumnName="offense_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatch_offense_records">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatch_offense_records">
+        <MappingFragment StoreEntitySet="tblbatch_offense_records">
+          <ScalarProperty Name="offense_record_id" ColumnName="offense_record_id" />
+          <ScalarProperty Name="or_mnno" ColumnName="or_mnno" />
+          <ScalarProperty Name="or_batchno" ColumnName="or_batchno" />
+          <ScalarProperty Name="or_offense_category" ColumnName="or_offense_category" />
+          <ScalarProperty Name="or_offense_id" ColumnName="or_offense_id" />
+          <ScalarProperty Name="or_offense_remarks" ColumnName="or_offense_remarks" />
+          <ScalarProperty Name="or_insertedby" ColumnName="or_insertedby" />
+          <ScalarProperty Name="or_dateinserted" ColumnName="or_dateinserted" />
+          <ScalarProperty Name="or_updatedby" ColumnName="or_updatedby" />
+          <ScalarProperty Name="or_dateupdated" ColumnName="or_dateupdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbatchassignments">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbatchassignment">
+        <MappingFragment StoreEntitySet="tblbatchassignment">
+          <ScalarProperty Name="AppNo" ColumnName="AppNo" />
+          <ScalarProperty Name="BatchName" ColumnName="BatchName" />
+          <ScalarProperty Name="DateAssigned" ColumnName="DateAssigned" />
+          <ScalarProperty Name="ETD" ColumnName="ETD" />
+          <ScalarProperty Name="Vessel" ColumnName="Vessel" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="USVisa" ColumnName="USVisa" />
+          <ScalarProperty Name="Availability" ColumnName="Availability" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbehavioral_asessment_gen_remark">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbehavioral_asessment_gen_remark">
+        <MappingFragment StoreEntitySet="tblbehavioral_asessment_gen_remark">
+          <ScalarProperty Name="bhvr_gen_rmrk_id" ColumnName="bhvr_gen_rmrk_id" />
+          <ScalarProperty Name="bhvr_gen_mnno" ColumnName="bhvr_gen_mnno" />
+          <ScalarProperty Name="first_block_gen_remark" ColumnName="first_block_gen_remark" />
+          <ScalarProperty Name="latest_encoder_a" ColumnName="latest_encoder_a" />
+          <ScalarProperty Name="date_last_updated_a" ColumnName="date_last_updated_a" />
+          <ScalarProperty Name="second_block_gen_remark" ColumnName="second_block_gen_remark" />
+          <ScalarProperty Name="latest_encoder_b" ColumnName="latest_encoder_b" />
+          <ScalarProperty Name="date_last_updated_b" ColumnName="date_last_updated_b" />
+          <ScalarProperty Name="third_block_gen_remark" ColumnName="third_block_gen_remark" />
+          <ScalarProperty Name="latest_encoder_c" ColumnName="latest_encoder_c" />
+          <ScalarProperty Name="date_last_updated_c" ColumnName="date_last_updated_c" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblbehavioral_assessment">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblbehavioral_assessment">
+        <MappingFragment StoreEntitySet="tblbehavioral_assessment">
+          <ScalarProperty Name="bapt_id" ColumnName="bapt_id" />
+          <ScalarProperty Name="bapt_mnno" ColumnName="bapt_mnno" />
+          <ScalarProperty Name="bapt_schedid" ColumnName="bapt_schedid" />
+          <ScalarProperty Name="gen_conduct" ColumnName="gen_conduct" />
+          <ScalarProperty Name="bapt_comm" ColumnName="bapt_comm" />
+          <ScalarProperty Name="bapt_init" ColumnName="bapt_init" />
+          <ScalarProperty Name="bapt_assert" ColumnName="bapt_assert" />
+          <ScalarProperty Name="bapt_comment" ColumnName="bapt_comment" />
+          <ScalarProperty Name="bapt_encoder" ColumnName="bapt_encoder" />
+          <ScalarProperty Name="bapt_datecoded" ColumnName="bapt_datecoded" />
+          <ScalarProperty Name="bapt_batci_remark" ColumnName="bapt_batci_remark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblcourse_curriculum">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblcourse_curriculum">
+        <MappingFragment StoreEntitySet="tblcourse_curriculum">
+          <ScalarProperty Name="cur_id" ColumnName="cur_id" />
+          <ScalarProperty Name="cur_year" ColumnName="cur_year" />
+          <ScalarProperty Name="cur_dept" ColumnName="cur_dept" />
+          <ScalarProperty Name="cur_first_blk" ColumnName="cur_first_blk" />
+          <ScalarProperty Name="cur_second_blk" ColumnName="cur_second_blk" />
+          <ScalarProperty Name="cur_third_blk" ColumnName="cur_third_blk" />
+          <ScalarProperty Name="cur_ver" ColumnName="cur_ver" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblcrews">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblcrew">
+        <MappingFragment StoreEntitySet="tblcrew">
+          <ScalarProperty Name="MNNO" ColumnName="MNNO" />
+          <ScalarProperty Name="Rank" ColumnName="Rank" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="MName" ColumnName="MName" />
+          <ScalarProperty Name="BDate" ColumnName="BDate" />
+          <ScalarProperty Name="BPlace" ColumnName="BPlace" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Employer" ColumnName="Employer" />
+          <ScalarProperty Name="CrewStatus" ColumnName="CrewStatus" />
+          <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+          <ScalarProperty Name="AvailabilityDate" ColumnName="AvailabilityDate" />
+          <ScalarProperty Name="cyprus_group" ColumnName="cyprus_group" />
+          <ScalarProperty Name="sub_cy_grp" ColumnName="sub_cy_grp" />
+          <ScalarProperty Name="AssignedVessel" ColumnName="AssignedVessel" />
+          <ScalarProperty Name="CC_SignOffDate" ColumnName="CC_SignOffDate" />
+          <ScalarProperty Name="LineUpDate" ColumnName="LineUpDate" />
+          <ScalarProperty Name="SignOnDate" ColumnName="SignOnDate" />
+          <ScalarProperty Name="EOCDate" ColumnName="EOCDate" />
+          <ScalarProperty Name="LastVessel" ColumnName="LastVessel" />
+          <ScalarProperty Name="LastSignOnDate" ColumnName="LastSignOnDate" />
+          <ScalarProperty Name="LastSignOffDate" ColumnName="LastSignOffDate" />
+          <ScalarProperty Name="TrainingStartDate" ColumnName="TrainingStartDate" />
+          <ScalarProperty Name="TrainingEndDate" ColumnName="TrainingEndDate" />
+          <ScalarProperty Name="MealProvision" ColumnName="MealProvision" />
+          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+          <ScalarProperty Name="CurriculumUsed" ColumnName="CurriculumUsed" />
+          <ScalarProperty Name="AppliedToMarlow" ColumnName="AppliedToMarlow" />
+          <ScalarProperty Name="Locked_to_group" ColumnName="Locked_to_group" />
+          <ScalarProperty Name="Cmpny_Owner" ColumnName="Cmpny_Owner" />
+          <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
+          <ScalarProperty Name="Accounted" ColumnName="Accounted" />
+          <ScalarProperty Name="Record_Locked" ColumnName="Record_Locked" />
+          <ScalarProperty Name="ExternalID" ColumnName="ExternalID" />
+          <ScalarProperty Name="AccessPasswrd" ColumnName="AccessPasswrd" />
+          <ScalarProperty Name="num_onboard" ColumnName="num_onboard" />
+          <ScalarProperty Name="cadetship_stats" ColumnName="cadetship_stats" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblranks">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblrank">
+        <MappingFragment StoreEntitySet="tblrank">
+          <ScalarProperty Name="rank" ColumnName="rank" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="department" ColumnName="department" />
+          <ScalarProperty Name="rank_level" ColumnName="rank_level" />
+          <ScalarProperty Name="elect_class" ColumnName="elect_class" />
+          <ScalarProperty Name="main_rank" ColumnName="main_rank" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblscheddatas">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblscheddata">
+        <MappingFragment StoreEntitySet="tblscheddata">
+          <ScalarProperty Name="RecordNo" ColumnName="RecordNo" />
+          <ScalarProperty Name="SchedID" ColumnName="SchedID" />
+          <ScalarProperty Name="MNNo" ColumnName="MNNo" />
+          <ScalarProperty Name="CertNo" ColumnName="CertNo" />
+          <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="Marking" ColumnName="Marking" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="Scheduler_no" ColumnName="Scheduler_no" />
+          <ScalarProperty Name="DateScheduled" ColumnName="DateScheduled" />
+          <ScalarProperty Name="Export" ColumnName="Export" />
+          <ScalarProperty Name="CertStatus" ColumnName="CertStatus" />
+          <ScalarProperty Name="CertRecBy" ColumnName="CertRecBy" />
+          <ScalarProperty Name="CertUpBy" ColumnName="CertUpBy" />
+          <ScalarProperty Name="CertEndTo" ColumnName="CertEndTo" />
+          <ScalarProperty Name="CertEndorsedTo" ColumnName="CertEndorsedTo" />
+          <ScalarProperty Name="registrationNo" ColumnName="registrationNo" />
+          <ScalarProperty Name="paymentMode" ColumnName="paymentMode" />
+          <ScalarProperty Name="courseFee" ColumnName="courseFee" />
+          <ScalarProperty Name="pesoFee" ColumnName="pesoFee" />
+          <ScalarProperty Name="PaymentRecBy" ColumnName="PaymentRecBy" />
+          <ScalarProperty Name="CertValidity" ColumnName="CertValidity" />
+          <ScalarProperty Name="TrainorComment" ColumnName="TrainorComment" />
+          <ScalarProperty Name="AssignedGroupId" ColumnName="AssignedGroupId" />
+          <ScalarProperty Name="DateCertGenerated" ColumnName="DateCertGenerated" />
+          <ScalarProperty Name="ReassignedOPNGrp" ColumnName="ReassignedOPNGrp" />
+          <ScalarProperty Name="CrewRank" ColumnName="CrewRank" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="Employer" ColumnName="Employer" />
+          <ScalarProperty Name="MarkRemarks" ColumnName="MarkRemarks" />
+          <ScalarProperty Name="previous_mnno" ColumnName="previous_mnno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblschedules">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tblschedule">
+        <MappingFragment StoreEntitySet="tblschedule">
+          <ScalarProperty Name="SchedID" ColumnName="SchedID" />
+          <ScalarProperty Name="TrainingID" ColumnName="TrainingID" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+          <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+          <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+          <ScalarProperty Name="TimeFrom" ColumnName="TimeFrom" />
+          <ScalarProperty Name="TimeTo" ColumnName="TimeTo" />
+          <ScalarProperty Name="MaxCapacity" ColumnName="MaxCapacity" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="ToShow" ColumnName="ToShow" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="ToOpen" ColumnName="ToOpen" />
+          <ScalarProperty Name="ClassShift" ColumnName="ClassShift" />
+          <ScalarProperty Name="PracticalClass" ColumnName="PracticalClass" />
+          <ScalarProperty Name="CertUploaded" ColumnName="CertUploaded" />
+          <ScalarProperty Name="CertDownloaded" ColumnName="CertDownloaded" />
+          <ScalarProperty Name="DateCertExported" ColumnName="DateCertExported" />
+          <ScalarProperty Name="BookerGroup" ColumnName="BookerGroup" />
+          <ScalarProperty Name="MNPICreated_Schedule" ColumnName="MNPICreated_Schedule" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbltpcompanies">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tbltpcompany">
+        <MappingFragment StoreEntitySet="tbltpcompany">
+          <ScalarProperty Name="companyID" ColumnName="companyID" />
+          <ScalarProperty Name="companyCode" ColumnName="companyCode" />
+          <ScalarProperty Name="companyName" ColumnName="companyName" />
+          <ScalarProperty Name="companyShortName" ColumnName="companyShortName" />
+          <ScalarProperty Name="companyLocation" ColumnName="companyLocation" />
+          <ScalarProperty Name="companyEmail" ColumnName="companyEmail" />
+          <ScalarProperty Name="contactPerson" ColumnName="contactPerson" />
+          <ScalarProperty Name="contactPersonPos" ColumnName="contactPersonPos" />
+          <ScalarProperty Name="companyContactNo" ColumnName="companyContactNo" />
+          <ScalarProperty Name="terms" ColumnName="terms" />
+          <ScalarProperty Name="courseDiscount" ColumnName="courseDiscount" />
+          <ScalarProperty Name="MOA" ColumnName="MOA" />
+          <ScalarProperty Name="IMEC" ColumnName="IMEC" />
+          <ScalarProperty Name="TIN" ColumnName="TIN" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbltraining_attendees">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tbltraining_attendees">
+        <MappingFragment StoreEntitySet="tbltraining_attendees">
+          <ScalarProperty Name="Attendance_id" ColumnName="Attendance_id" />
+          <ScalarProperty Name="SchedID" ColumnName="SchedID" />
+          <ScalarProperty Name="SchedDate" ColumnName="SchedDate" />
+          <ScalarProperty Name="TimeFrom" ColumnName="TimeFrom" />
+          <ScalarProperty Name="TimeTo" ColumnName="TimeTo" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="TrainerID" ColumnName="TrainerID" />
+          <ScalarProperty Name="TrainerID2" ColumnName="TrainerID2" />
+          <ScalarProperty Name="Attendees" ColumnName="Attendees" />
+          <ScalarProperty Name="Absent" ColumnName="Absent" />
+          <ScalarProperty Name="TimeChecked" ColumnName="TimeChecked" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbltrainings">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tbltraining">
+        <MappingFragment StoreEntitySet="tbltrainings">
+          <ScalarProperty Name="SubjectCode" ColumnName="SubjectCode" />
+          <ScalarProperty Name="SubjectArea" ColumnName="SubjectArea" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+          <ScalarProperty Name="Subject_Shortname" ColumnName="Subject_Shortname" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="Training_classification" ColumnName="Training_classification" />
+          <ScalarProperty Name="web_display_courses" ColumnName="web_display_courses" />
+          <ScalarProperty Name="Calendar_view_grp" ColumnName="Calendar_view_grp" />
+          <ScalarProperty Name="ThirdPartyOffer" ColumnName="ThirdPartyOffer" />
+          <ScalarProperty Name="Vsble_CDandD" ColumnName="Vsble_CDandD" />
+          <ScalarProperty Name="STCW_courses" ColumnName="STCW_courses" />
+          <ScalarProperty Name="DisplaySubject" ColumnName="DisplaySubject" />
+          <ScalarProperty Name="YearsValid" ColumnName="YearsValid" />
+          <ScalarProperty Name="OpeningMonths" ColumnName="OpeningMonths" />
+          <ScalarProperty Name="CourseCode" ColumnName="CourseCode" />
+          <ScalarProperty Name="NoHours" ColumnName="NoHours" />
+          <ScalarProperty Name="CourseDuration" ColumnName="CourseDuration" />
+          <ScalarProperty Name="AssignedRoom" ColumnName="AssignedRoom" />
+          <ScalarProperty Name="PassingMarks_Type" ColumnName="PassingMarks_Type" />
+          <ScalarProperty Name="PassingMarks" ColumnName="PassingMarks" />
+          <ScalarProperty Name="PassingMarks_Remarks" ColumnName="PassingMarks_Remarks" />
+          <ScalarProperty Name="Min" ColumnName="Min" />
+          <ScalarProperty Name="Max" ColumnName="Max" />
+          <ScalarProperty Name="CourseFee" ColumnName="CourseFee" />
+          <ScalarProperty Name="PublishRate" ColumnName="PublishRate" />
+          <ScalarProperty Name="EntryStandards" ColumnName="EntryStandards" />
+          <ScalarProperty Name="Prerequisite" ColumnName="Prerequisite" />
+          <ScalarProperty Name="CourseOwner" ColumnName="CourseOwner" />
+          <ScalarProperty Name="AssignedInstructor" ColumnName="AssignedInstructor" />
+          <ScalarProperty Name="Assessor" ColumnName="Assessor" />
+          <ScalarProperty Name="Supervisor" ColumnName="Supervisor" />
+          <ScalarProperty Name="AccreditationExpirationDate" ColumnName="AccreditationExpirationDate" />
+          <ScalarProperty Name="RequestingCompany" ColumnName="RequestingCompany" />
+          <ScalarProperty Name="OnDemandOnly" ColumnName="OnDemandOnly" />
+          <ScalarProperty Name="ResponsibleUser" ColumnName="ResponsibleUser" />
+          <ScalarProperty Name="OpenTP" ColumnName="OpenTP" />
+          <ScalarProperty Name="UtilizationCount" ColumnName="UtilizationCount" />
+          <ScalarProperty Name="Classification" ColumnName="Classification" />
+          <ScalarProperty Name="MatrixCourse" ColumnName="MatrixCourse" />
+          <ScalarProperty Name="CertIssued" ColumnName="CertIssued" />
+          <ScalarProperty Name="Accreditor" ColumnName="Accreditor" />
+          <ScalarProperty Name="DocumentFormat" ColumnName="DocumentFormat" />
+          <ScalarProperty Name="Cadet_crse_clsfctn" ColumnName="Cadet_crse_clsfctn" />
+          <ScalarProperty Name="certAllowedNoGrade" ColumnName="certAllowedNoGrade" />
+          <ScalarProperty Name="OnQuartSchedDispOnly" ColumnName="OnQuartSchedDispOnly" />
+          <ScalarProperty Name="IMTT_sub" ColumnName="IMTT_sub" />
+          <ScalarProperty Name="OnTheDayBooking" ColumnName="OnTheDayBooking" />
+          <ScalarProperty Name="CulinaryOrdering" ColumnName="CulinaryOrdering" />
+          <ScalarProperty Name="cdt_crse_dsply_matrix" ColumnName="cdt_crse_dsply_matrix" />
+          <ScalarProperty Name="bus_act_id" ColumnName="bus_act_id" />
+          <ScalarProperty Name="ETOOrdering" ColumnName="ETOOrdering" />
+          <ScalarProperty Name="MainCourse" ColumnName="MainCourse" />
+          <ScalarProperty Name="SubCourseClassification" ColumnName="SubCourseClassification" />
+          <ScalarProperty Name="PaidCourse" ColumnName="PaidCourse" />
+          <ScalarProperty Name="POTP_allowed_courses" ColumnName="POTP_allowed_courses" />
+          <ScalarProperty Name="MNPI_cert_to_display" ColumnName="MNPI_cert_to_display" />
+          <ScalarProperty Name="TrainingType" ColumnName="TrainingType" />
+          <ScalarProperty Name="TrainingGroup" ColumnName="TrainingGroup" />
+          <ScalarProperty Name="Report_Course_Display" ColumnName="Report_Course_Display" />
+          <ScalarProperty Name="AllowedConflictTraining" ColumnName="AllowedConflictTraining" />
+          <ScalarProperty Name="UseTimeRestriction" ColumnName="UseTimeRestriction" />
+          <ScalarProperty Name="issue_certificate" ColumnName="issue_certificate" />
+          <ScalarProperty Name="with_bhve_asstmnt" ColumnName="with_bhve_asstmnt" />
+          <ScalarProperty Name="opn_scheduling" ColumnName="opn_scheduling" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblusers">
+      <EntityTypeMapping TypeName="officecadetprogramModel.tbluser">
+        <MappingFragment StoreEntitySet="tbluser">
+          <ScalarProperty Name="userno" ColumnName="userno" />
+          <ScalarProperty Name="user" ColumnName="user" />
+          <ScalarProperty Name="pass" ColumnName="pass" />
+          <ScalarProperty Name="web_pass" ColumnName="web_pass" />
+          <ScalarProperty Name="active_accnt" ColumnName="active_accnt" />
+          <ScalarProperty Name="accessname" ColumnName="accessname" />
+          <ScalarProperty Name="u_rank" ColumnName="u_rank" />
+          <ScalarProperty Name="u_lname" ColumnName="u_lname" />
+          <ScalarProperty Name="u_fname" ColumnName="u_fname" />
+          <ScalarProperty Name="randd_access" ColumnName="randd_access" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="accessmode" ColumnName="accessmode" />
+          <ScalarProperty Name="oncall" ColumnName="oncall" />
+          <ScalarProperty Name="groupID" ColumnName="groupID" />
+          <ScalarProperty Name="cdtrecord" ColumnName="cdtrecord" />
+          <ScalarProperty Name="batchass" ColumnName="batchass" />
+          <ScalarProperty Name="uploadgrades" ColumnName="uploadgrades" />
+          <ScalarProperty Name="cdtmonitor" ColumnName="cdtmonitor" />
+          <ScalarProperty Name="groupreport" ColumnName="groupreport" />
+          <ScalarProperty Name="batchreport" ColumnName="batchreport" />
+          <ScalarProperty Name="schoreport" ColumnName="schoreport" />
+          <ScalarProperty Name="poolreport" ColumnName="poolreport" />
+          <ScalarProperty Name="adsreport" ColumnName="adsreport" />
+          <ScalarProperty Name="writtensched" ColumnName="writtensched" />
+          <ScalarProperty Name="culrecord" ColumnName="culrecord" />
+          <ScalarProperty Name="crewrecord" ColumnName="crewrecord" />
+          <ScalarProperty Name="culbatch" ColumnName="culbatch" />
+          <ScalarProperty Name="culmon" ColumnName="culmon" />
+          <ScalarProperty Name="createschedule" ColumnName="createschedule" />
+          <ScalarProperty Name="cbtschedule" ColumnName="cbtschedule" />
+          <ScalarProperty Name="viewparticipants" ColumnName="viewparticipants" />
+          <ScalarProperty Name="specialtraining" ColumnName="specialtraining" />
+          <ScalarProperty Name="classes" ColumnName="classes" />
+          <ScalarProperty Name="cbttraining" ColumnName="cbttraining" />
+          <ScalarProperty Name="culbatchreport" ColumnName="culbatchreport" />
+          <ScalarProperty Name="culmasterlist" ColumnName="culmasterlist" />
+          <ScalarProperty Name="matrix_report" ColumnName="matrix_report" />
+          <ScalarProperty Name="matrix_report_high" ColumnName="matrix_report_high" />
+          <ScalarProperty Name="print_cert" ColumnName="print_cert" />
+          <ScalarProperty Name="assign_cert" ColumnName="assign_cert" />
+          <ScalarProperty Name="outside_access" ColumnName="outside_access" />
+          <ScalarProperty Name="outside_access_matrix" ColumnName="outside_access_matrix" />
+          <ScalarProperty Name="dorm_booking" ColumnName="dorm_booking" />
+          <ScalarProperty Name="delete_record" ColumnName="delete_record" />
+          <ScalarProperty Name="hotel_booking" ColumnName="hotel_booking" />
+          <ScalarProperty Name="trainee_record" ColumnName="trainee_record" />
+          <ScalarProperty Name="external_record" ColumnName="external_record" />
+          <ScalarProperty Name="mnrecord" ColumnName="mnrecord" />
+          <ScalarProperty Name="operation" ColumnName="operation" />
+          <ScalarProperty Name="thirdparty" ColumnName="thirdparty" />
+          <ScalarProperty Name="dormitory" ColumnName="dormitory" />
+          <ScalarProperty Name="report" ColumnName="report" />
+          <ScalarProperty Name="marketReport" ColumnName="marketReport" />
+          <ScalarProperty Name="paymentSummary" ColumnName="paymentSummary" />
+          <ScalarProperty Name="dataexchange" ColumnName="dataexchange" />
+          <ScalarProperty Name="reopen_grading" ColumnName="reopen_grading" />
+          <ScalarProperty Name="hotel_dorm_reporting" ColumnName="hotel_dorm_reporting" />
+          <ScalarProperty Name="external_booking" ColumnName="external_booking" />
+          <ScalarProperty Name="cashier" ColumnName="cashier" />
+          <ScalarProperty Name="dwnld_cert" ColumnName="dwnld_cert" />
+          <ScalarProperty Name="mtrx_meal_prov" ColumnName="mtrx_meal_prov" />
+          <ScalarProperty Name="UserCompany" ColumnName="UserCompany" />
+          <ScalarProperty Name="ViewAttendance" ColumnName="ViewAttendance" />
+          <ScalarProperty Name="cadet_records" ColumnName="cadet_records" />
+          <ScalarProperty Name="mtrx_cdt_records_v" ColumnName="mtrx_cdt_records_v" />
+          <ScalarProperty Name="cadet_course_booking" ColumnName="cadet_course_booking" />
+          <ScalarProperty Name="deck_engine_access" ColumnName="deck_engine_access" />
+          <ScalarProperty Name="user_class" ColumnName="user_class" />
+          <ScalarProperty Name="crew_regrouping" ColumnName="crew_regrouping" />
+          <ScalarProperty Name="a_directory_full_control" ColumnName="a_directory_full_control" />
+          <ScalarProperty Name="b_qa_full_ctrl" ColumnName="b_qa_full_ctrl" />
+          <ScalarProperty Name="c_courses_full_control" ColumnName="c_courses_full_control" />
+          <ScalarProperty Name="trainees_info_locked" ColumnName="trainees_info_locked" />
+          <ScalarProperty Name="recruitment_booking" ColumnName="recruitment_booking" />
+          <ScalarProperty Name="sales_mod" ColumnName="sales_mod" />
+          <ScalarProperty Name="training_coordinator" ColumnName="training_coordinator" />
+          <ScalarProperty Name="booking_group" ColumnName="booking_group" />
+          <ScalarProperty Name="audit_trail" ColumnName="audit_trail" />
+          <ScalarProperty Name="company_access" ColumnName="company_access" />
+          <ScalarProperty Name="cy_intended_report" ColumnName="cy_intended_report" />
+          <ScalarProperty Name="emp_id" ColumnName="emp_id" />
+          <ScalarProperty Name="user_pos" ColumnName="user_pos" />
+          <ScalarProperty Name="um_booker_group" ColumnName="um_booker_group" />
+          <ScalarProperty Name="helpdesk_access" ColumnName="helpdesk_access" />
+          <ScalarProperty Name="grade_display_access" ColumnName="grade_display_access" />
+          <ScalarProperty Name="opn_schedule_creator" ColumnName="opn_schedule_creator" />
+          <ScalarProperty Name="opn_schedule_instructor" ColumnName="opn_schedule_instructor" />
+          <ScalarProperty Name="behavioral_access" ColumnName="behavioral_access" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

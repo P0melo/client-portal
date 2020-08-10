@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbidentityModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="users" Relationship="Self.userroles" FromRole="roles" ToRole="users" />
+  </EntityType>
+  <EntityType Name="userclaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ClaimType" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="ClaimValue" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="Self.ApplicationUser_Claims" FromRole="userclaims" ToRole="users" />
+  </EntityType>
+  <EntityType Name="userlogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="user" Relationship="Self.ApplicationUser_Logins" FromRole="userlogins" ToRole="users" />
+  </EntityType>
+  <EntityType Name="useroldpassword">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="String" />
+    <Property Name="Timestamp" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="userclaims" Relationship="Self.ApplicationUser_Claims" FromRole="users" ToRole="userclaims" />
+    <NavigationProperty Name="userlogins" Relationship="Self.ApplicationUser_Logins" FromRole="users" ToRole="userlogins" />
+    <NavigationProperty Name="roles" Relationship="Self.userroles" FromRole="users" ToRole="roles" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="ApplicationUser_Claims">
+    <End Role="users" Type="Self.user" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="userclaims" Type="Self.userclaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="userclaims">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ApplicationUser_Logins">
+    <End Role="users" Type="Self.user" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="userlogins" Type="Self.userlogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="userlogins">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="userroles">
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+    <End Role="roles" Type="Self.role" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="dbidentityEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="roles" EntityType="Self.role" />
+    <EntitySet Name="userclaims" EntityType="Self.userclaim" />
+    <EntitySet Name="userlogins" EntityType="Self.userlogin" />
+    <EntitySet Name="useroldpasswords" EntityType="Self.useroldpassword" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="ApplicationUser_Claims" Association="Self.ApplicationUser_Claims">
+      <End Role="users" EntitySet="users" />
+      <End Role="userclaims" EntitySet="userclaims" />
+    </AssociationSet>
+    <AssociationSet Name="ApplicationUser_Logins" Association="Self.ApplicationUser_Logins">
+      <End Role="users" EntitySet="users" />
+      <End Role="userlogins" EntitySet="userlogins" />
+    </AssociationSet>
+    <AssociationSet Name="userroles" Association="Self.userroles">
+      <End Role="users" EntitySet="users" />
+      <End Role="roles" EntitySet="roles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

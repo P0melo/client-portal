@@ -1,0 +1,237 @@
+﻿@using SAMPortal.Models
+@model CourseListModel
+
+@{
+    ViewBag.Title = "CourseList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="pad margin no-print">
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+        <h3><i class="fa fa-edit"></i> &nbsp;Course Booking</h3>
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title col-xs-12">Course List</h3>
+            <div class="box-tools pull-right">
+                <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+            </div>
+        </div>
+        <div class="box-body">
+            <table id="course_list_tbl" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Duration (Days)</th>
+                        <th>Start Date</th>
+                        <th>Enrolled</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="course_list_tbl_tbody"></tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade in" id="enrollees_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Enrollees</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped table-hover" id="course_enrollee_tbl">
+                    <thead>
+                        <tr>
+                            <th>MNNO</th>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Contact No.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="course_enrollee_tbl_body"></tbody>
+                </table>
+
+                @*<div class="form-horizontal col-xs-8"><input class="form-control" type="text" /></div>
+
+                    <input class="btn btn-default" type="button" value="Enroll"/>*@
+
+                <span id="message"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade in" id="enroll_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Enroll Crew</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped table-hover" id="enrolled_crews_tbl">
+                    <thead>
+                        <tr>
+                            <th>MNNO</th>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Contact No.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="enrolled_crews_tbl body"></tbody>
+                </table>
+                <span id="message"></span>
+                <br />
+                <hr />
+                <table class="table table-bordered table-striped table-hover" id="enroll_crew_tbl">
+                    <thead>
+                        <tr>
+                            <th>MNNO</th>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Contact No.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="enroll_crew_tbl_body"></tbody>
+                </table>
+
+                @*<div class="form-horizontal col-xs-8"><input class="form-control" type="text" /></div>
+
+                    <input class="btn btn-default" type="button" value="Enroll"/>*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade in" id="swap_enrollees">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Swap Enrollee</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped table-hover" id="swap_enrollees_tbl">
+                    <thead>
+                        <tr>
+                            <th>MNNO</th>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Contact No.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="swap_enrollees_tbl_body"></tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="swap_this_crew_warning">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="swap_this_crew_warning_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="enroll_this_crew_warning">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="enroll_this_crew_warning_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="enroll_warning">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-success fade in" id="enroll_success">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/CourseBooking.js"></script>
+}

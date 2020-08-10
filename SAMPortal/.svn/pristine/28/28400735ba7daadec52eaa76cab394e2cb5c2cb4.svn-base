@@ -1,0 +1,141 @@
+﻿@*@using SAMPortal.Models
+    @model NewCrewRegistrationViewModel*@
+
+<div class="col-md-12 col-lg-5 form-group" id="accomodation_crew_picture">
+    <img class="img img-responsive" src="~/Content/images/default.jpg" />
+</div>
+
+<div class="col-lg-7 form-group">
+    <label for="accomodation_mnno" class="col-md-2 control-label">MNNO</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <div class="input-group">
+            <input id="accomodation_mnno_input" type="text" class="form-control" />
+            <span id="accomodation_search_btn" class="input-group-btn">
+                <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="accomodation_rank" class="col-md-2 control-label">Rank</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="accomodation_rank_input" type="text" class="form-control" style="border-radius: 3px;" />
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="accomodation_name" class="col-md-2 control-label">Name</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="accomodation_name_input" type="text" class="form-control" style="border-radius: 3px;" />
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="reservation_type" class="col-md-2 control-label">Type</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        @*<input id="reservation_type_input" type="text" class="form-control" style="border-radius: 3px;" />*@
+        <select id="reservation_type" class="form-control">
+            <option value="1">
+                New Booking
+            </option>
+            <option value="2">
+                Extension
+            </option>
+        </select>
+    </div>
+</div>
+<div class="col-lg-7 form-group">
+    <label for="room_type" class="col-md-2 control-label">Room</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        @*<input id="reservation_type_input" type="text" class="form-control" style="border-radius: 3px;" />*@
+        <select id="room_type" class="form-control">
+            <option value="1">
+                Regular Room
+            </option>
+            <option value="2">
+                Officers Room
+            </option>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 form-group">
+    <label for="accomodation_date" class="col-md-2 control-label">Date</label>
+    <div class="col-xs-12 col-md-12 col-lg-4">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <input type="text" class="form-control pull-right" id="accomodation_date">
+        </div>
+
+    </div>
+    <p style="padding-top: 5px;"class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
+    <!-- /.input group -->
+</div>
+
+<div class="col-lg-12 form-group">
+    <label for="mode_of_payment" class="col-md-2 control-label">Payment</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="mode_of_payment" class="form-control">
+            <option value="0">
+                Company Sponsored
+            </option>
+            <option value="1">
+                Personal Account
+            </option>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 form-group">
+    <label for="reason" class="col-md-2 control-label">Reason</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <select id="accomodation_reason" class="form-control">
+            <option value="1">
+                In House Training
+            </option>
+            <option value="4">
+                Paying Crew
+            </option>
+        </select>
+    </div>
+</div>
+<div class="form-group col-lg-12">
+    <label for="accomodation_remarks" class="col-md-2 control-label">Remarks</label>
+    <div class="col-xs-12 col-md-12 col-lg-10">
+        <input id="accomodation_remarks_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />
+    </div>
+</div>
+
+<div class="form-group col-sm-12">
+    <div class="form-group col-lg-12">
+        <span id="accomodation_err_msg" style="color: red; display: none">**Remarks cannot be left blank</span>
+        <button type="button" id="save_accomodation_btn" class="btn btn-default pull-right">Reserve Crew</button>
+        <button type="button" id="view_accomodation_btn" class="btn btn-default pull-right" >View Rooms</button>
+        <button type="button" id="view_rates_btn" class="btn btn-default pull-right">Rates and Inclusions</button>
+    </div>
+</div>
+
+@*<div class="col-sm-12" id="meal_tbl_div">
+        <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+            <thead>
+                <tr>
+                    <td colspan="5">Meal Provision Log</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">No</td>
+                    <td colspan="2">Meal Date</td>
+                    <td rowspan="2">Reason</td>
+                    <td rowspan="2">Reference ID</td>
+                </tr>
+                <tr>
+                    <td>From</td>
+                    <td>To</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>*@
+
+
+@section Scripts{
+
+}
+

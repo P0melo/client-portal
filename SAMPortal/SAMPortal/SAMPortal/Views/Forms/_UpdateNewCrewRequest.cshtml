@@ -1,0 +1,81 @@
+﻿@using SAMPortal.Models
+@model NewCrewRegistrationViewModel
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+        </button>
+        <h4 class="modal-title">Update New Crew Request</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+
+                <div class="col-xs-12 col-sm-6">
+                    <label for="first_name" class="control-label">First Name</label>
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="position" class="control-label">Rank</label>
+                    @Html.DropDownListFor(m => m.Position, new SelectList(Model.Ranks, "crewrank", "rankdesc"), "Select Rank", htmlAttributes: new { @class = "form-control", Id = "position" })
+                </div>
+
+            </div>
+
+            <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="middle_name" class="control-label">Middle Initial</label>
+                    @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control", @placeholder = "Middle Initial" })
+                </div>
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="birth_place" class="control-label">Birth Place</label>
+                    @Html.TextBoxFor(m => m.BirthPlace, new { @class = "form-control", @placeholder = "Birth Place" })
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="last_name" class="control-label">Last Name</label>
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                </div>
+
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="birthday" class="control-label">Birthday</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @placeholder = "mm/dd/yyyy", Id = "datepicker" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-lg-6" style="padding-left: 0px; padding-right: 0px;">
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label class="control-label">Image input <span style="font-weight:lighter; color: #ccc">(Optional)</span></label>
+                    <div class="col-xs-12" style="padding: 0px;">
+                        <input type="button" id="choose_image_input" class="btn btn-default" value="Choose..." onclick="document.getElementById('InputFile').click()">
+                        <input type="file" id="InputFile" style="display: none;">
+                        <span id="inputFilename"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="col-xs-12 col-lg-6" style="padding-left: 0px; padding-right: 0px;">
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label for="verify" class="control-label">Check for duplicate record</label>
+                    <div class="col-xs-12" style="padding: 0px;">
+                        <input type="button" class="btn btn-default" id="verify_btn" value="Verify" />
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="col-xs-12 form-group">
+                <input type="text" id="output" hidden />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="modal_update_new_crew_request_save" class="btn btn-default pull-right" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" style="margin-right: 10px;">Cancel</button>
+    </div>

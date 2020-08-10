@@ -1,0 +1,38 @@
+﻿$(document).ready(function () {
+    //$.ajax({
+    //    url: '/Administration/Partial',
+    //    type: 'get',
+    //    data: { id: id },
+    //    success: function (result) {
+    //        $('.content').html(result);
+    //    }
+    //});
+    $('#administration').parent().addClass('active');
+    getPartialOfGenerateLink();
+    getPartialOfReviewRegisteredAccounts();
+
+    function getPartialOfGenerateLink() {
+        var id = "generatelink"
+        $.ajax({
+            url: '/SAMPortal/Administration/GetPartialOfGenerateLink',
+            type: 'get',
+            success: function (result) {
+
+                $('#generate_link').html(result);
+
+            }
+        });
+    }
+
+    function getPartialOfReviewRegisteredAccounts() {
+        var id = "generatelink"
+        $.ajax({
+            url: '/SAMPortal/Administration/GetPartialOfReviewRegisteredAccounts',
+            type: 'get',
+            success: function (result) {
+
+                $('#review_registered_accounts').html(result);
+            }
+        });
+    }
+});

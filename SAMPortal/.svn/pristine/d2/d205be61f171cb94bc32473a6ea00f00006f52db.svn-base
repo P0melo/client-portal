@@ -1,0 +1,169 @@
+﻿/*body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}*/
+
+/* Set padding to keep content from hitting the edges */
+/*.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}*/
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+/*.dl-horizontal dt {
+    white-space: normal;
+}*/
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+/*UMTC Logo*/
+.umtc-logo {
+    height: 55px;
+    margin-left: -16px;
+    width: 100%;
+}
+
+.umtc-logo-circle {
+    width: 100%;
+    max-width: 40px;
+    height: auto;
+}
+
+.bg1, .bg2, .bg3, .bg4, .bg5 {
+    /* The image used */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#home_banner {
+    /*background-image: url('../Content/images/05.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: absolute;*/
+    height: 100%;
+}
+
+/*@media screen and (max-width: 1080px){
+    #home_banner{
+        padding-top: 300px;
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}*/
+
+/*#box-content {
+    font-size: 24px;
+    padding: 18px;
+}*/
+
+@media screen and (max-width: 1024px) {
+    #home_banner {
+        padding-top: 100px;
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #home_banner {
+        padding-top: 64px;
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    #home_banner {
+        padding-top: 64px;
+        height: 100%;
+    }
+}
+
+/*@media screen and (max-height: 568px){
+    #box-content {
+        font-size: 18px;
+    }
+}*/
+
+@media screen and (min-width: 1025px){
+    #home_banner {
+        padding: 100px;
+        padding-top: 50px;
+    }
+}
+
+#home_nav {
+    background-color: red;
+    margin: 0;
+    border-radius: 0;
+    height:50px;
+}
+
+#home_footer {
+    background-image: url('../Content/images/cloud_and_waves.jpg');
+    margin: 0;
+    border-radius: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    height: 150px;
+    padding: 15px;
+    color: #0077b3;
+}
+
+#home_footer h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#home_footer p{
+    margin-bottom: 0;
+}
+
+#company_logo{
+    width: 200px;
+    height: auto;
+}
+
+.main_content{
+    height: 100%;
+}
+
+#dashboard_btn{
+    padding-top: 100px;
+    text-align: center;
+}
+
+#dashboard_btn a{
+    padding: 20px;
+    font-size: 24px;
+}
+
+
+/*#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}*/

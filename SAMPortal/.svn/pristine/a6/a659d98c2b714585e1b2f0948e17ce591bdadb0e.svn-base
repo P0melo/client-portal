@@ -1,0 +1,23 @@
+﻿@using SAMPortal.Models
+
+
+<table id="crew_list_tbl" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Nation</th>
+            <th>Birthday</th>
+            <th>Birth Place</th>
+            <th>Contact</th>
+            <th>Gender</th>
+            <th>Company</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="crew_list_tbl_tbody"></tbody>
+</table>
+
+@section Scripts{
+
+}

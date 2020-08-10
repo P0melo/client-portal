@@ -1,0 +1,48 @@
+﻿@model SAMPortal.Models.ChangePasswordViewModel
+<div class="pad margin no-print">
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+
+        <h3><i class="fa fa-cogs"></i> &nbsp;Change Password</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="box box-body">
+                @using (Html.BeginForm("ChangePassword", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.NewPassword, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Change password" class="btn btn-default" />
+                        </div>
+                    </div>
+                }
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

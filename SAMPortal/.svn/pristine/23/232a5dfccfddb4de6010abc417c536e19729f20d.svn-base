@@ -1,0 +1,53 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $('#meal_reservation').daterangepicker();
+
+    $(document).on('click', '#meal_search_btn', function () {
+        var mnno = $('#mnno_input').val();
+        //var date = new Date();
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetCrewDetailsForMeal',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#rank_input').val(position);
+                    $('#name_input').val(name);
+
+                    $('#crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+
+                    $.ajax({
+                        url: '/SAMPortal/api/Forms/GetMealProvisionLog',
+                        type: 'get',
+                        dataType: 'json',
+                        data: { mnno: mnno },
+                        success: function (result) {
+                            var content = "";
+                            for (var i = 0; i < result.length; i++) {
+                                content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + formatDate(result[i].FromDate) + "</td><td id='toDate'>" + formatDate(result[i].ToDate) +
+                                    "<td id='reason'>" + result[i].Reason + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
+                            }
+
+                            $("#meal_tbl tbody").html(content);
+                            $('#meal_tbl_div').css('display', 'block');
+                        }
+                    });
+
+                }
+            }
+        });
+    });
+});

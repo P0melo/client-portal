@@ -1,0 +1,190 @@
+﻿$(document).ready(function () {
+    //$.ajax({
+    //    url: '/Administration/Partial',
+    //    type: 'get',
+    //    data: { id: id },
+    //    success: function (result) {
+    //        $('.content').html(result);
+    //    }
+    //});
+    $('#administration').parent().addClass('active');
+    getPartialOfGenerateLink();
+    getPartialOfReviewRegisteredAccounts();
+    getPartialOfReviewNewCrewRequest();
+    var table = "";
+
+    function getPartialOfGenerateLink() {
+        var id = "generatelink"
+        $.ajax({
+            url: '/SAMPortal/Administration/GetPartialOfGenerateLink',
+            type: 'get',
+            success: function (result) {
+
+                $('#generate_link').html(result);
+
+                $('#companies_dropdown').select2({ theme: "bootstrap", placeholder: "Select Company" });
+
+                $('.select2-container--bootstrap .select2-selection--single').css('padding-top', '10px');
+
+            }
+        });
+    }
+
+    function getPartialOfReviewRegisteredAccounts() {
+
+        $.ajax({
+            url: '/SAMPortal/Administration/GetPartialOfReviewRegisteredAccounts',
+            type: 'get',
+            success: function (result) {
+
+                $('#review_registered_accounts').html(result);
+            }
+        });
+    }
+
+    function getPartialOfReviewNewCrewRequest() {
+        $.ajax({
+            url: '/SAMPortal/Administration/GetPartialOfReviewNewCrewRequest',
+            type: 'get',
+            success: function (result) {
+
+                $('#review_new_crew_tbl').html(result);
+            }, complete: function () {
+                getNewCrewRequest();
+            }
+        });
+    }
+
+    function getNewCrewRequest() {
+        $.ajax({
+            url: '/SAMPortal/api/Administration/GetNewCrewRequest',
+            type: 'get',
+            beforeSend: function () {
+                $('#crew_list_tbl_tbody').html("<trx><td style='text-align: center' colspan='11' valign='top' >Please wait while loading the data...</td></tr>");
+            },
+            success: function (result) {
+                var content = "";
+                for (var i = 0; i < result.length; i++) {
+                    content += "<tr id='" + result[i].Id + "'><td>" + result[i].Position + "</td><td><a id='" + result[i].Position + "~" + result[i].LastName + "~" + result[i].FirstName + "~" + result[i].MiddleInitial + "'>" + result[i].LastName + ", " + result[i].FirstName + " " + result[i].MiddleInitial + "</a></td><td>" + result[i].Nationality + "</td>" + 
+                        "<td id='"+result[i].Birthday+"'>" + formatDate(result[i].Birthday) + "</td><td>" + result[i].BirthPlace + "</td><td>" + result[i].Contact + "</td><td>" + result[i].Gender + "</td><td>" + result[i].CompanyName + "</td>" +
+                        "<td>" + result[i].EnteredBy + "</td><td>" + (result[i].Picture == null ? '' : result[i].Picture) + "</td><td><input id='approve_btn' class='btn btn-default' type='button' value='Approve' />&nbsp;<input id='deny_btn' class='btn btn-default' type=button value='Deny' /></td></tr> ";
+                }
+
+                if (table != "") {
+                    table.destroy();
+                }
+                
+                $('#crew_list_tbl_tbody').html(content);
+                table = $('#crew_list_tbl').DataTable({
+                    "columnDefs": [
+                        {
+                            "targets": [9],
+                            "visible": false,
+                            "searchable": false
+                        },
+                        {
+                            "targets": [10],
+                            "visible": true,
+                            "searchable": false,
+                            "orderable": false
+                        },
+                    ]
+                });
+            }
+        });
+    }
+
+    $(document).on('click', '#crew_list_tbl_tbody tr td a', function () {
+        var imageName = $(this).attr('id');
+        var imageNameSplit = imageName.split('~');
+        var crewName = imageNameSplit[1] + ", " + imageNameSplit[2] + " " + imageNameSplit[3];
+        var row = $(this).parent().parent();
+        var src = table.row(row).data()[9];
+
+        $('.modal_picture .modal-title').html(crewName);
+        if (src != "") {
+            $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + src + '" /><br /><p>This photo will not be the official photo of the crew</p>');
+        } else {
+            $('.modal_picture .modal-body div').html('<p style="text-align: center">No photo to show</p>');
+        }
+        
+        $('.modal_picture').modal();
+    });
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    function formatDate(data, redirect) {
+
+        if (data == null) {
+            return "";
+        }
+
+        if (redirect) {
+            return data.replace(/\//g, "-");
+        }
+
+        var result = data.replace(/[^0-9 +]/g, '');
+
+        var date = new Date(data);
+
+        return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+    }
+
+    $(document).on('click', '#approve_btn', function () {
+        var tr = $(this).parent().parent();
+        var recordId = tr.attr('id');
+        var rankPlusName = tr.find('td:eq(1) a').attr('id').split('~');
+        var lastName = rankPlusName[1];
+        var firstName = rankPlusName[2];
+        var middleInitial = rankPlusName[3];
+        var rank = table.row(tr).data()[0];
+        var nation = table.row(tr).data()[2];
+        var birthday = tr.find('td:eq(3)').attr('id');
+        var birthplace = table.row(tr).data()[4];
+        var contact = table.row(tr).data()[5];
+        var gender = table.row(tr).data()[6];
+        var company = table.row(tr).data()[7];
+
+        var parameters = [rank, lastName, firstName, middleInitial, nation, birthday, birthplace, contact, gender, company, recordId];
+
+        $.ajax({
+            url: '/SAMPortal/Administration/ApproveNewCrew',
+            type: 'post',
+            data: { parameters: parameters },
+            success: function (result) {
+
+            }
+        });
+    });
+    var recordId;
+    $(document).on('click', '#deny_btn', function () {
+        var tr = $(this).parent().parent();
+        recordId = tr.attr('id');
+
+        $('.modal-warning .modal-body p').html("Are you sure you want to Deny this request?");
+        $('.modal-warning').modal();
+    });
+
+    $(document).on('click', '#refresh_new_crew_tbl', function () {
+        getNewCrewRequest();
+
+    });
+
+    $(document).on('click', '#modal_yes', function () {
+        $.ajax({
+            url: '/SAMPortal/Administration/DenyNewCrew',
+            type: 'post',
+            data: { recordId: recordId },
+            success: function (result) {
+                if (result.data == 1) {
+                    getNewCrewRequest();
+                } else {
+                    //call modal stating that something went wrong
+                }
+            }
+        });
+    });
+
+});

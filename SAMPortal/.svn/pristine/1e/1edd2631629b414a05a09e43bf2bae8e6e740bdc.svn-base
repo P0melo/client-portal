@@ -1,0 +1,431 @@
+﻿@*@using SAMPortal.Models
+    @model NewCrewRegistrationViewModel*@
+
+@*<div class="callout callout-info">
+
+        <h3><i class="fa fa-hotel"></i> &nbsp;Accommodation</h3>
+    </div>*@
+
+<div class="box box-solid">
+
+    <div id="accomodation" class="box-body">
+        <button type="button" id="view_rates_btn" class="btn btn-default pull-right">Rates and Inclusions</button>
+        <br />
+        <div class="col-md-12 col-lg-6 form-group" id="crew_picture">
+            <img class="img img-responsive" src="~/Content/images/default.jpg" />
+        </div>
+
+        <div class="col-lg-6 form-group">
+            <div class="col-xs-12">
+                <label for="accomodation_mnno" class="control-label">MNNO</label>
+                <div class="input-group">
+                    <input id="mnno_input" placeholder="Click the magnifying glass to search crew" type="text" class="form-control" disabled />
+                    <span id="crew_search_btn" class="input-group-btn">
+                        <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 form-group">
+            <div class="col-xs-12">
+                <label for="accomodation_rank" class="control-label">Rank</label>
+                <input id="rank_input" type="text" class="form-control" disabled />
+            </div>
+        </div>
+        <div class="col-lg-6 form-group">
+            <div class="col-xs-12">
+                <label for="accomodation_name" class="control-label">Name</label>
+                <input id="name_input" type="text" class="form-control" disabled />
+            </div>
+        </div>
+        <div class="col-lg-6 form-group">
+            <div class="col-xs-12">
+                <label for="reservation_type" class="control-label">Type</label>
+                @*<input id="reservation_type_input" type="text" class="form-control" style="border-radius: 3px;" />*@
+                <select id="reservation_type" class="form-control">
+                    <option value="1">
+                        New Booking
+                    </option>
+                    <option value="2">
+                        Extension
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-6 form-group">
+            <div class="col-xs-12">
+                <label for="room_type" class="control-label">Room</label>
+                @*<input id="reservation_type_input" type="text" class="form-control" style="border-radius: 3px;" />*@
+                <select id="room_type" class="form-control">
+                    <option value="1">
+                        Dorm - Standard
+                    </option>
+                    <option value="2">
+                        Dorm - Superior
+                    </option>
+                    <option value="3">
+                        Hotel - Single
+                    </option>
+                    <option value="4">
+                        Hotel - Double
+                    </option>
+                    @*<option value="5">
+                            Executive Room
+                        </option>*@
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-12 form-group">
+            <div class="col-xs-12 col-md-12 col-lg-6">
+                <label for="accomodation_date" class="control-label">Date</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="accomodation_date">
+                </div>
+
+            </div>
+            &nbsp;
+            <p style="padding-top: 5px;" class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
+            <!-- /.input group -->
+        </div>
+
+        <div class="col-lg-12 form-group">
+            <div class="col-xs-12 col-sm-6">
+                <label for="mode_of_payment" class="control-label">Payment</label>
+
+                <select id="mode_of_payment" class="form-control">
+                    <option value="0">
+                        Company Sponsored
+                    </option>
+                    <option value="1">
+                        Personal Account
+                    </option>
+                </select>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="reason" class="control-label">Reason</label>
+                <select id="accomodation_reason" class="form-control">
+                    <option value="1">
+                        In House Training
+                    </option>
+                    <option value="4">
+                        Paying Crew
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-lg-12">
+            <div class="col-xs-12">
+                <label for="accomodation_remarks" class="control-label">Remarks</label>
+                <input id="accomodation_remarks_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <span id="accomodation_err_msg" style="color: red; display: none">**Fields must not be left blank</span>
+            <button type="button" id="save_accomodation_btn" class="btn btn-default pull-right">Submit</button>
+            @*<button type="button" id="view_accomodation_btn" class="btn btn-default pull-right">View Rooms</button>*@
+
+        </div>
+
+    </div>
+</div>
+
+@*<div class="modal fade" id="rooms_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Rooms</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                            <li data-target="#myCarousel" data-slide-to="2"></li>
+                            <li data-target="#myCarousel" data-slide-to="3"></li>
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img class="img img-responsive" src="~/Content/images/dorm_standard_room.jpg" alt="Dorm Standard Room">
+                                <div class="carousel-caption">
+                                    <h3>Standard Dormitory</h3>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <img class="img img-responsive" src="~/Content/images/dorm_superior_room.jpg" alt="Dorm Superior Room">
+                                <div class="carousel-caption">
+                                    <h3>Superior Dormitory</h3>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <img class="img img-responsive" src="~/Content/images/hotel_single_room.jpg" alt="Hotel Single Room">
+                                <div class="carousel-caption">
+                                    <h3>Single Occupancy Room</h3>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <img class="img img-responsive" src="~/Content/images/hotel_double_room.jpg" alt="Hotel Double Room">
+                                <div class="carousel-caption">
+                                    <h3>Double Occupancy Room</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Left and right controls -->
+                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div class="modal fade" id="rates_and_inclusions_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Rates and Inclusions</h4>
+            </div>
+            <div class="modal-body">
+                <table id="rates_and_inclusion_tbl" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Room</th>
+                            <th rowspan="2">Rate<br />(USD)</th>
+                            <th rowspan="2">Location</th>
+                            <th colspan="2">Inclusion</th>
+                            <th rowspan="2">Reminder</th>
+                        </tr>
+                        <tr>
+                            <th>Meals</th>
+                            <th>Others</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a id="single_occupancy_img">Single Occupancy Room</a></td>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["singleOccupancyRate"]</td>
+                            <td rowspan="2">UMTC Building, 6th floor</td>
+                            <td rowspan="2">Breakfast, Lunch and Dinner</td>
+                            <td rowspan="2">Toiletries and Batch Towel</td>
+                            <td rowspan="2">
+                                Please contact the Sales and Marketing Department if you want to book on these rooms.
+                                <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133
+                                <br />E:  marketing@umtc.com.ph
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a id="double_occupancy_img">Double Occupancy Room</a></td>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["doubleOccupancyRate"]</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><a id="standard_dormitory_img">Standard Dormitory (air-condition room, 4-10 persons in a room)</a></td>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["standardDormitory1"]</td>
+                            <td rowspan="6">UMTC Dormitory</td>
+                            <td colspan="2"> N/A </td>
+                            <td rowspan="6">
+                                Check-in time: 1300h / Check out time: 1200h
+                                <br />
+                                Early check-in and late check-out is equivalent to one day room rate.
+                                <br />
+                                Subject to room availability
+                                <br />
+                                Note:
+                                <br />
+                                1. Rate is per pax/day.
+                                <br />
+                                2. Basic toiletries(one set) and bath towels are available upon request with additional cost.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["standardDormitory2"]</td>
+                            <td>Lunch</td>
+                            <td rowspan="2">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["standardDormitory3"]</td>
+                            <td>Breakfast, Lunch and Dinner</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><a id="superior_dormitory_img">Superior Dormitory (air-conditioned room, 2-4 persons in a room)</a></td>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["superiorDormitory1"]</td>
+                            <td>N/A</td>
+                            <td rowspan="3">Bath Towel Only</td>
+                        </tr>
+                        <tr>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["superiorDormitory2"]</td>
+                            <td>Lunch</td>
+                        </tr>
+                        <tr>
+                            <td>@System.Configuration.ConfigurationManager.AppSettings["superiorDormitory3"]</td>
+                            <td>Breakfast, Lunch and Dinner</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal modal-success fade" id="modal_success_accommodation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_close_btn" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+<div class="modal modal-warning fade" id="modal_warning_booking_reservation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_close_btn" class="btn btn-outline pull-right" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_warning_accommodation_submit">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_warning_accommodation_submit_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" id="modal_close_btn" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="room_picture">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <img id="hotel_single_room" class="img img-responsive" src="~/Content/images/hotel_single_room.jpg" style="display: none" alt="Hotel Single Room">
+                <img id="hotel_double_room" class="img img-responsive" src="~/Content/images/hotel_double_room.jpg" style="display: none" alt="Hotel Double Room">
+                <img id="dorm_standard_room" class="img img-responsive" src="~/Content/images/dorm_standard_room.jpg" style="display: none" alt="Dorm Standard Room">
+                <img id="dorm_superior_room" class="img img-responsive" src="~/Content/images/dorm_superior_room.jpg" style="display: none" alt="Dorm Superior Room">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-info fade" id="hotel_single_double_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Please contact our Sales and Marketing department for inquires and/or reservations for Hotel - Single and Hotel - Double:
+                    <br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133
+                    <br />E:  marketing@umtc.com.ph
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="duplicate_booking_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Duplicate Reservation</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <table id="duplicate_booking_modal_tbl" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>MNNO</th>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Reservation Type</th>
+                            <th>Room Type</th>
+                            <th>Check In Date</th>
+                            <th>Check Out Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/Accommodation.js"></script>
+    <script src="~/Scripts/CrewSearch.js"></script>
+}
+

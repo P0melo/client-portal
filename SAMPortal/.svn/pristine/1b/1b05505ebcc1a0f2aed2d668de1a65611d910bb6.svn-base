@@ -1,0 +1,75 @@
+﻿
+    <div class="pad margin no-print">
+        <div class="callout callout-info" style="margin-bottom: 0!important;">
+
+            <h3><i class="fa fa-certificate"></i> &nbsp;Accreditations</h3>
+        </div>
+    </div>
+    <div class="invoice">
+        <div class="row">
+            <div class="col-xs-12">
+                @*<h3 class="page-header" style="margin-top: 0">Our Company</h3>*@
+                <div class="box-body no-border">
+                    <p>
+                        United Marine Training Center, formerly known as Marlow Navigation Training Center, Inc., is a duly recognized organization registered under the Securities and Exchange Commission (SEC) since May 2001.
+                    </p>
+                    <p>
+                        We have been compliant to the ISO 9001 Standard for the Effective Quality Management System since August 2001. We are certified by Det Norske Veritas (DNV) in compliance with ISO 9001:2008 for Course Development, Training and Assessment for Seafarers and Standard Certification-Maritime Training Centre.
+                    </p>
+                    <p>
+                        We are proud member of Philippine Association of Maritime Training Centers, Inc. (PAMTCI) and German-Philippine Chamber of Commerce and Industry, Inc. (GPCCI)
+                    </p>
+                    <p>
+                        Our courses are accredited by the following bodies: All Academy, Det Norske Veritas (DNV), Germanischer Lloyd (GL), Liberia Maritime Authority, Maritime Industry Authority (MARINA), National Telecommunications Commission (NTC) and Technical Education and Skills Development Authority (TESDA).
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <hr />
+            <div class="col-md-6">
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-dnv.png" />
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-all-academy.png" />
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-liberia.png" />
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/umtc_web_marina.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-ntc.png" />
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-tesda.png" />
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-pamtci.png" />
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="description-block border-right">
+                        <img src="http://umtc.com.ph/wp-content/uploads/2015/07/web-gpcci.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

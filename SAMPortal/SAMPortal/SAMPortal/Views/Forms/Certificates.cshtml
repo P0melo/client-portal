@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "Certificates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-solid">
+    <div class="box-header">
+        @*<div class="box-tools pull-right ">
+                <button type="button" id="update_profile_btn" class="btn btn-box-tool">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button type="button" id="cancel_changes_btn" class="btn btn-box-tool" style="display: none;">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>*@
+    </div>
+    <div class=box-body>
+        <div class="col-sm-6">
+            <div class="col-sm-12 form-group">
+                <label for="single_request" class="control-label">Single Request</label>
+                <div class="input-group">
+                    <input id="mnno_input" placeholder="Click the magnifying glass to search crew" type="text" class="form-control" disabled="">
+                    <span id="crew_search_btn" class="input-group-btn">
+                        <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+                @*<input type="text" class="form-control" id="single_request_input" />*@
+            </div>
+            <div class="col-sm-12 form-group">
+                <input type="button" class="btn btn-default pull-right" value="Submit" id="single_request_btn" />
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="col-sm-12 form-group">
+                <label for="batch_request" class="control-label">Batch Request</label>
+                <div class="input-group">
+                    <input id="mnno_input_batch" placeholder="Click the magnifying glass to search crews" type="text" class="form-control" disabled="">
+                    <span id="batch_crew_search_btn" class="input-group-btn">
+                        <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12 form-group">
+                <input type="button" class="btn btn-default pull-right" value="Submit" id="batch_request_btn" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-warning" id="warning_batch_certificates_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="warning_batch_certificates_modal_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-warning" id="warning_certificates_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="warning_certificates_modal_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-success" id="success_certificates_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/certificates")
+}
+

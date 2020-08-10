@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SAMPortal.Controllers
+{
+
+    public class HomeController : Controller
+    {
+
+        public ActionResult Index()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+        }
+
+        //public ActionResult About()
+        //{
+        //    return View();
+        //}
+
+
+        public ActionResult Contact()
+        {
+            return PartialView("_ContactPartial");
+        }
+
+        public ActionResult PartialHeader(string id)
+        {
+            if (id.Equals("company_profile"))
+            {
+                return PartialView("_CompanyProfileHeader");
+            }
+            return null;
+        }
+
+        public ActionResult Partial(string id)
+        {
+            if (id.Equals("company_profile"))
+            {
+                return PartialView("_CompanyProfile");
+            }
+            else if (id.Equals("vision_mission"))
+            {
+                return PartialView("_VisionAndMission");
+            }
+            else if (id.Equals("accreditations"))
+            {
+                return PartialView("_Accreditations");
+            }
+            else if (id.Equals("our_team"))
+            {
+                return PartialView("_OurTeam");
+            }
+            return null;
+        }
+
+        public ActionResult UnderConstruction()
+        {
+            return View();
+        }
+
+    }
+}

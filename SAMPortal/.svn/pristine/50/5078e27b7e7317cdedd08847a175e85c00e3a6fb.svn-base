@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Forgot Password Confirmation";
+}
+@{Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>UMTC Portal | Forgot Password</title>
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/ico" href="~/Content/images/umtc_logo_icon.ico" />
+    <link rel="icon" type="image/x-icon" href="~/Content/images/umtc_logo_icon.ico" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+
+<body class="hold-transition login-page">
+    @Html.Partial("_Background")
+
+
+    <div class="login-box">
+        <div class="login-box-body">
+            <div style="text-align: center">
+                <img style="width:240px" src="@Url.Content("~/Content/images/umtc_logo.png")" />
+            </div>
+            <hr />
+            <p class="login-box-msg">Please check your email to reset your password</p>
+            <a href="../Account/Login" class="text-center">Back to log in page</a>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/adminlte/js")
+</body>
+</html>
+
+
+

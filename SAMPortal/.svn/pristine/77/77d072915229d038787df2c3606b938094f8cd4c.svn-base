@@ -1,0 +1,177 @@
+﻿@using SAMPortal.Models
+@model NewCrewRegistrationViewModel
+
+@{
+    ViewBag.Title = "NewCrewRegistration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+    @*<div class="callout callout-info">
+
+        <h3><i class="fa fa-user-plus"></i> &nbsp;Register New Crew</h3>
+    </div>*@
+<div class="box box-solid">
+    @*<div class="box-header with-border">
+            <h3 class="box-title col-xs-12">New Crew Registration</h3>
+            <div class="box-tools pull-right">
+                <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+            </div>
+        </div>*@
+    <div id="new_crew_registration" class="box-body">
+        <br />
+        @using (Html.BeginForm("ISaveNewCrew", "Api/Dashboard", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="form-group">
+                <label for="position" class="col-sm-2 control-label">Position</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.Position, new SelectList(Model.Ranks, "crewrank", "rankdesc"), "Select Position", htmlAttributes: new { @class = "form-control", Id = "position" })
+
+                </div>
+
+                <label for="first_name" class="col-sm-2 control-label">First Name</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="last_name" class="col-sm-2 control-label">Last Name</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                </div>
+
+                <label for="middle_name" class="col-sm-2 control-label">Middle Initial</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control", @placeholder = "Middle Initial" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="gender" class="col-sm-2 control-label">Gender</label>
+                <div class="col-sm-4">
+                    <label class="radio-inline">
+                        @Html.RadioButtonFor(m => m.Gender, "Male", new { @checked = "checked" })Male
+                    </label>
+                    <label class="radio-inline">
+                        @Html.RadioButtonFor(m => m.Gender, "Female")Female
+                    </label>
+                </div>
+
+                <label for="nationality" class="col-sm-2 control-label">Nation</label>
+                <div class="col-sm-4">
+                    @*<select class="form-control" id="nationality"></select>*@
+                    @Html.DropDownListFor(m => m.Nation, new SelectList(Model.Nations, "iso3", "name"), "Select Nation", htmlAttributes: new { @class = "form-control", Id = "nationality" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="birthday" class="col-sm-2 control-label">Birthday</label>
+                <div class="col-sm-4">
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @placeholder = "Birthday", Id = "datepicker" })
+                    </div>
+                </div>
+
+                <label for="birth_place" class="col-sm-2 control-label">Birth Place</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.BirthPlace, new { @class = "form-control", @placeholder = "Birth Place" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="contact" class="col-sm-2 control-label">Contact</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        @Html.TextBoxFor(m => m.Contact, new { @class = "form-control", @placeholder = "Contact" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="InputFile" class="col-sm-4 control-label">Image input</label>
+                    <input type="file" id="InputFile" class="col-sm-8 control-label">
+                    @*<p class="help-block col-sm-12 control-label pull-left">Please insert a picture if there's any</p>*@
+
+                </div>
+                <input type="text" id="output" hidden>
+            </div>
+            <div class="col-sm-12">
+                <span id="new_crew_registration_err_msg" style="color: red; display: none">**fields on red should not be left blank</span>
+                <button type="button" id="request_btn" class="btn btn-default pull-right">Submit</button>
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="modal modal-success fade" id="modal-success">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modal_close_btn" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="modal-warning">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Please make sure that the data you enter in the fields are correct then try again, or you may contact Sales and Marketing for support.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="modal_warning_request">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" id="modal_warning_request_yes" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/Scripts/NewCrewRegistration.js"></script>
+}

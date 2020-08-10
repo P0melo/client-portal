@@ -1,0 +1,132 @@
+﻿$(document).ready(function () {
+
+    $(document).on('click', '#company_profile', function () {
+        var id = $(this).attr('id');
+        getPartial(id);
+        window.history.pushState("", "Company Profile", "/About/CompanyProfile");
+    });
+
+    $(document).on('click', '#vision_mission', function () {
+        var id = $(this).attr('id');
+        getPartial(id);
+        window.history.pushState("", "Vision and Mission", "/About/VisionAndMission");
+    });
+
+    $(document).on('click', '#accreditations', function () {
+        var id = $(this).attr('id');
+        getPartial(id);
+        window.history.pushState("", "Acreditations", "/About/Accreditations");
+    });
+
+    $(document).on('click', '#our_team', function () {
+        var id = $(this).attr('id');
+        getPartial(id);
+        window.history.pushState("", "Team", "/About/Team");
+    });
+
+    $(document).on('click', '#contact', function () {
+        goToContact();
+        window.history.pushState("", "Contact", "/Contact");
+    });
+
+    $(document).on('click', '#side_links li', function () {
+        $('#side_links li').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $(document).on('click', '#generate', function () {
+        var id = $('#companies_dropdown option:selected').val();
+        getLink(parseInt(id));
+        //window.history.pushState("", "GenerateLink", "/Administration/About/Team");
+    });
+
+    function getLink(id) {
+        $.ajax({
+            url: '/SAMPortal/Administration/Partial',
+            type: 'get',
+            data: { id: id },
+            success: function (result) {
+                $('#link_placeholder').html(result);
+                $('#copy_link').css('display', 'block');
+            }
+        });
+    }
+
+    function goToContact() {
+        $.ajax({
+            url: '/SAMPortal/Home/Contact',
+            type: 'get',
+            success: function (result) {
+                $('.content').html(result);
+            }
+        });
+    }
+
+    function getPartial(id) {
+        $.ajax({
+            url: '/SAMPortal/Home/Partial',
+            type: 'get',
+            data: { id: id },
+            success: function (result) {
+                $('.content').html(result);
+            }
+        });
+    }
+
+    $(document).on('click', '#copy_link', function () {
+        /* Get the text field */
+        var copyText = document.getElementById("register_lnk");
+
+        /* Select the text field */
+        copyText.select();
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+    });
+
+    $(function () {
+        $('.fadein div:gt(0)').hide();
+        //$('.fadein :first-child').css({ "transform": "scale(1.1)", "transition": "transform 18s ease" });
+
+        setInterval(function () {
+            //$('.fadein :last-child').css({
+            //    "transform": "none"
+            //});
+            $('.fadein :first-child').fadeOut(3000)
+                .next('div').fadeIn(3000)
+                .end().appendTo('.fadein');
+
+            //$('.fadein :first-child').css({ "transform": "scale(1.1)", "transition": "transform 18s ease" });
+        },
+            18000);
+    });
+
+    $(document).on('focusin : click', '#password_txtbox', function () {
+        $("#dialog").dialog({
+            position: {
+                my: 'left bottom',
+                at: 'right top',
+                collision: 'fit flip',
+                of: $(this)
+            }
+        });
+    });
+
+    //$(document).on('click', '#password_txtbox', function () {
+    //    $("#dialog").dialog({
+    //        position: {
+    //            my: 'left bottom',
+    //            at: 'right top',
+    //            collision: 'fit flip',
+    //            of: $(this)
+    //        }
+    //    });
+    //});
+
+
+    //if ($('#password_txtbox').is(":focus")) {
+    //    alert(1);
+    //}
+    
+});

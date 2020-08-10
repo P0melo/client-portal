@@ -1,0 +1,451 @@
+﻿using MySql.Data.MySqlClient;
+using SAMPortal.Models;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
+
+
+namespace SAMPortal.Controllers
+{
+    public class DashboardController : Controller
+    {
+        private officecadetprogramEntities _context;
+        private dbidentityEntities _usercontext;
+
+        public DashboardController()
+        {
+            _context = new officecadetprogramEntities();
+            _usercontext = new dbidentityEntities();
+        }
+
+        // GET: Dashboard
+        public ActionResult Index(DashboardMessageId? message, int? days)
+        {
+            ViewBag.StatusMessage =
+                message == DashboardMessageId.RequestSuccessful ? "Request Successful"
+                : "";
+
+            return View();
+        }
+
+        public ActionResult GetPartialOfNewCrewRegistration()
+        {
+            var nations = _context.tblcountries.Select(m => new Nation { Name = m.name, Iso3 = m.iso3 }).ToList();
+
+            var ranks = _context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+
+            IEnumerable<Nation> nationList = nations;
+            IEnumerable<Rank> ranksList = ranks;
+
+            NewCrewRegistrationViewModel ncrvm = new NewCrewRegistrationViewModel()
+            {
+                Nations = nationList,
+                Ranks = ranksList
+            };
+
+            return PartialView("_NewCrewRegistration", ncrvm);
+        }
+
+        public ActionResult GetPartialOfMeal()
+        {
+            return PartialView("_Meal");
+        }
+
+        public ActionResult GetPartialOfCrewList()
+        {
+            return PartialView("_CrewList");
+        }
+
+        public ActionResult GetPartialOfAccomodation()
+        {
+            return PartialView("_Accomodation");
+        }
+
+        public ActionResult GetPartialOfOffSiteAccommodation()
+        {
+            return PartialView("_OffSiteAccommodation");
+        }
+
+        public ActionResult GetPartialOfTransportationSingle()
+        {
+            return PartialView("_TransportationSingle");
+        }
+
+        public ActionResult SaveNewCrew(string firstName, string position, string lastName, string middleName, string nationality, string datepicker, string birthPlace, string contact, string gender, string inputFile)
+        {
+            var byteArr = new object();
+
+            if (inputFile != "")
+            {
+                byte[] bytes = Convert.FromBase64String(inputFile.Split(',')[1]);
+                byteArr = bytes;
+            }
+            else
+            {
+                byteArr = null;
+            }
+
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+            DateTime dateValue = DateTime.ParseExact(datepicker, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            int flag = 0;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tblnewcrewrequest (Position, FirstName, LastName, MiddleName, Gender, Nationality, Birthday, BirthPlace, Contact, Company, EnteredBy, Picture) VALUES(@position, @firstname, @lastname, @middlename, @gender, @nationality, @birthday, @birthplace, @contact, @company, @enteredby, @picture)",
+                        new MySqlParameter("position", position),
+                        new MySqlParameter("firstname", firstName),
+                        new MySqlParameter("lastname", lastName),
+                        new MySqlParameter("middlename", middleName.Substring(0, 1)),
+                        new MySqlParameter("gender", gender.Equals("Male") ? "M" : "F"),
+                        new MySqlParameter("nationality", nationality),
+                        new MySqlParameter("birthday", dateValue.Date),
+                        new MySqlParameter("birthplace", birthPlace),
+                        new MySqlParameter("contact", contact),
+                        new MySqlParameter("company", company),
+                        new MySqlParameter("enteredby", user),
+                        new MySqlParameter("picture", byteArr)
+                     );
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            /*
+             * Add a code that will handle invalid ModelState correctly
+             */
+            var jsonResult = Json(new { data = flag },
+                             JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        //mnno, rank, name, date, reason, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb
+        public ActionResult SaveMealProvision(params string[] parameters)
+        {
+            //reference number should be marlow number
+
+            var user = User.Identity.Name;
+
+            string mnno = parameters[0];
+            string rank = parameters[1];
+            string name = parameters[2];
+            string date = parameters[3];
+            string reason = parameters[4];
+            bool breakfast_cb = parameters[5] == "true";
+            bool am_snack_cb = parameters[6] == "true";
+            bool lunch_cb = parameters[7] == "true";
+            bool pm_snack_cb = parameters[8] == "true";
+            bool dinner_cb = parameters[9] == "true";
+
+            var guid = _usercontext.users.Where(model => model.Email == user).Select(model => model.Id).FirstOrDefault();
+
+            string[] dateSplit = date.Split('-');
+
+            DateTime dateFrom = DateTime.ParseExact(dateSplit[0].Trim(), "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            DateTime dateTo = DateTime.ParseExact(dateSplit[1].Trim(), "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+
+            //string vDateFrom = dateFrom.ToString("yyyy-MM-dd");
+
+
+            var duration = (dateTo - dateFrom).TotalDays + 1;
+            var reference_id = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
+
+            int flag = 0;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    for (var i = 0; i < duration; i++)
+                    {
+
+                        string vDateFrom = dateFrom.ToString("yyyy-MM-dd");
+
+                        _context.Database.ExecuteSqlCommand("INSERT INTO tblmeal_provision (MNNO, meal_group, meal_b, meal_l, meal_d, meal_ms, meal_as, meal_date_from, meal_date_to, " +
+                            "meal_reason, meal_assigned_by, meal_date_assigned, reference_id)" +
+                                    "VALUE (@mnno, @meal_group, @meal_b, @meal_l, @meal_d, @meal_ms, @meal_as, @meal_date_from, " +
+                                    "@meal_date_to, @meal_reason, @meal_assigned_by, @meal_date_assigned, @reference_id)",
+                                    new MySqlParameter("@mnno", mnno),
+                                    new MySqlParameter("@meal_group", 4),
+                                    new MySqlParameter("@meal_b", breakfast_cb),
+                                    new MySqlParameter("@meal_l", lunch_cb),
+                                    new MySqlParameter("@meal_d", dinner_cb),
+                                    new MySqlParameter("@meal_ms", am_snack_cb),
+                                    new MySqlParameter("@meal_as", pm_snack_cb),
+                                    new MySqlParameter("@meal_date_from", vDateFrom),
+                                    new MySqlParameter("@meal_date_to", vDateFrom),
+                                    new MySqlParameter("@meal_reason", reason),
+                                    new MySqlParameter("@meal_assigned_by", guid),
+                                    new MySqlParameter("@meal_date_assigned", DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + " " + DateTime.Now.Hour +
+                                    ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second),
+                                    new MySqlParameter("@reference_id", reference_id));
+
+                        dateFrom = dateFrom.AddDays(1);
+                    }
+
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    //add exception handling
+                }
+
+            }
+
+            var jsonResult = Json(new { data = flag },
+                             JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult SaveMealLogEdit(params string[] parameters)
+        {
+            string id = parameters[0];
+            bool breakfast_cb = parameters[1] == "true";
+            bool am_snack_cb = parameters[2] == "true";
+            bool lunch_cb = parameters[3] == "true";
+            bool pm_snack_cb = parameters[4] == "true";
+            bool dinner_cb = parameters[5] == "true";
+
+            int flag = 0;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("UPDATE tblmeal_provision SET meal_b = @breakfast, meal_l = @lunch, meal_d = @dinner, meal_ms = @morningSnack, meal_as = @afternoonSnack " +
+                   "WHERE meal_id = @id",
+                    new MySqlParameter("@id", id),
+                    new MySqlParameter("@breakfast", breakfast_cb),
+                    new MySqlParameter("@lunch", lunch_cb),
+                    new MySqlParameter("@dinner", dinner_cb),
+                    new MySqlParameter("@morningSnack", am_snack_cb),
+                    new MySqlParameter("@afternoonSnack", pm_snack_cb));
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    //add error handling
+                }
+            }
+
+            var jsonResult = Json(new { data = flag },
+                      JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult SaveOffSiteAccomodation(params string[] parameters)
+        {
+            //parameters = [mnno, rank, name, date, hotel, room_type, payment, reason, remarks];
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+            var guid = _usercontext.users.Where(model => model.Email == user).Select(model => model.Id).FirstOrDefault();
+
+            var mnno = parameters[0];
+            var rank = parameters[1];
+            var name = parameters[2].Split(' ');
+            var date = parameters[3].Split('-');
+            var hotel = parameters[4];
+            var roomType = parameters[5];
+            var payment = parameters[6];
+            var reason = parameters[7];
+            var remarks = parameters[8];
+
+            var lastName = name[0].Substring(0, name[0].Length - 1);
+            var firstName = name[1];
+
+
+            DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            DateTime checkOutDate = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            var classification = "CREW";
+
+            //Status = Request/Confirmed/Billed/Paid/ClientArrangedPayment
+            var status = 1;
+
+            var crewBatch = 141;
+
+            int flag = 0;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbloff_site_reservation(MNNO, Rank, LastName, FirstName, HotelName, RoomType, Classification, Status, CheckInDate, CheckOutDate, CompanyId," +
+                        "ModeOfPayment, ReasonOfStay, Remarks, CrewBatch, ReservationBy, ReservationDate, LastUpdatedBy, LastUpdated)" +
+                        "VALUE (@mnno, @rank, @lastName, @firstName, @hotelName, @roomType, @classification, @status, @checkInDate, @checkOutDate, @companyId," +
+                        "@modeOfPayment, @reasonOfStay, @remarks, @crewBatch, @reservationBy, @reservationDate, @lastUpdatedBy, @lastUpdated)",
+                        new MySqlParameter("@mnno", mnno),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@lastName", lastName),
+                        new MySqlParameter("@firstName", firstName),
+                        new MySqlParameter("@hotelName", hotel),
+                        new MySqlParameter("@roomType", roomType),
+                        new MySqlParameter("@classification", classification),
+                        new MySqlParameter("@status", status),
+                        new MySqlParameter("@checkInDate", checkInDate),
+                        new MySqlParameter("@checkOutDate", checkOutDate),
+                        new MySqlParameter("@companyId", company),
+                        new MySqlParameter("@modeOfPayment", payment),
+                        new MySqlParameter("@reasonOfStay", reason),
+                        new MySqlParameter("@remarks", remarks),
+                        new MySqlParameter("@crewBatch", crewBatch),
+                        new MySqlParameter("@reservationBy", guid),
+                        new MySqlParameter("@reservationDate", DateTime.Now),
+                        new MySqlParameter("@lastUpdatedBy", guid),
+                        new MySqlParameter("@lastUpdated", DateTime.Now));
+
+                    flag = 1;
+
+                }
+                catch (Exception e)
+                {
+                    //add error handling   
+                }
+            }
+
+            var jsonResult = Json(new { data = "" },
+                JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult SaveAccomodation(params string[] parameters)
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+            var guid = _usercontext.users.Where(model => model.Email == user).Select(model => model.Id).FirstOrDefault();
+
+            var mnno = parameters[0];
+            var rank = parameters[1];
+            var name = parameters[2].Split(' ');
+            var date = parameters[3].Split('-');
+            var reservation_type = parameters[4];
+            var payment = parameters[5];
+            var reason = parameters[6];
+            var remarks = parameters[7];
+            var room_type = parameters[8];
+
+
+            var lastName = name[0].Substring(0, name[0].Length - 1);
+            var firstName = name[1];
+
+            DateTime checkInDateTimeFrom = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            DateTime checkInDateTimeTo = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            var classification = "CREW";
+            var status = "Reserved";
+            var crew_batch = 141;
+
+            int flag = 0;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldorm_reservation_bank(MNNO, rank, LastName, FirstName, type_of_reservation, room_type, classification, stats, expctd_checkInDate," +
+                        "expctd_checkOutDate, company_name, mode_of_pymnt, reason_of_stay, remarks, rsrvtn_by, rsrvtn_date, rsrvtn_last_updated_by, rsrvtn_last_updated, crew_batch)" +
+                        "VALUE (@mnno, @rank, @lastName, @firstName, @type_of_reservation, @room_type, @classification, @stats, @expctd_checkInDate," +
+                        "@expctd_checkOutDate, @company_name, @mode_of_pymnt, @reason_of_stay, @remarks, @rsrvtn_by, @rsrvtn_date, @rsrvtn_last_updated_by, @rsrvtn_last_updated, @crew_batch)",
+                        new MySqlParameter("@mnno", mnno),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@lastName", lastName),
+                        new MySqlParameter("@firstName", firstName),
+                        new MySqlParameter("@type_of_reservation", reservation_type),
+                        new MySqlParameter("@room_type", room_type),
+                        new MySqlParameter("@classification", classification),
+                        new MySqlParameter("@stats", status),
+                        new MySqlParameter("@expctd_checkInDate", checkInDateTimeFrom),
+                        new MySqlParameter("@expctd_checkOutDate", checkInDateTimeTo),
+                        new MySqlParameter("@company_name", company),
+                        new MySqlParameter("@mode_of_pymnt", payment),
+                        new MySqlParameter("@reason_of_stay", reason),
+                        new MySqlParameter("@remarks", remarks),
+                        new MySqlParameter("@rsrvtn_by", guid),
+                        new MySqlParameter("@rsrvtn_date", DateTime.Now),
+                        new MySqlParameter("@rsrvtn_last_updated_by", guid),
+                        new MySqlParameter("@rsrvtn_last_updated", DateTime.Now),
+                        new MySqlParameter("@crew_batch", crew_batch));
+
+                    flag = 1;
+
+                }
+                catch (Exception e)
+                {
+                    //add error handling   
+                }
+            }
+            var jsonResult = Json(new { data = flag },
+                JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult SaveTransportationSingle(params string[] parameters)
+        {
+            //[mnno, rank, firstName, lastName, vehicle, date, destination]
+
+            var mnno = parameters[0];
+            var rank = parameters[1];
+            var firstName = parameters[2];
+            var lastName = parameters[3];
+            var vehicle = parameters[4];
+            var date = parameters[5];
+            var destination = parameters[6];
+
+            DateTime transportationDate = DateTime.ParseExact(date,"M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+
+            var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
+
+            int flag = 0;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation(Mnno, Rank, FirstName, LastName, Vehicle, Date, Destination, ReferenceId)" +
+                        "VALUE (@mnno, @rank, @lastName, @firstName, @vehicle, @date, @destination, @referenceId)",
+                        new MySqlParameter("@mnno", mnno),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@lastName", lastName),
+                        new MySqlParameter("@firstName", firstName),
+                        new MySqlParameter("@vehicle", vehicle),
+                        new MySqlParameter("@date", transportationDate),
+                        new MySqlParameter("@destination", destination),
+                        new MySqlParameter("@referenceId", referenceId));
+
+                    flag = 1;
+
+                }
+                catch (Exception e)
+                {
+                    //add error handling   
+                }
+            }
+
+            var jsonResult = Json(new { data = flag },
+                JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public enum DashboardMessageId
+        {
+            RequestSuccessful
+        }
+    }
+}

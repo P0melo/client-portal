@@ -1,0 +1,126 @@
+﻿@*@{
+    ViewBag.Title = "About";
+}
+
+<section class="content-header">
+    <h1><i class="fa fa-info-circle"></i> &nbsp; About us</h1>
+</section>
+
+<section class="content container-fluid">
+    <div id="company_profile" class="pad margin no-print">
+        <div  class="callout callout-info" style="margin-bottom: 0!important;">
+            <h3><i class="fa fa-building"></i> &nbsp;Company Profile</h3>
+        </div>
+    </div>
+    <div class="invoice">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header" style="margin-top: 0;">Our Company</h3>
+                <div class="box-body no-border">
+                    <p>
+                        United Marine Training Center (UMTC) is a top-quality maritime educational institution providing world-class instruction
+                        and training to seafarers. Our mandate is to develop them into highly competent marine professionals
+                        who are well prepared to face the challenges of the shipping industry.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header" style="margin-top: 0;">Our Services</h3>
+
+                <div class="box-body no-border">
+                    <p>
+                        We provide upgrading training to all seafarers to augment their skills.
+                        We offer one of the most updated cadet training programs, fully acquainted with the actual demands of the industry,
+                        and also develop a customized program to suit a company’s specific needs.
+                        <br />
+                        <br />
+                        Our training is up-to-date and in accordance with current industry regulations.
+                        Our faculty is composed of top-caliber instructors and high-ranking industry practitioners.
+                        Our facilities, workshops, laboratories, and equipment are state-of-the-art.
+                        Our standards are high and our methods are comprehensive.
+                        We employ all these to ensure our trainees live up to their full potential and are developed into determined,
+                        service-oriented, and outstanding seafarers who are great assets to their companies and the whole industry.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header" style="margin-top: 0;">Our History</h3>
+
+                <div class="box-body no-border">
+                    <p>
+                        We are the product of almost two decades of Marlow Navigation’s pursuit of excellence and innovation in the maritime sector.
+                        <br />
+                        <br />
+                        Established and named Marlow Navigation Training Center (MNTC) since 1999, we changed our name to United Marine Training Center in 2015 to more
+                        accurately represent the spirit of collaboration and commitment our company espouses. This renewal also opens the door for more opportunities to
+                        share our expertise with the rest of the industry and contribute to its further development.
+                        <br />
+                        <br />
+                        We trace our humble beginnings to a single lecture room doubling as the office and another room for culinary training. In 2004,
+                        we expanded our operations to further fulfill the growing need for well-trained seafarers. This led to the setting up of three more classrooms for the cadet training program,
+                        a computer laboratory, and a culinary center.
+                        <br />
+                        <br />
+                        We finally moved to our present site in the heart of Manila in 2008. We kept on expanding, enhancing,
+                        and improving since then to continue to provide world-class instruction to seafarers and pursue our vision of becoming a maritime Center of Excellence.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="vision_mission" class="pad margin no-print">
+        <div class="callout callout-info" style="margin-bottom: 0!important;">
+            <h3><i class="fa fa-low-vision"></i> &nbsp;Vision and Mission</h3>
+        </div>
+    </div>
+    <div class="invoice">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header" style="margin-top: 0">Our Values</h3>
+
+                <div class="box-body no-border">
+                    <ul>
+                        <li>We are honest.</li>
+                        <li>We are accountable.</li>
+                        <li>We are responsible.</li>
+                        <li>We are committed.</li>
+                        <li>We are empowered.</li>
+                        <li>We are customer oriented.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header" style="margin-top: 0">Our Vision</h3>
+
+                <div class="box-body no-border">
+                    <p>
+                        As a Center of Excellence, we are committed to:
+                        <ul>
+                            <li>Produce technically competent, globally competitive, and dedicated maritime professionals by providing comprehensive training programs, employing innovative systems, advanced equipment, and the latest technologies.</li>
+                            <li>Uphold our corporate values.</li>
+                            <li>Provide high quality training programs developed and conducted by competent and qualified instructors.</li>
+                            <li>Be proactive in meeting the needs of maritime industry through collaboration with industry partners and stakeholders.</li>
+                            <li>Continuously enhance employee satisfaction by promoting career advancement to foster a professional, motivated, and creative team.</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="page-header">Our Quality Policy</h3>
+            </div>
+            <div class="box-body no-border">
+                <p>
+                    We are committed to deliver quality maritime training to meet industry and customer requirements, which will be achieved through systematic process review, improvement and innovation.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>*@

@@ -1,0 +1,156 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+
+    var inputWidth = document.getElementById('LastName').clientWidth + "px";
+
+    $('#dashboard_lnk').parent().addClass('active');
+
+    $('#datepicker').datepicker();
+
+    $("#new_crew_registration #nationality").select2({ theme: "bootstrap", placeholder: "Select Nation", width: '"' + inputWidth + '"' });
+
+    $("#new_crew_registration #position").select2({ theme: "bootstrap", placeholder: "Select Position", width: '"' + inputWidth + '"' });
+
+    $('.select2-container--bootstrap .select2-selection--single').css({ 'padding-top': '10px', 'border-radius': '0px' });
+
+    $(document).on('change', '#InputFile', function () {
+        var inputFile = document.getElementById('InputFile');
+        var reader = new FileReader();
+        reader.readAsDataURL(inputFile.files[0]);
+        reader.onload = function () {
+            inputFile = reader.result;
+            $('#output').val(inputFile);
+        };
+    });
+
+    $(document).on('click', '#request_btn', function (e) {
+        var inputFile = document.getElementById('InputFile');
+        var imageSizeLimit = 5000000;//5245329;
+        var firstName = 0;
+        var position = 0;
+        var lastName = 0;
+        var middleName = 0;
+        var nationality = 0;
+        var datepicker = 0;
+        var birthPlace = 0;
+        var contact = 0;
+
+        if ($('#FirstName').val() == "") {
+            $('#FirstName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            firstName = 1;
+            $('#FirstName').css('border-color', '#ccc');
+        }
+
+        if ($('#position option:selected').val() == "") {
+            $('#position + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            position = 1;
+            $('#position + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#LastName').val() == "") {
+            $('#LastName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            lastName = 1;
+            $('#LastName').css('border-color', '#ccc');
+        }
+
+        if ($('#MiddleName').val() == "") {
+            $('#MiddleName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            middleName = 1;
+            $('#MiddleName').css('border-color', '#ccc');
+        }
+
+        if ($('#nationality option:selected').val() == "") {
+            $('#nationality + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            nationality = 1;
+            $('#nationality + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#datepicker').val() == "") {
+            $('#datepicker').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            datepicker = 1;
+            $('#datepicker').css('border-color', '#ccc');
+        }
+
+        if ($('#BirthPlace').val() == "") {
+            $('#BirthPlace').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            birthPlace = 1;
+            $('#BirthPlace').css('border-color', '#ccc');
+        }
+
+        if ($('#Contact').val() == "") {
+            $('#Contact').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            contact = 1;
+            $('#Contact').css('border-color', '#ccc');
+        }
+
+        if (inputFile.files[0] != null) {
+            if (inputFile.files[0].size > imageSizeLimit) {
+                $('.modal-warning .modal-title').html("Warning!");
+                $('.modal-warning .modal-body p').html("Please limit your image file to 5mb only.");
+                $('.modal-warning').modal();
+                e.preventDefault();
+            } else {
+                $('#InputFile').css('border-color', '#ccc');
+            }
+        }
+
+        if (firstName == 1 && position == 1 && lastName == 1 && middleName == 1 && nationality == 1 && datepicker == 1 && birthPlace == 1 && contact == 1) {
+
+            $('#modal_warning_request .modal-body p').html('Are you sure you want to submit this request?');
+            $('#modal_warning_request').modal();
+        } else {
+            $('#new_crew_registration_err_msg').css('display', 'block');
+        }
+    });
+
+    $(document).on('click', '#modal_warning_request_yes', function () {
+        $('#new_crew_registration_err_msg').css('display', 'none');
+        firstName = $('#FirstName').val();
+        position = $('#position option:selected').val();
+        lastName = $('#LastName').val();
+        middleName = $('#MiddleName').val();
+        nationality = $('#nationality option:selected').val();
+        datepicker = $('#datepicker').val();
+        birthPlace = $('#BirthPlace').val();
+        contact = $('#Contact').val();
+        var gender = $('input[name="Gender"]:checked').val();
+        var picture = $('#output').val();
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveNewCrew',
+            dataType: 'json',
+            type: 'POST',
+            data: { firstName: firstName, position: position, lastName: lastName, middleName: middleName, nationality: nationality, datepicker: datepicker, birthPlace: birthPlace, contact: contact, gender: gender, inputFile: picture },
+            success: function (result) {
+                if (result.data == 1) {
+
+                    $('.modal-success .modal-body p').html("Request Successful!");
+                    $('.modal-success').modal();
+
+                } else {
+                    $('#modal-warning').modal();
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#modal_close_btn', function () {
+        window.location.reload();
+    });
+});

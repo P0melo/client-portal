@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pad margin no-print">
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+
+        <h3><i class="fa fa-edit"></i> &nbsp;Forms</h3>
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title col-xs-12">Crew List</h3>
+            <div class="box-tools pull-right">
+                <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+            </div>
+        </div>
+        <div id="crew_list" class="box-body">
+
+        </div>
+    </div>
+</div>
+<div class="col-lg-6" style="padding: 0">
+    <div class="col-md-12 col-lg-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title col-xs-12">New Crew Registration</h3>
+                <div class="box-tools pull-right">
+                    <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                </div>
+            </div>
+            <div id="new_crew_registration" class="box-body">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title col-xs-12">Meals</h3>
+                <div class="box-tools pull-right">
+                    <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                </div>
+            </div>
+            <div id="meals" class="box-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-lg-6">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title col-xs-12">Accommodation</h3>
+            <div class="box-tools pull-right">
+                <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+            </div>
+        </div>
+        <div id="accomodation" class="box-body">
+
+        </div>
+    </div>
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title col-xs-12">Off Site Accommodation</h3>
+            <div class="box-tools pull-right">
+                <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+            </div>
+        </div>
+        <div id="off_site_accomodation" class="box-body">
+
+        </div>
+    </div>
+</div>
+<div class="modal modal-success fade" id="modal-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Warning!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Please make sure that the data you enter in the fields are correct then try again, or you may contact Sales and Marketing for support.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade in" id="meal_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Meal Provisions Log</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <table id="meal_log_tbl" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Id</th>
+                            <th colspan="2">Meal Date</th>
+                            <th rowspan="2">B</th>
+                            <th rowspan="2">MS</th>
+                            <th rowspan="2">L</th>
+                            <th rowspan="2">AS</th>
+                            <th rowspan="2">D</th>
+                            <th rowspan="2">Reason</th>
+                        </tr>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/dashboard.js"></script>
+    @*@if (ViewBag.StatusMessage != "")
+        {
+            <script>
+                $('.modal').modal();
+            </script>
+        }*@
+}
+

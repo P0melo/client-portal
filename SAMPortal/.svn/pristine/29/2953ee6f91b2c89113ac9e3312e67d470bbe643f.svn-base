@@ -1,0 +1,553 @@
+﻿$(document).ready(function () {
+    var date = new Date();
+    $('#dashboard_lnk').parent().addClass('active');
+    $(function () {
+        getPartialOfNewCrewRegistration();
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfCrewList',
+            type: 'get',
+            success: function (result) {
+                $('#crew_list').html(result);
+                getCrewList();
+            }
+        });
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfMeal',
+            type: 'get',
+            success: function (result) {
+                $('#meals').html(result);
+                $('#meal_reservation').daterangepicker();
+            }
+        });
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfAccomodation',
+            type: 'get',
+            success: function (result) {
+                $('#accomodation').html(result);
+                $('#accomodation_date').daterangepicker();
+            }
+        });
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfOffSiteAccommodation',
+            type: 'get',
+            success: function (result) {
+                $('#off_site_accomodation').html(result);
+            }
+        });
+
+    });
+
+    function getPartialOfNewCrewRegistration() {
+        $.ajax({
+            url: '/SAMPortal/Dashboard/GetPartialOfNewCrewRegistration',
+            type: 'get',
+            success: function (result) {
+                $('#new_crew_registration').html(result);
+            },
+            complete: function () {
+                $(function () {
+                    $('#datepicker').datepicker();
+                });
+                $("#new_crew_registration #nationality").select2({ theme: "bootstrap", placeholder: "Select Nation" });
+
+                $("#new_crew_registration #position").select2({ theme: "bootstrap", placeholder: "Select Position" });
+
+                $('.select2-container--bootstrap .select2-selection--single').css('padding-top', '10px');
+            }
+        });
+    }
+
+    function getCrewList() {
+        $.ajax({
+            url: '/SAMPortal/api/Dashboard/GetCrewList',
+            type: 'get',
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                var content = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + (result[i].Nation == null ? "" : result[i].Nation) + "</td><td>" + result[i].Birthday +
+                        "</td><td>" + result[i].BirthPlace + "</td><td>" + result[i].Contact + "</td><td>" + result[i].Gender + "</td></tr>"
+                }
+
+                $('#crew_list_tbl_tbody').html(content);
+                $('#crew_list_tbl').DataTable();
+            }
+        });
+    }
+
+    $(document).on('change', '#InputFile', function () {
+        var inputFile = document.getElementById('InputFile');
+        var reader = new FileReader();
+        reader.readAsDataURL(inputFile.files[0]);
+        reader.onload = function () {
+            inputFile = reader.result;
+            $('#output').val(inputFile);
+        };
+    });
+
+    $(document).on('click', '#request_btn', function (e) {
+
+        var inputFile = document.getElementById('InputFile');
+        var imageSizeLimit = 5000000;//5245329;
+        var firstName = 0;
+        var position = 0;
+        var lastName = 0;
+        var middleName = 0;
+        var nationality = 0;
+        var datepicker = 0;
+        var birthPlace = 0;
+        var contact = 0;
+
+        if ($('#FirstName').val() == "") {
+            $('#FirstName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            firstName = 1;
+            $('#FirstName').css('border-color', '#ccc');
+        }
+
+        if ($('#position option:selected').val() == "") {
+            $('#position + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            position = 1;
+            $('#position + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#LastName').val() == "") {
+            $('#LastName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            lastName = 1;
+            $('#LastName').css('border-color', '#ccc');
+        }
+
+        if ($('#MiddleName').val() == "") {
+            $('#MiddleName').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            middleName = 1;
+            $('#MiddleName').css('border-color', '#ccc');
+        }
+
+        if ($('#nationality option:selected').val() == "") {
+            $('#nationality + span .select2-selection').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            nationality = 1;
+            $('#nationality + span .select2-selection').css('border-color', '#ccc');
+        }
+
+        if ($('#datepicker').val() == "") {
+            $('#datepicker').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            datepicker = 1;
+            $('#datepicker').css('border-color', '#ccc');
+        }
+
+        if ($('#BirthPlace').val() == "") {
+            $('#BirthPlace').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            birthPlace = 1;
+            $('#BirthPlace').css('border-color', '#ccc');
+        }
+
+        if ($('#Contact').val() == "") {
+            $('#Contact').css('border-color', 'red');
+            e.preventDefault();
+        } else {
+            contact = 1;
+            $('#Contact').css('border-color', '#ccc');
+        }
+
+        if (inputFile.files[0] != null) {
+            if (inputFile.files[0].size > imageSizeLimit) {
+                $('.modal-warning .modal-title').html("Warning!");
+                $('.modal-warning .modal-body p').html("Please limit your image file to 5mb only.");
+                $('.modal-warning').modal();
+                e.preventDefault();
+            } else {
+                $('#InputFile').css('border-color', '#ccc');
+            }
+        }
+
+
+        if (firstName == 1 && position == 1 && lastName == 1 && middleName == 1 && nationality == 1 && datepicker == 1 && birthPlace == 1 && contact == 1) {
+
+            $('#new_crew_registration_err_msg').css('display', 'none');
+            firstName = $('#FirstName').val();
+            position = $('#position option:selected').val();
+            lastName = $('#LastName').val();
+            middleName = $('#MiddleName').val();
+            nationality = $('#nationality option:selected').val();
+            datepicker = $('#datepicker').val();
+            birthPlace = $('#BirthPlace').val();
+            contact = $('#Contact').val();
+            var gender = $('input[name="Gender"]:checked').val();
+            var picture = $('#output').val();
+
+            $.ajax({
+                url: '/SAMPortal/Dashboard/SaveNewCrew',
+                dataType: 'json',
+                type: 'POST',
+                data: { firstName: firstName, position: position, lastName: lastName, middleName: middleName, nationality: nationality, datepicker: datepicker, birthPlace: birthPlace, contact: contact, gender: gender, inputFile: picture },
+                success: function (result) {
+                    if (result.data == 1) {
+
+                        $('.modal-success .modal-body p').html("Request Successful!");
+                        $('.modal-success').modal();
+
+                        getPartialOfNewCrewRegistration();
+                    } else {
+                        $('.modal-danger').modal();
+                    }
+                }
+            });
+        } else {
+            $('#new_crew_registration_err_msg').css('display', 'block');
+        }
+
+    });
+
+    $(document).on('click', '#accomodation_search_btn', function () {
+        var mnno = $('#accomodation_mnno_input').val();
+
+        $.ajax({
+            url: '/SAMPortal/api/Dashboard/GetCrewDetailsForAccomodation',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#accomodation_rank_input').val(position);
+                    $('#accomodation_name_input').val(name);
+
+                    $('#accomodation_crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#accomodation_crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#meal_search_btn', function () {
+        var mnno = $('#mnno_input').val();
+        //var date = new Date();
+        $.ajax({
+            url: '/SAMPortal/api/Dashboard/GetCrewDetailsForMeal',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#rank_input').val(position);
+                    $('#name_input').val(name);
+
+                    $('#crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+
+                    $.ajax({
+                        url: '/SAMPortal/api/Dashboard/GetMealProvisionLog',
+                        type: 'get',
+                        dataType: 'json',
+                        data: { mnno: mnno },
+                        success: function (result) {
+                            // "</td><td id='breakfast'>" + RenderCheckBox(result[i].Breakfast) + "</td><td id='morning_snack'>" + RenderCheckBox(result[i].MorningSnack) + "</td><td id='lunch'>" + RenderCheckBox(result[i].Lunch) +
+                            //"</td><td id='afternoon_snack'>" + RenderCheckBox(result[i].AfternoonSnack) + "</td><td id='dinner'>" + RenderCheckBox(result[i].Dinner) + "</td>
+                            var content = "";
+                            for (var i = 0; i < result.length; i++) {
+                                content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + formatDate(result[i].FromDate) + "</td><td id='toDate'>" + formatDate(result[i].ToDate) +
+                                    "<td id='reason'>" + result[i].Reason + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
+                            }
+
+                            $("#meal_tbl tbody").html(content);
+                            $('#meal_tbl_div').css('display', 'block');
+                        }
+                    });
+
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#reference_id_btn', function () {
+        var reference_id = $(this).html();
+        getMealsProvisionByReference(reference_id);
+
+    });
+
+    function getMealsProvisionByReference(reference_id) {
+        $.ajax({
+            url: '/SAMPortal/api/Dashboard/GetMealsProvisionByReference',
+            type: 'get',
+            dataType: 'json',
+            data: { referenceId: reference_id },
+            success: function (result) {
+                var tableContent = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    var id = result[i].Id;
+                    var fromDate = result[i].FromDate;
+                    var toDate = result[i].ToDate;
+                    var breakfast = result[i].Breakfast;
+                    var morningSnack = result[i].MorningSnack;
+                    var lunch = result[i].Lunch;
+                    var afternoonSnack = result[i].AfternoonSnack;
+                    var dinner = result[i].Dinner;
+
+                    tableContent += "<tr><td id='" + id + "'>" + id + "</td><td>" + formatDate(fromDate) + "</td><td>" + formatDate(toDate) + "</td><td id='#breakfast'>" + RenderCheckBox(breakfast, fromDate) + "</td>" +
+                        "<td>" + RenderCheckBox(morningSnack, fromDate) + "</td><td>" + RenderCheckBox(lunch, fromDate) + "</td><td>" + RenderCheckBox(afternoonSnack, fromDate) + "</td><td>" +
+                        RenderCheckBox(dinner, fromDate) + "</td><td>" + result[i].Reason + "</td><td>" + renderEditButton(fromDate) +
+                        "<span id='meal_log_save_btn'><i class='fa fa-save'></i></span>&nbsp;<span id='meal_log_cancel_btn'><i class='fa fa-close'></i></span></td></tr>";
+                }
+                $('#meal_modal .modal-body p').html('Note: You are not allowed to edit a record within 3 days before the start of the meal');
+                $('#meal_modal .modal-body #meal_log_tbl tbody').html(tableContent);
+                $('#meal_modal').modal();
+            }
+        });
+    }
+
+    $(document).on('click', '#meal_log_edit_btn', function () {
+        var isDisabled = $(this).attr('disabled');
+        if (isDisabled != 'disabled') {
+            $(this).css('display', 'none');
+            $(this).siblings().css('display', 'inline');
+            $('.meal_log_edit').prop('disabled', true);
+            $('.meal_log_edit').css('color', 'gray');
+            //$('#meal_log_save_btn').css('display', 'inline');
+
+            var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input');
+            var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input');
+            var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input');
+            var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input');
+            var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input');
+
+            breakfast_cb_log.prop('disabled', false);
+            morning_snack_cb_log.prop('disabled', false);
+            lunch_cb_log.prop('disabled', false);
+            afternoon_cb_log.prop('disabled', false);
+            dinner_cb_log.prop('disabled', false);
+        }
+    });
+
+    $(document).on('click', '#meal_log_cancel_btn', function () {
+        $(this).css('display', 'none');
+        $(this).siblings('#meal_log_edit_btn').css('display', 'inline');
+        $(this).siblings('#meal_log_save_btn').css('display', 'none');
+        $('.meal_log_edit').prop('disabled', false);
+        $('.meal_log_edit').css('color', 'black');
+
+        var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input');
+        var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input');
+        var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input');
+        var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input');
+        var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input');
+
+        breakfast_cb_log.prop('disabled', true);
+        morning_snack_cb_log.prop('disabled', true);
+        lunch_cb_log.prop('disabled', true);
+        afternoon_cb_log.prop('disabled', true);
+        dinner_cb_log.prop('disabled', true);
+
+    });
+
+    $(document).on('click', '#meal_log_save_btn', function () {
+        var id = $(this).closest('tr').find('td').html();
+
+        var breakfast_cb_log = $(this).closest('tr').find(':nth-child(4) input').is(':checked');
+        var morning_snack_cb_log = $(this).closest('tr').find(':nth-child(5) input').is(':checked');
+        var lunch_cb_log = $(this).closest('tr').find(':nth-child(6) input').is(':checked');
+        var afternoon_cb_log = $(this).closest('tr').find(':nth-child(7) input').is(':checked');
+        var dinner_cb_log = $(this).closest('tr').find(':nth-child(8) input').is(':checked');
+
+        var parameters = [id, breakfast_cb_log, morning_snack_cb_log, lunch_cb_log, afternoon_cb_log, dinner_cb_log];
+
+        $.ajax({
+            url: '/SAMPortal/Dashboard/SaveMealLogEdit',
+            type: 'post',
+            dataType: 'json',
+            data: { parameters: parameters },
+            success: function (result) {
+                if (result.data == 1) {
+                    $('.modal-success .modal-body p').html("Save Successful!");
+                    $('.modal-success').modal();
+                }
+            }
+        });
+    });
+
+    function renderEditButton(fromDate) {
+        var dateToday = new Date();
+        dateToday.setHours(0);
+        dateToday.setMinutes(0);
+        dateToday.setSeconds(0);
+        var fDate = new Date(fromDate);
+
+        var dateDiff = fDate - dateToday;
+        var intDiff = Math.round(dateDiff / (1000 * 60 * 60 * 24));
+        
+        if (intDiff > 3) {
+            return "<span id='meal_log_edit_btn' class='meal_log_edit'><i class='fa fa-edit'></i></span>";
+        } else {
+            return "<span id='meal_log_edit_btn' class='meal_log_edit' disabled><i class='fa fa-edit'></i></span>";
+        }
+    }
+
+    function RenderCheckBox(checked) {
+        var checkedValue = "";
+        if (checked == 1) {
+            checkedValue = "checked";
+        }
+
+        return "<input type='checkbox' " + checkedValue + " disabled='true'/>";
+    }
+
+    $(document).on('click', '#save_meal_btn', function (e) {
+        var mnno = $('#mnno_input').val();
+        var rank = $('#rank_input').val();
+        var name = $('#name_input').val();
+        var date = $('#meal_reservation').val();
+        var breakfast_cb = $('#breakfast_cb').prop('checked');
+        var am_snack_cb = $('#am_snack_cb').prop('checked');
+        var lunch_cb = $('#lunch_cb').prop('checked');
+        var pm_snack_cb = $('#pm_snack_cb').prop('checked');
+        var dinner_cb = $('#dinner_cb').prop('checked');
+        var reason = $('#reason_input').val();
+
+        var dateDiff = getDateDiff(date);
+
+        if (dateDiff > 30) {
+            $('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days and do another request for the remaining days");
+            $('.modal-warning').modal();
+        } else {
+            if (reason.trim() == "" || (breakfast_cb == false && am_snack_cb == false && lunch_cb == false && pm_snack_cb == false && dinner_cb == false)) {
+                $('#meal_err_msg').css('display', 'block');
+            } else {
+                $('#meal_err_msg').css('display', 'none');
+                var parameters = [mnno, rank, name, date, reason, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
+
+                $.ajax({
+                    url: '/SAMPortal/Dashboard/SaveMealProvision',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { parameters: parameters },
+                    success: function (result) {
+                        if (result.data == 1) {
+                            $('.modal-success .modal-body p').html("Meal Request Successful!");
+                            $('.modal-success').modal();
+                        }
+                        
+                    }
+                });
+            }
+        }
+
+    });
+
+    $(document).on('click', '#save_accomodation_btn', function () {
+        var mnno = $('#accomodation_mnno_input').val();
+        var rank = $('#accomodation_rank_input').val();
+        var name = $('#accomodation_name_input').val();
+        var date = $('#accomodation_date').val();
+        var reservation_type = $('#reservation_type option:selected').val();
+        var room_type = $('#room_type option:selected').val();
+        var payment = $('#mode_of_payment option:selected').val();
+        var reason = $('#accomodation_reason option:selected').val();
+        var remarks = $('#accomodation_remarks_input').val();
+
+        if (remarks.trim() == "") {
+            $('#accomodation_err_msg').css('display', 'block');
+        } else {
+            $('#accomodation_err_msg').css('display', 'none');
+
+            var parameters = [mnno, rank, name, date, reservation_type, payment, reason, remarks, room_type];
+
+            $.ajax({
+                url: '/SAMPortal/Dashboard/SaveAccomodation',
+                type: 'post',
+                dataType: 'json',
+                data: { parameters: parameters },
+                success: function (result) {
+                    if (result.data == 1) {
+                        $('.modal-success .modal-body p').html("Accommodation Request Successful!");
+                        $('.modal-success').modal();
+                    }
+
+                }
+            });
+        }
+
+    });
+
+    function getDateDiff(date) {
+        var splitDate = date.split(' - ');
+
+        var newDateFrom = new Date(splitDate[0]);
+        var newDateTo = new Date(splitDate[1]);
+
+        var dateDifference = new Date(newDateTo - newDateFrom);
+        var intDifference = Math.round((dateDifference / (1000 * 60 * 60 * 24)));
+        return intDifference;
+    }
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    function formatDate(data, redirect) {
+
+        if (data == null) {
+            return "";
+        }
+
+        if (redirect) {
+            return data.replace(/\//g, "-");
+        }
+
+        var result = data.replace(/[^0-9 +]/g, '');
+
+        var date = new Date(data);
+
+        return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+    }
+
+    function formatDate2(data) {
+        if (data == null) {
+            return "";
+        }
+
+        var splitDate = data.split('.');
+
+        var month = splitDate[1];
+
+        var intMonth = (monthNames.indexOf(month)) + 1;
+
+        return intMonth + "/" + splitDate[0] + "/" + splitDate[2];
+    }
+
+
+
+});

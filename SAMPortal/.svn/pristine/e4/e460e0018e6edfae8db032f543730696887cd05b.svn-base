@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using SAMPortal.Models;
+
+namespace SAMPortal.Controllers.Api
+{
+    [System.Web.Http.Authorize]
+    public class AdministrationController : ApiController
+    {
+        private officecadetprogramEntities _context;
+        private dbidentityEntities _usercontext;
+
+        public AdministrationController()
+        {
+            _context = new officecadetprogramEntities();
+            _usercontext = new dbidentityEntities();
+        }
+
+        public IHttpActionResult GetNewCrewRequest()
+        {
+
+            var data = _context.Database.SqlQuery<ReviewNewCrewRegistration>("select n.Id, n.Position, n.FirstName, n.LastName, n.MiddleName as MiddleInitial, n.Gender, n.Nationality, " +
+                                                                             "n.Birthday, n.BirthPlace, n.Contact, n.Company, t.companyName, n.EnteredBy, n.Picture " +
+                                                                             "from tblnewcrewrequest n join tbltpcompany t on n.Company = t.companyID").ToList();
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetOffSiteAccommodationRequest()
+        {
+            var data = _context.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT Id, MNNO, Rank, LastName, FirstName, HotelName, RoomType, Status, CheckInDate, CheckOutDate, c.CompanyName, ModeOfPayment, h.h_rmrk AS ReasonOfStay " +
+                                                                                "FROM tbloff_site_reservation o JOIN tbltpcompany c on o.CompanyId = c.CompanyID JOIN tblhotel_guest_remark_type h on h.id_h_rmrk = ReasonOfStay WHERE o.Status = 1 " +
+                                                                                "OR o.Status = 2 OR o.Status = 3").ToList();
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetAccomodationDetailsById(int Id)
+        {
+            var data = _context.Database.SqlQuery<OffsiteAccomodationById>("SELECT Id, Status, h_rmrk AS ReasonOfStay FROM tbloff_site_reservation osr JOIN tblhotel_guest_remark_type hgrt on osr.ReasonOfStay = hgrt.id_h_rmrk WHERE Id = " + Id).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetTransportationRequests()
+        {
+            var data = _context.tbltransportations.OrderByDescending(m => m.DateBooked).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetTransportationRequestById(int recordId)
+        {
+            var data = _context.Database.SqlQuery<TransportationModel>("SELECT tp.companyName, Inbound, Outbound, OneTrip, TwoTrips, Status, PickUp, DateTimeOfPickUp, " +
+                            "DropOff, SecondPickUp, SecondDateTimeOfPickUp, SecondDropOff, Notes FROM tbltransportation t JOIN tbltpcompany tp ON t.Company = tp.companyID " +
+                            "WHERE Id = " + recordId).ToList();
+
+            return Ok(data);
+        }
+    }
+}

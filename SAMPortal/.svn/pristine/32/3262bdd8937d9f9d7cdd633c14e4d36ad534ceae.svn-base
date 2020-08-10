@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using MySql.Data.MySqlClient;
+using SAMPortal.Models;
+
+namespace SAMPortal.Controllers
+{
+    public class DashboardController : Controller
+    {
+        private officecadetprogramEntities _context;
+        private dbidentityEntities _usercontext;
+
+        public DashboardController()
+        {
+            _context = new officecadetprogramEntities();
+            _usercontext = new dbidentityEntities();
+        }
+
+        // GET: Dashboard
+        public ActionResult Index(DashboardMessageId? message, int? days)
+        {
+            ViewBag.StatusMessage =
+                message == DashboardMessageId.RequestSuccessful ? "Request Successful"
+                : "";
+
+            return View();
+        }
+
+        public ActionResult GetPartialOfNewCrewRegistration()
+        {
+            var nations = _context.tblcountries.Select(m => new NationDTO { Name = m.name, Iso3 = m.iso3 }).ToList();
+
+            var ranks = _context.tblranks.Select(m => new RankDTO { Rank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+
+            IEnumerable<NationDTO> nationList = nations;
+            IEnumerable<RankDTO> ranksList = ranks;
+
+            NewCrewRegistrationViewModel ncrvm = new NewCrewRegistrationViewModel()
+            {
+                Nations = nationList,
+                Ranks = ranksList
+            };
+
+            return PartialView("_NewCrewRegistration", ncrvm);
+        }
+
+        public ActionResult GetNationalityList()
+        {
+            var data = _context.tblcountries.Select(m => new { m.name, m.iso3 }).ToList();
+
+            var jsonResult = Json(new { data },
+                 JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult SaveNewCrew(NewCrewRegistrationViewModel m)
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+            DateTime dateValue = DateTime.ParseExact(m.Birthday, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            var x = dateValue.Date;
+
+            if (ModelState.IsValid)
+            {
+                _context.Database.ExecuteSqlCommand("INSERT INTO tblnewcrewrequest (Position, FirstName, LastName, MiddleName, Gender, Nationality, Birthday, BirthPlace, Contact, Company, EnteredBy) VALUES(@position, @firstname, @lastname, @middlename, @gender, @nationality, @birthday, @birthplace, @contact, @company, @enteredby)",
+                    new MySqlParameter("position", m.Position),
+                    new MySqlParameter("firstname", m.FirstName),
+                    new MySqlParameter("lastname", m.LastName),
+                    new MySqlParameter("middlename", m.MiddleName.Substring(0,1)),
+                    new MySqlParameter("gender", m.Gender.Equals("Male") ? 'M' : 'F'),
+                    new MySqlParameter("nationality", m.Nation),
+                    new MySqlParameter("birthday", dateValue.Date),
+                    new MySqlParameter("birthplace", m.BirthPlace),
+                    new MySqlParameter("contact", m.Contact),
+                    new MySqlParameter("company", company),
+                    new MySqlParameter("enteredby", user)
+                 );
+            }
+
+            return RedirectToAction("Index", new { Message = DashboardMessageId.RequestSuccessful });
+        }
+
+        public ActionResult GetPartialOfCrewList()
+        {
+            return PartialView("_CrewList");
+        }
+
+        public ActionResult GetCrewList()
+        {
+            var user = User.Identity.Name;
+
+            var company = _usercontext.users.Where(m => m.Email == user).Select(m => m.CompanyId).FirstOrDefault();
+
+            var data = _context.tblcrews.Where(m => m.Employer == company).Select(m => new CrewDTO { Position = m.Rank, Name = string.Concat(m.LName, ", ", m.FName, " ", m.MName), Nation = m.Nationality,
+                                                                                                      Birthday = m.BDate.ToString(), BirthPlace = m.BPlace, Contact = m.ContactNo, Gender = m.Gender}).ToList();
+
+            //IEnumerable<CrewDTO> c = data;
+
+            //CrewViewModel cl = new CrewViewModel()
+            //{
+            //    ListOfCrews = c
+            //};
+
+            var jsonResult = Json(new { data },
+                 JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+    }
+
+    public enum DashboardMessageId
+    {
+        RequestSuccessful
+    }
+}

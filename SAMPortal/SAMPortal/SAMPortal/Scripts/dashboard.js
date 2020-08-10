@@ -1,0 +1,170 @@
+﻿var date = new Date();
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function formatDate(data, redirect) {
+
+    if (data == null) {
+        return "";
+    }
+
+    if (redirect) {
+        return data.replace(/\//g, "-");
+    }
+
+    var result = data.replace(/[^0-9 +]/g, '');
+
+    var date = new Date(data);
+
+    return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+}
+
+function formatDate2(data) {
+    if (data == null) {
+        return "";
+    }
+
+    var splitDate = data.split('.');
+
+    var month = splitDate[1];
+
+    var intMonth = (monthNames.indexOf(month)) + 1;
+
+    return intMonth + "/" + splitDate[0] + "/" + splitDate[2];
+}
+
+
+function getCrewDetails(mnno, htmlId) {
+
+    $.ajax({
+        url: '/SAMPortal/api/Forms/GetCrewDetails',
+        type: 'get',
+        dataType: 'json',
+        data: { mnno: mnno },
+        success: function (result) {
+            if (result.length <= 0) {
+                $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                $('.modal-warning').modal();
+            } else {
+                var name = result[0].Name;
+                var position = result[0].Position;
+
+                $('#' + htmlId + '_rank_input').val(position);
+                $('#' + htmlId + '_name_input').val(name);
+
+                $('#' + htmlId + '_crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                $('#' + htmlId + '_crew_picture img').on('error', function () {
+                    $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                });
+            }
+        }
+    });
+}
+
+function getDateDiff(date) {
+    var splitDate = date.split(' - ');
+
+    var newDateFrom = new Date(splitDate[0]);
+    var newDateTo = new Date(splitDate[1]);
+
+    var dateDifference = new Date(newDateTo - newDateFrom);
+    var intDifference = Math.round((dateDifference / (1000 * 60 * 60 * 24)));
+    return intDifference;
+}
+
+$(document).ready(function () {
+
+    $(document).on('click', '#crewList_lnk', function () {
+        var id = $(this).attr('id');
+        getCrewList();
+    });
+
+    function getPartialOfTransportationSingle() {
+        $.ajax({
+            url: '/SAMPortal/Forms/GetPartialOfTransportationSingle',
+            type: 'get',
+            success: function (result) {
+                $('#transportation').html(result);
+                $('#transportation_date').datepicker();
+            }
+        });
+    }
+
+    function getCrewList() {
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetCrewList',
+            type: 'get',
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                var content = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + (result[i].Nation == null ? "" : result[i].Nation) + "</td><td>" + result[i].Birthday +
+                        "</td><td>" + result[i].BirthPlace + "</td><td>" + result[i].Contact + "</td><td>" + result[i].Gender + "</td></tr>"
+                }
+
+                $('#crew_list_tbl_tbody').html(content);
+                $('#crew_list_tbl').DataTable();
+            }
+        });
+    }
+
+    $(document).on('click', '#transportation_search_btn', function () {
+        var mnno = $('#transportation_mnno_input').val();
+        getCrewDetails(mnno, 'transportation');
+    });
+
+    $(document).on('click', '#accomodation_search_btn', function () {
+        var mnno = $('#accomodation_mnno_input').val();
+        getCrewDetails(mnno, 'accomodation');
+    });
+
+    $(document).on('click', '#off_site_search_btn', function () {
+        var mnno = $('#off_site_mnno_input').val();
+        getCrewDetails(mnno, 'off_site');
+    });
+
+    $(document).on('click', '#off_site_search_btn', function () {
+        var mnno = $('#off_site_mnno_input').val();
+        getCrewDetails(mnno, 'off_site');
+    });
+
+    function getCrewDetails(mnno, htmlId) {
+
+        $.ajax({
+            url: '/SAMPortal/api/Forms/GetCrewDetails',
+            type: 'get',
+            dataType: 'json',
+            data: { mnno: mnno },
+            success: function (result) {
+                if (result.length <= 0) {
+                    $('.modal-warning .modal-body p').html("The Marlow number you entered is not found in the database. Please enter an existing Marlow number and try again.");
+                    $('.modal-warning').modal();
+                } else {
+                    var name = result[0].Name;
+                    var position = result[0].Position;
+
+                    $('#' + htmlId + '_rank_input').val(position);
+                    $('#' + htmlId + '_name_input').val(name);
+
+                    $('#' + htmlId + '_crew_picture img').attr('src', 'http://pics.umtc.com.ph/Images/CadetPictures/' + mnno + '.jpg?' + date.getMilliseconds());
+
+                    $('#' + htmlId + '_crew_picture img').on('error', function () {
+                        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+                    });
+                }
+            }
+        });
+    }
+
+    //$(document).on('click', '#view_accomodation_btn', function () {
+    //    $('#rooms_modal').modal();
+    //});
+
+    //$(document).on('click', '#view_rates_btn', function () {
+    //    $('#rates_and_inclusions_modal').modal();
+    //});
+
+});

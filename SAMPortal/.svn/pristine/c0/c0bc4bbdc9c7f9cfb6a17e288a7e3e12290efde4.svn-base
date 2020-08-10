@@ -1,0 +1,100 @@
+﻿<div class="pad margin no-print">
+    <div class="callout callout-info" style="margin-bottom: 0!important;">
+
+        <h3><i class="fa fa-edit"></i> &nbsp;Forms</h3>
+    </div>
+</div>
+    <div class="col-md-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title col-xs-12">Transportation</h3>
+                <div class="box-tools pull-right">
+                    <buton typeof="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></buton>
+                </div>
+            </div>
+            <div id="transportation" class="box-body">
+                <div class="col-md-12 col-lg-5 form-group" id="transportation_crew_picture">
+                    <img class="img img-responsive" src="~/Content/images/default.jpg" />
+                </div>
+
+                <div class="col-lg-7 form-group">
+                    <label for="transportation_mnno" class="col-md-2 control-label">MNNO</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <div class="input-group">
+                            <input id="transportation_mnno_input" type="text" class="form-control" />
+                            <span id="transportation_search_btn" class="input-group-btn">
+                                <button type="button" name="search" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 form-group">
+                    <label for="transportation_rank" class="col-md-2 control-label">Rank</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <input id="transportation_rank_input" type="text" class="form-control" style="border-radius: 3px;" />
+                    </div>
+                </div>
+                <div class="col-lg-7 form-group">
+                    <label for="transportation_name" class="col-md-2 control-label">Name</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <input id="transportation_name_input" type="text" class="form-control" style="border-radius: 3px;" />
+                    </div>
+                </div>
+                <div class="col-lg-7 form-group">
+                    <label for="transportation_name" class="col-md-2 control-label">Vehicle</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <select id="transportation_vehicle" class="form-control">
+                            @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfVehicles"]); i++)
+                            {
+                                <option value="@System.Configuration.ConfigurationManager.AppSettings["vehicle" + (i + 1)]">
+                                    @System.Configuration.ConfigurationManager.AppSettings["vehicle" + (i + 1)]
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-7 form-group">
+                    <label for="transportation_date" class="col-md-2 control-label">Date</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="transportation_date">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12 form-group">
+                    <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
+                    <div class="col-xs-12 col-md-12 col-lg-10">
+                        <select id="transportation_destination" class="form-control">
+                            @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfDestinations"]); i++)
+                            {
+                                <option value="@System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]">
+                                    @System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]
+                                </option>
+                            }
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-12">
+                    <div class="form-group col-lg-12">
+                        <button type="button" id="save_transportation_btn" class="btn btn-default pull-right">Reserve</button>
+                        <button type="button" id="transportation_rates_btn" class="btn btn-default pull-right">Rates</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts{
+        <script src="~/Scripts/TransportationSingle.js"></script>
+    }
+
+
