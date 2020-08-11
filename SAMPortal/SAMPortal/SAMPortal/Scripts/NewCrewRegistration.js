@@ -603,14 +603,15 @@
 
                     //}
 
-                    $('#modal-success .modal-body p').html("New Crew Request Sent! " + mergeMessage);
+                    //$('#modal-success .modal-body p').html("New Crew Request Sent! " + mergeMessage);
+                    $('#modal-success .modal-body p').html("New Crew Request Sent!");
                     $('#modal-success').modal();
 
                 } else if (result.status == "Error") {
                     //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                     //$('.modal-danger').modal();
 
-                    generateWarningModal("save_new_crew_error_modal", 2, "save_new_crew_error_modal_ok", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    generateDangerModal("save_new_crew_error_modal", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 }
 
             }
@@ -621,13 +622,13 @@
     function submit_new_crew_request() {
         let inputFile = document.getElementById('InputFile');
         let imageSizeLimit = 5000000;//5245329;
-        let firstName = 0;
-        let position = 0;
-        let lastName = 0;
+        //let firstName = 0;
+        //let position = 0;
+        //let lastName = 0;
         //let middleName = 0;
         //let nationality = 0;
-        let datepicker = 0;
-        let birthPlace = 0;
+        //let datepicker = 0;
+        //let birthPlace = 0;
         //let contact = 0;
 
         //let inHouseBookingParameters = [];
@@ -772,7 +773,7 @@
 
 
     $(document).on('click', '#submit_request_btn', function () {
-        if (verify_btn_validation($('#FirstName').val(), $('#LastName').val(), $('#datepicker').val() === 1, $('#position option:selected').val(), $('#BirthPlace').val())) {
+        if (verify_btn_validation($('#FirstName').val(), $('#LastName').val(), $('#datepicker').val(), $('#position option:selected').val(), $('#BirthPlace').val())) {
 
             let message = "<p>Please make sure that the required fields are not left blank before clicking the Submit button</p>";
             generateWarningModal("verify_btn_validation_modal", 2, "", message);
