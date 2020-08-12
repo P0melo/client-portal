@@ -339,9 +339,7 @@
 
         var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
         var mnno = $(this).parent().parent().attr('id');
-        crewNameToBeEnrolledContact = $(this).parent().prev().html();
         var rank = $(this).parent().prev().prev().prev().html();
-        crewNameToBeEnrolled = $(this).parent().prev().prev().html();
 
         var parameters = [];
         parameters[0] = schedId;
@@ -360,128 +358,6 @@
         enrollThisCrew(enrollThisCrewParameters);
     });
 
-    function enrollThisCrew(parameters) {
-        $.ajax({
-            url: '/SAMPortal/CourseBooking/EnrollThisCrew',
-            dataType: 'json',
-            type: 'post',
-            beforeSend: function () {
-                $.blockUI({ message: null });
-            },
-            data: { parameters: parameters },
-            success: function (result) {
-                $.unblockUI();
-                if (result.data === 1) {
-                    //temp
-                    $('#modal_success .modal-body p').html('Crew is successfully enrolled.');
-                    $('#modal_success').modal();
-
-                    var newRow = myEnrolledCrewTable.row.add([
-                        enrollThisCrewParameters[1],
-                        enrollThisCrewParameters[2],
-                        crewNameToBeEnrolled,
-                        crewNameToBeEnrolledContact,
-                        "<button id='swap_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-exchange'></i></button><button id='remove_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-times'></i></button>",
-                        myEnrolledCrewTable.rows().count() + 1
-                    ]).draw(false);
-
-                    newRow.nodes().to$().css({ 'background-color': 'lightgreen' });
-
-                } else if (result.data === 0) {
-                    $('#enroll_warning .modal-body p').html('This crew is already enrolled in this schedule.');
-                    $('#enroll_warning').modal();
-                } else {
-                    generateDangerModal("enroll_this_crew_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    //$('.modal-danger').modal();
-                }
-            }
-        });
-    }
-    var course_enrollee_tbl = "";
-    $(document).on('click', '#course_list_tbl tr td a', function () {
-        var schedId = $(this).parent().parent().attr('id');
-        var numberOfEnrollees = 0;
-
-        $.ajax({
-            url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
-            dataType: 'json',
-            type: 'get',
-            data: { schedId: schedId },
-            success: function (result) {
-                numberOfEnrollees = result;
-
-                //if (numberOfEnrollees != 0) {
-                $('.modal-body #message').html('Number of enrollees from other company: ' + numberOfEnrollees);
-                //}
-
-                $.ajax({
-                    url: '/SAMPortal/api/CourseBooking/GetEnrollees',
-                    type: 'get',
-                    dataType: 'json',
-                    data: { schedId: schedId },
-                    success: function (result) {
-                        var content = "";
-
-                        if (course_enrollee_tbl != "") {
-                            course_enrollee_tbl.destroy();
-                        }
-
-                        for (var i = 0; i < result.length; i++) {
-                            content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td></tr>";
-                        }
-
-                        $('#course_enrollee_tbl_body').html(content);
-                        $('#enrollees_modal').modal();
-
-                        course_enrollee_tbl = $('#course_enrollee_tbl').DataTable({ "bProcessing": true });
-                    }
-                });
-            }
-        });
-    });
-
-    $(document).on('click', '#o_course_list_tbl tr td a', function () {
-        var schedId = $(this).parent().parent().attr('id');
-        var o_numberOfEnrollees = 0;
-
-        $.ajax({
-            url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
-            dataType: 'json',
-            type: 'get',
-            data: { schedId: schedId },
-            success: function (result) {
-                o_numberOfEnrollees = result;
-
-                $('.modal-body #message').html('Number of enrollees from other company: ' + o_numberOfEnrollees);
-
-                $.ajax({
-                    url: '/SAMPortal/api/CourseBooking/GetEnrollees',
-                    type: 'get',
-                    dataType: 'json',
-                    data: { schedId: schedId },
-                    success: function (result) {
-                        var content = "";
-
-                        if (course_enrollee_tbl != "") {
-                            course_enrollee_tbl.destroy();
-                        }
-
-                        for (var i = 0; i < result.length; i++) {
-                            content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td></tr>";
-                        }
-
-                        $('#course_enrollee_tbl_body').html(content);
-                        $('#enrollees_modal').modal();
-
-                        course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
-                    }
-                });
-            }
-        });
-    });
 
     var swapThisCrewParameters = [];
     var crewNameToBeSwapped = "";

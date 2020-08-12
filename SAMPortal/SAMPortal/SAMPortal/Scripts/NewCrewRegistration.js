@@ -6,6 +6,10 @@
     var checkforduplicate_mnno = "";
     var checkforduplicate_rank = "";
 
+    //this two is needed in the coursebooking part of register new crew page
+    var mnnoAfterRegistration = "";
+    var position = 0;
+
     $('.custom_treeview-menu').find('span').css('color', '#b8c7ce');
     $('#newCrewRegistration_lnk').find('span').css('color', 'white');
 
@@ -84,7 +88,7 @@
         var inputFile = document.getElementById('InputFile');
         var imageSizeLimit = 5000000;//5245329;
         var firstName = 0;
-        var position = 0;
+        //var position = 0; see at top of javascript file
         var lastName = 0;
         var middleName = 0;
         var nationality = 0;
@@ -160,9 +164,10 @@
         }
     });
 
-    $(document).on('click', '#modal_close_btn', function () {
-        window.location.reload();
-    });
+    //removed so that variables will not get refreshed
+    //$(document).on('click', '#modal_close_btn', function () {
+    //    window.location.reload();
+    //});
 
     $(document).on('focusin : click', '#FirstName', function () {
         $('#dialog').css('position', 'absolute');
@@ -604,6 +609,7 @@
                     //}
 
                     //$('#modal-success .modal-body p').html("New Crew Request Sent! " + mergeMessage);
+                    mnnoAfterRegistration = "Temp" + result.tempId;
                     $('#modal-success .modal-body p').html("New Crew Request Sent!");
                     $('#modal-success').modal();
 
@@ -984,4 +990,78 @@
     });
 
     $('#course_list_lnk').parent().addClass('active');
+    let totalEnrollees = [];
+    let enrollThisCrewParameters;
+    $(document).on('click', '#enroll_crew', function () {
+
+        let courseStartDate = "";
+
+        //var schedId = $(this).parent().parent().attr('id');
+        let schedId = $(this).parent().parent().attr('id');
+        let mnno = mnnoAfterRegistration;
+        let rank = position;
+        //let courseName = $(this).parent().prevAll().eq(4).find('a').html();
+        //let e_numberOfEnrollees = 0;
+
+        totalEnrollees = $(this).parent().prev().html().split(' / ');
+
+        courseStartDate = $(this).parent().prev().prev().html();
+
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
+            dataType: 'json',
+            type: 'get',
+            data: { schedId: schedId },
+            success: function (result) {
+                e_numberOfEnrollees = result;
+            },
+            complete: function () {
+                let enrollees = parseInt(totalEnrollees[0]);
+                let maxEnrolless = parseInt(totalEnrollees[1]);
+
+                let startDate = new Date(courseStartDate);
+                let d = new Date();
+
+                if (d.getTime() >= startDate.getTime()) {
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course is finished or has already started.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
+                //(daysBeforeStart + 1) <= 7
+                if ((getWeekNumber(startDate) - getWeekNumber(d)) === 1) {
+                    //$('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start in " + (daysBeforeStart + 1) + " day/s.");
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start next week.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
+
+                if (enrollees >= maxEnrolless) {
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course has already reached the maximum enrollees.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
+
+                //let schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
+                //crewNameToBeEnrolledContact = $(this).parent().prev().html();
+                //crewNameToBeEnrolled = $(this).parent().prev().prev().html();
+
+                let parameters = [];
+                parameters[0] = schedId;
+                parameters[1] = mnno;
+                parameters[2] = rank;
+                //parameters[3] = name;
+
+                enrollThisCrewParameters = parameters;
+                //enrollThisCrew(enrollThisCrewParameters);
+                $('#enroll_this_crew_warning .modal-body p').html('Are you sure you want to enroll this crew?');
+                $('#enroll_this_crew_warning').modal();
+            }
+        });
+        
+    });
+
+    $(document).on('click', '#enroll_this_crew_warning_yes', function () {
+        totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
+        enrollThisCrew(enrollThisCrewParameters);
+    });
 });
