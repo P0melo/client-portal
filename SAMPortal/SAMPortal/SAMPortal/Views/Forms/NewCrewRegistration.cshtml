@@ -214,7 +214,7 @@
                         <th>Duration (Days)</th>
                         <th>Start Date</th>
                         <th>Enrolled</th>
-                        <th>Action</th>
+                        <th>Enroll</th>
                     </tr>
                 </thead>
                 <tbody id="course_list_tbl_tbody"></tbody>
@@ -235,7 +235,7 @@
             <div class="col-xs-12">
                 <div class="col-xs-4 form-group">
                     @*<label>Month</label>
-                    <select id="o_month_select" class="form-control"></select>*@
+                        <select id="o_month_select" class="form-control"></select>*@
                     <label>Month</label>
                     &nbsp;
                     &nbsp;
@@ -282,7 +282,7 @@
                         <th>Duration (Days)</th>
                         <th>Start Date</th>
                         <th>Enrolled</th>
-                        <th>Action</th>
+                        <th>Enroll</th>
                     </tr>
                 </thead>
                 <tbody id="o_course_list_tbl_tbody"></tbody>
@@ -1078,6 +1078,23 @@
     </div>
 </div>
 
+<div id="indicator_red_dialog" class="alert alert-danger alert-dismissible" style="display: none;">
+    <button type="button" class="close" @*data-dismiss="alert"*@ aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-ban"></i> Notice</h4>
+    <p>Please be informed that this course is going to be cancelled due to insufficient enrollees. <br />Kindly refrain from adding more enrollees in this schedule. <br /></p>
+    <br />
+    <p>For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141.</p>
+</div>
+
+<div id="indicator_orange_dialog" class="alert alert-warning alert-dismissible" style="display: none;">
+    <button type="button" class="close" @*data-dismiss="alert"*@ aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-warning"></i> Notice</h4>
+    <p>Please be informed that this course is going to be cancelled if the minimum number of enrollees is not met within the week of the start of this course.<br /></p>
+    <br />
+    <p>For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141.</p>
+</div>
+
 @section Scripts{
+    @*@Scripts.Render("~/bundles/coursebooking")*@
     @Scripts.Render("~/bundles/newcrewregistration")
 }

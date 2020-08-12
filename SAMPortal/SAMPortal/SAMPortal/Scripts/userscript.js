@@ -77,6 +77,233 @@ function fixServerDateFormat(serverDate) {
 }
 
 
+function getCourseList(month, year) {
+
+    $.ajax({
+        url: '/SAMPortal/api/CourseBooking/GetCourseList',
+        dataType: 'json',
+        type: 'get',
+        data: { month: month, year: year },
+        success: function (result) {
+            generateCourseListTable(result);
+        }
+    });
+}
+
+function getCourseListRange(monthFrom, monthTo, year) {
+    $.ajax({
+        url: '/SAMPortal/api/CourseBooking/GetCourseListRange',
+        dataType: 'json',
+        type: 'get',
+        data: { monthFrom: monthFrom, monthTo: monthTo, year: year },
+        success: function (result) {
+            generateCourseListTable(result);
+        }
+    });
+}
+
+function getOCourseList(month, year) {
+    $.ajax({
+        url: '/SAMPortal/api/CourseBooking/GetCourseListO',
+        dataType: 'json',
+        type: 'get',
+        data: { month: month, year: year },
+        success: function (result) {
+            generateOCourseListTable(result);
+        }
+    });
+}
+
+function getOCourseListRange(monthFrom, monthTo, year) {
+    $.ajax({
+        url: '/SAMPortal/api/CourseBooking/GetCourseListRangeO',
+        dataType: 'json',
+        type: 'get',
+        data: { monthFrom: monthFrom, monthTo: monthTo, year: year },
+        success: function (result) {
+            generateOCourseListTable(result);
+        }
+    });
+}
+
+var o_courseTable = "";
+
+function generateOCourseListTable(result) {
+    var content = "";
+    let serverDate = "";
+    //course_list_tbl_tbody
+    getServerDate().then(function (data) {
+        serverDate = data;
+
+        if (o_courseTable != "") {
+            o_courseTable.destroy();
+        }
+
+        for (var i = 0; i < result.length; i++) {
+            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
+                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + result[i].DateFrom.split('T')[0] +
+                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'><button id='enroll_crew' class='btn btn-default' style='width: 100%'>" + renderButtonFontAwesome() + "</button></td></tr>";
+        }
+
+        $('#o_course_list_tbl_tbody').html(content);
+
+        o_courseTable = $('#o_course_list_tbl').DataTable({
+            "columnDefs": [{
+                "targets": [4],
+                "orderable": false
+            }, {
+                "width": "50%",
+                "targets": [0]
+            }]
+        });
+        $('#o_course_list_tbl').css({ 'width': 'inherit' });
+    }).catch(function (err) {
+        generateDangerModal("get_server_date_modal", "Cannot get the Server Date. Please contact the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+    });
+
+}
+
+function renderButtonFontAwesome() {
+    if ($('.content-wrapper section h1').html() == "Register New Crew") {
+        return "<i class='fa fa-user-plus'></i>"
+    } else {
+        return "<i class='fa fa-plus></i>"
+    }
+}
+
+var courseTable = "";
+
+function generateCourseListTable(result) {
+    var content = "";
+    let serverDate = "";
+    //course_list_tbl_tbody
+
+    getServerDate().then(function (data) {
+        serverDate = data;
+
+        if (courseTable != "") {
+            courseTable.destroy();
+        }
+
+
+        for (var i = 0; i < result.length; i++) {
+
+            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
+                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + result[i].DateFrom.split('T')[0] +
+                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'><button id='enroll_crew' class='btn btn-default' style='width: 100%'>" + renderButtonFontAwesome() + "</button></td></tr>";
+
+        }
+
+        $('#course_list_tbl_tbody').html(content);
+
+        courseTable = $('#course_list_tbl').DataTable({
+            "columnDefs": [{
+                "targets": [4],
+                "orderable": false
+            }, {
+                "width": "50%",
+                "targets": [0]
+            }]
+        });
+        $('#course_list_tbl').css({ 'width': 'inherit' });
+
+    }).catch(function (err) {
+        generateDangerModal("get_server_date_modal", "Cannot get the Server Date. Please contact the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+    });
+
+}
+
+
+function getWeekNumber(myDate) {
+    let d = new Date(myDate);
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    // Get first day of year
+    let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    // Calculate full weeks to nearest Thursday
+    let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    // Return array of year and week number
+    return weekNo;
+}
+
+function generateIndicator(data, serverDate) {
+    //alert(fixServerDateFormat(serverDate));
+    //alert(data.DateFrom);
+    if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) === 2 && data.Slots < data.MinCapacity) {
+        return "<span id='indicator_orange' class='pull-right'><i style='color: orange; font-size: large' class='fa fa-warning'></i></span>";
+    } else if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity) {
+        return "<span id='indicator_red' class='pull-right'><i style='color: red; font-size: large'' class='fa fa-ban'></i></span>";//<div id='test_diva'>hey hey hey</div>
+    }
+
+    return "";
+}
+
+
+$(document).on('mouseover', 'span#indicator_red', function () {
+    $('.alert').css('display', 'none');
+    $('#indicator_red_dialog').css('position', 'absolute');
+    $('#indicator_red_dialog').css('top', $(this).offset().top);
+    $('#indicator_red_dialog').css('left', $(this).offset().left + $(this).width());
+    $('#indicator_red_dialog').css('z-index', 100);
+    //$('#indicator_red_dialog').css('display', 'block');
+    $('#indicator_red_dialog').fadeIn();
+});
+
+$(document).on('mouseleave', 'span#indicator_red', function () {
+    $('#indicator_red_dialog').css('display', 'none');
+});
+
+$(document).on('click', '#indicator_red_dialog .close', function () {
+    $('#indicator_red_dialog').css('display', 'none');
+});
+
+$(document).on('click', '#indicator_orange_dialog .close', function () {
+    $('#indicator_orange_dialog').css('display', 'none');
+});
+
+$(document).on('mouseover', 'span#indicator_orange', function () {
+    $('.alert').css('display', 'none');
+    $('#indicator_orange_dialog').css('position', 'absolute');
+    $('#indicator_orange_dialog').css('top', $(this).offset().top);
+    $('#indicator_orange_dialog').css('left', $(this).offset().left + $(this).width());
+    $('#indicator_orange_dialog').css('z-index', 100);
+    $('#indicator_orange_dialog').fadeIn();
+});
+
+$(document).on('mouseleave', 'span#indicator_orange', function () {
+    $('#indicator_orange_dialog').css('display', 'none');
+});
+
+
+
+
+$(document).on('click', 'input#date_rb_single', function () {
+    $('#multiple_date_div_yc').css('display', 'none');
+    $('#single_date_div_yc').css('display', 'block');
+
+});
+
+$(document).on('click', 'input#date_rb_range', function () {
+    $('#single_date_div_yc').css('display', 'none');
+    $('#multiple_date_div_yc').css('display', 'block');
+
+});
+
+$(document).on('click', 'input#o_date_rb_single', function () {
+    $('#o_multiple_date_div_yc').css('display', 'none');
+    $('#o_single_date_div_yc').css('display', 'block');
+
+});
+
+$(document).on('click', 'input#o_date_rb_range', function () {
+    $('#o_single_date_div_yc').css('display', 'none');
+    $('#o_multiple_date_div_yc').css('display', 'block');
+
+});
+
 $(document).on('change', '#InputFile', function () {
     $('#inputFilename').html($(this).val());
     var inputFile = document.getElementById('InputFile');

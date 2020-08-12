@@ -889,4 +889,99 @@
         });
     });
 
+    //=======================================================Course Booking=============================================================
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+
+    var d = new Date();
+    var currentMonth = d.getMonth() + 1;
+    var currentYear = d.getFullYear();
+
+    //var totalEnrollees = [];
+    //var courseStartDate = "";
+
+    if (currentMonth < 10) {
+        getCourseList("0" + currentMonth, currentYear);
+        getOCourseList("0" + currentMonth, currentYear);
+    } else {
+        getCourseList(currentMonth, currentYear);
+        getOCourseList(currentMonth, currentYear);
+    }
+
+    //getAllCourseList();
+
+    for (var i = 0; i <= 12; i++) {
+        if (i == 12) {
+            if (currentMonth < 10) {
+                $('#month_select option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#month_select_yc_from option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#month_select_yc_to option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select_yc_from option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select_yc_to option[value="0' + currentMonth + '"]').prop('selected', true);
+            } else {
+                $('#month_select option[value="' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select option[value="' + currentMonth + '"]').prop('selected', true);
+                $('#month_select_yc_from option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#month_select_yc_to option[value="' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select_yc_from option[value="0' + currentMonth + '"]').prop('selected', true);
+                $('#o_month_select_yc_to option[value="' + currentMonth + '"]').prop('selected', true);
+            }
+        } else {
+            if (i < 9) {
+                $('#month_select').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#month_select_yc_from').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#month_select_yc_to').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select_yc_from').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select_yc_to').append('<option value="0' + (i + 1) + '">' + monthNames[i] + '</option>');
+            }
+            else {
+                $('#month_select').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#month_select_yc_from').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#month_select_yc_to').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select_yc_from').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+                $('#o_month_select_yc_to').append('<option value="' + (i + 1) + '">' + monthNames[i] + '</option>');
+            }
+        }
+    }
+
+    $('#year_input').val(currentYear);
+    $('#o_year_input').val(currentYear);
+
+    $(document).on('click', '#submit_month_year', function () {
+
+        if ($('input#date_rb_range').is(':checked')) {
+            let monthFrom = $('#month_select_yc_from option:selected').val();
+            let monthTo = $('#month_select_yc_to option:selected').val();
+            let currentYear = $('#year_input').val();
+            getCourseListRange(monthFrom, monthTo, currentYear);
+
+        } else {
+            let currentMonth = $('#month_select option:selected').val();
+            let currentYear = $('#year_input').val();
+            getCourseList(currentMonth, currentYear);
+        }
+
+    });
+
+    $(document).on('click', '#o_submit_month_year', function () {
+
+        if ($('input#o_date_rb_range').is(':checked')) {
+            let monthFrom = $('#o_month_select_yc_from option:selected').val();
+            let monthTo = $('#o_month_select_yc_to option:selected').val();
+            let currentYear = $('#o_year_input').val();
+            getOCourseListRange(monthFrom, monthTo, currentYear);
+
+        } else {
+            var currentMonth = $('#o_month_select option:selected').val();
+            var currentYear = $('#o_year_input').val();
+            getOCourseList(currentMonth, currentYear);
+        }
+
+    });
+
+    $('#course_list_lnk').parent().addClass('active');
 });
