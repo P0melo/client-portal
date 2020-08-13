@@ -352,29 +352,6 @@
     var o_off_site_reason;
     var o_off_site_remarks_input;
 
-    function getInHouseBookingFieldsValues() {
-
-        i_reservation_type = $('#reservation_type').val();
-        i_room_type = $('#room_type').val();
-        i_accommodation = $('#accomodation_date').val();
-        i_mode_of_payment = $('#mode_of_payment').val();
-        i_accommodation_reason = $('#accomodation_reason').val();
-        i_accommodation_remarks_input = $('#accomodation_remarks_input').val();
-
-        if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '' && i_accommodation_remarks_input == '') {
-            inHouseBooking = 1;
-            return true;
-        } else {
-            if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
-                alert("Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
-                return false;
-            } else {
-                inHouseBooking = 0;
-                return true;
-            }
-        }
-    }
-
     function getTransportationFieldsValues() {
         t_transportation_type = $('#transportation_type').val();
         t_transportation_vehicle = $('#transportation_vehicle').val();
@@ -610,13 +587,11 @@
 
                     //$('#modal-success .modal-body p').html("New Crew Request Sent! " + mergeMessage);
                     mnnoAfterRegistration = "Temp" + result.tempId;
-                    $('#modal-success .modal-body p').html("New Crew Request Sent!");
-                    $('#modal-success').modal();
+                    //$('#modal-success .modal-body p').html("New Crew Request Sent!<br/><br/>Would you like to enroll the newly registered crew or book him/her to our other services?");
+                    //$('#modal-success').modal();
+                    generateSuccessModal("modal_success_new_crew_registration", 1, "modal_success_new_crew_registration_yes", "New Crew Request Sent!<br/><br/>Would you like to enroll the newly registered crew or book him/her to our other services?")
 
                 } else if (result.status == "Error") {
-                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    //$('.modal-danger').modal();
-
                     generateDangerModal("save_new_crew_error_modal", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 }
 
@@ -624,6 +599,11 @@
         });
     });
 
+    $(document).on('click', '#modal_success_new_crew_registration_yes', function () {
+        $('#crouse_booking').css('display', 'block');
+        $('#left_box').css('display', 'block');
+        $('#right_box').css('display', 'block');
+    });
 
     function submit_new_crew_request() {
         let inputFile = document.getElementById('InputFile');
@@ -1063,5 +1043,46 @@
     $(document).on('click', '#enroll_this_crew_warning_yes', function () {
         totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
         enrollThisCrew(enrollThisCrewParameters);
+    });
+
+    //=====================================================On-Site Booking===========================================================
+
+    function getInHouseBookingFieldsValues() {
+
+        if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '' && i_accommodation_remarks_input == '') {
+            inHouseBooking = 1;
+            return true;
+        } else {
+            if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
+                alert("Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
+                return false;
+            } else {
+                inHouseBooking = 0;
+                return true;
+            }
+        }
+    }
+
+    $(document).on('click', '#submit_in_house_booking', function () {
+        let mnno = mnnoAfterRegistration;
+        let rank = position;
+        let lastName = $('#LastName').val();
+        let firstName = $('#FirstName').val();
+        i_reservation_type = $('#reservation_type').val();
+        i_room_type = $('#room_type').val();
+        i_accommodation = $('#accomodation_date').val();
+        i_mode_of_payment = $('#mode_of_payment').val();
+        i_accommodation_reason = $('#accomodation_reason').val();
+        i_accommodation_remarks_input = $('#accomodation_remarks_input').val();
+
+        if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
+            generateWarningModal("on_site_accommodation_warning", 1, "", "Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
+            return false;
+        }
+
+        let parameters = [mnno, rank, lastName, firstName, i_reservation_type, i_room_type, i_accommodation, i_mode_of_payment, i_accommodation_reason, i_accommodation_remarks_input];
+
+        saveAccomodation(parameters);
+
     });
 });

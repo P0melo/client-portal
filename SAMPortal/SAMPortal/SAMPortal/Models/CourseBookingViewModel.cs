@@ -37,8 +37,8 @@ namespace SAMPortal.Models
     public class CourseNames
     {
         public string CourseName { get; set; }
-        public int Min { get; set; }
-        public int Max { get; set; }
+        public string Min { get; set; }
+        public string Max { get; set; }
         public int CourseDuration { get; set; }
     }
 

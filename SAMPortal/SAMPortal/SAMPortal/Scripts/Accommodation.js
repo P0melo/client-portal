@@ -101,45 +101,7 @@
         saveAccomodation(saveAccommodationParameters);
     });
 
-    function saveAccomodation(parameters) {
-        $.ajax({
-            url: '/SAMPortal/Forms/SaveAccomodation',
-            type: 'post',
-            dataType: 'json',
-            beforeSend: function () {
-                $.blockUI({ message: null });
-            },
-            data: { parameters: parameters },
-            success: function (result) {
-                $.unblockUI();
-                if (result.data === 1) {
-                    $('#modal_success .modal-body p').html("Accommodation Request Successful!");
-                    $('#modal_success').modal();
-                } else if (result.data == "Rooms") {
-                        var fixedFormatting = result.data2.substring(0, result.data2.length - 2);
-                        $('#modal_warning_booking_reservation .modal-body p').html("Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
-                        $('#modal_warning_booking_reservation').modal();
-                } else if (result.data == "Duplicates") {
-                        var data = result.data2;
-                        var content = "";
-                        for (var i = 0; i < data.length; i++) {
-                            content += "<tr><td>" + data[i].Mnno + "</td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") +
-                                "</td><td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + formatDate(data[i].CheckInDate) + "</td><td>" + formatDate(data[i].CheckOutDate) + "</td><td>" + data[i].Status + "</td></tr>";
-                        }
-
-                        $('#duplicate_booking_modal .modal-body p').html("Our system found out that there is already an existing reservation in our database.");
-                        $('#duplicate_booking_modal_tbl tbody').html(content);
-                        $('#duplicate_booking_modal').modal();
-                } else {
-                    $('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    $('.modal-danger').modal();
-                }
-
-                $('#modal_warning_accommodation_submit_yes').attr('disabled', false);
-
-            }
-        });
-    }
+    
 
     $('.modal-success').on('hidden.bs.modal', function () {
         window.location.reload();

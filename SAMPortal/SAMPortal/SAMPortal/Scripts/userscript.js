@@ -17,6 +17,7 @@ function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) 
 
 }
 
+//footerType: 1 = 'Yes' and 'No', 2 = 'Ok'
 function generateSuccessModal(modalId, footerType, modalButtonId, modalMessage) {
     $('.modal_success_template').attr('id', modalId);
     $('.modal_success_template .modal-content .modal-body p').html(modalMessage);
@@ -417,28 +418,76 @@ function enrollThisCrew(parameters) {
             $.unblockUI();
             if (result.data === 1) {
                 //temp
-                $('#modal_success .modal-body p').html('Crew is successfully enrolled.');
-                $('#modal_success').modal();
+                //$('#modal_success .modal-body p').html('Crew is successfully enrolled.');
+                //$('#modal_success').modal();
 
-                var newRow = myEnrolledCrewTable.row.add([
-                    enrollThisCrewParameters[1],
-                    enrollThisCrewParameters[2],
-                    crewNameToBeEnrolled,
-                    crewNameToBeEnrolledContact,
-                    "<button id='swap_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-exchange'></i></button><button id='remove_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-times'></i></button>",
-                    myEnrolledCrewTable.rows().count() + 1
-                ]).draw(false);
+                generateSuccessModal("crew_enrolled_modal", 2, "", "Crew is successfully enrolled.")
 
-                newRow.nodes().to$().css({ 'background-color': 'lightgreen' });
+
+                if ($('.content-wrapper .content-header h1').html() == "Course Booking") {
+                    var newRow = myEnrolledCrewTable.row.add([
+                        enrollThisCrewParameters[1],
+                        enrollThisCrewParameters[2],
+                        crewNameToBeEnrolled,
+                        crewNameToBeEnrolledContact,
+                        "<button id='swap_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-exchange'></i></button><button id='remove_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-times'></i></button>",
+                        myEnrolledCrewTable.rows().count() + 1
+                    ]).draw(false);
+
+                    newRow.nodes().to$().css({ 'background-color': 'lightgreen' });
+                }
 
             } else if (result.data === 0) {
-                $('#enroll_warning .modal-body p').html('This crew is already enrolled in this schedule.');
-                $('#enroll_warning').modal();
+                //$('#enroll_warning .modal-body p').html('This crew is already enrolled in this schedule.');
+                //$('#enroll_warning').modal();
+                generateWarningModal("crew_already_enrolled_warning", 2, "", "This crew is already enrolled in this schedule.")
             } else {
                 generateDangerModal("enroll_this_crew_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 //$('.modal-danger').modal();
             }
+        }
+    });
+}
+
+function saveAccomodation(parameters) {
+    $.ajax({
+        url: '/SAMPortal/Forms/SaveAccomodation',
+        type: 'post',
+        dataType: 'json',
+        beforeSend: function () {
+            $.blockUI({ message: null });
+        },
+        data: { parameters: parameters },
+        success: function (result) {
+            $.unblockUI();
+            if (result.data === 1) {
+                //$('#modal_success .modal-body p').html("Accommodation Request Successful!");
+                //$('#modal_success').modal();
+                generateSuccessModal("save_accomodation_success", 2, "", "Accommodation Request Successful!");
+            } else if (result.data == "Rooms") {
+                var fixedFormatting = result.data2.substring(0, result.data2.length - 2);
+                //$('#modal_warning_booking_reservation .modal-body p').html("Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
+                //$('#modal_warning_booking_reservation').modal();
+                generateWarningModal("rooms_full_warning", 2, "", "Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting)
+            } else if (result.data == "Duplicates") {
+                var data = result.data2;
+                var content = "";
+                for (var i = 0; i < data.length; i++) {
+                    content += "<tr><td>" + data[i].Mnno + "</td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") +
+                        "</td><td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + formatDate(data[i].CheckInDate) + "</td><td>" + formatDate(data[i].CheckOutDate) + "</td><td>" + data[i].Status + "</td></tr>";
+                }
+
+                $('#duplicate_booking_modal .modal-body p').html("Our system found out that there is already an existing reservation in our database.");
+                $('#duplicate_booking_modal_tbl tbody').html(content);
+                $('#duplicate_booking_modal').modal();
+            } else {
+                $('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                $('.modal-danger').modal();
+            }
+
+            $('#modal_warning_accommodation_submit_yes').attr('disabled', false);
+
         }
     });
 }
