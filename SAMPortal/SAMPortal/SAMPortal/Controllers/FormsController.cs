@@ -351,7 +351,7 @@ namespace SAMPortal.Controllers
                     logging.Log(user, "KeySequenceChange", data3);
 
                     //For Email Notif
-                    sendEmail.Send(User.Identity, (int)Enum.Requests.NewCrewRequest, "");
+                    //sendEmail.Send(User.Identity, (int)Enum.Requests.NewCrewRequest, "");
 
                     //flag = 1;
                 }
@@ -616,7 +616,7 @@ namespace SAMPortal.Controllers
                     flag = 1;
 
                     //For Email Notif
-                    sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
+                    //sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
 
                 }
                 catch (Exception e)
@@ -1116,7 +1116,7 @@ namespace SAMPortal.Controllers
             {
                 try
                 {
-                    _context.Database.ExecuteSqlCommand("UPDATE tblcrew SET rank = '" + newRank + "' WHERE MNNO = '" + mnno + "'");
+                    _context.Database.ExecuteSqlCommand("UPDATE tblcrew SET tblcrew.rank = '" + newRank + "' WHERE MNNO = '" + mnno + "'");
 
                     string[] parameters = { "mnno:" + mnno, "newRank:" + newRank, "oldRank: " + oldRank };
                     string data = logging.ConvertToLoggingParameter(parameters);

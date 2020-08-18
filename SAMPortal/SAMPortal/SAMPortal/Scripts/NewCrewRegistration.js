@@ -352,117 +352,117 @@
     var o_off_site_reason;
     var o_off_site_remarks_input;
 
-    function getTransportationFieldsValues() {
-        t_transportation_type = $('#transportation_type').val();
-        t_transportation_vehicle = $('#transportation_vehicle').val();
-        t_transportation_date = $('#transportation_date').val();
-        t_dt_optradio_1 = $('#dt_optradio_1').is(':checked');
-        t_dt_optradio_2 = $('#dt_optradio_2').is(':checked');
-        t_airport_cb_i = $('#airport_cb_i').is(':checked');
-        t_airport_cb_o = $('#airport_cb_o').is(':checked');
-        t_InputFileTransportation = $('#InputFileTransportation').val();
-        t_pickup_input = $('#pickup_input').val();
-        t_datetime_input = $('#datetime_input').val();
-        t_dropoff_input = $('#dropoff_input').val();
-        t_2ndpickup_input = $('#2ndpickup_input').val();
-        t_2nddatetime_input = $('#2nddatetime_input').val();
-        t_2nddropoff_input = $('#2nddropoff_input').val();
-        t_transpotation_details = $('#transportation_details').val();
-        t_outputTransportation = $('#outputTransportation').val();
+    //function getTransportationFieldsValues() {
+    //    t_transportation_type = $('#transportation_type').val();
+    //    t_transportation_vehicle = $('#transportation_vehicle').val();
+    //    t_transportation_date = $('#transportation_date').val();
+    //    t_dt_optradio_1 = $('#dt_optradio_1').is(':checked');
+    //    t_dt_optradio_2 = $('#dt_optradio_2').is(':checked');
+    //    t_airport_cb_i = $('#airport_cb_i').is(':checked');
+    //    t_airport_cb_o = $('#airport_cb_o').is(':checked');
+    //    t_InputFileTransportation = $('#InputFileTransportation').val();
+    //    t_pickup_input = $('#pickup_input').val();
+    //    t_datetime_input = $('#datetime_input').val();
+    //    t_dropoff_input = $('#dropoff_input').val();
+    //    t_2ndpickup_input = $('#2ndpickup_input').val();
+    //    t_2nddatetime_input = $('#2nddatetime_input').val();
+    //    t_2nddropoff_input = $('#2nddropoff_input').val();
+    //    t_transpotation_details = $('#transportation_details').val();
+    //    t_outputTransportation = $('#outputTransportation').val();
 
-        if (t_transportation_type == '' && t_transportation_vehicle == '' && t_transportation_date == '' && t_dt_optradio_1 == false && t_dt_optradio_2 == false && t_airport_cb_i == false &&
-            t_airport_cb_o == false && t_InputFileTransportation == '' && t_pickup_input == '' && t_datetime_input == '' && t_dropoff_input == '' && t_2ndpickup_input == '' && t_2nddatetime_input == '' &&
-            t_2nddropoff_input == '' && t_transpotation_details == '') {
+    //    if (t_transportation_type == '' && t_transportation_vehicle == '' && t_transportation_date == '' && t_dt_optradio_1 == false && t_dt_optradio_2 == false && t_airport_cb_i == false &&
+    //        t_airport_cb_o == false && t_InputFileTransportation == '' && t_pickup_input == '' && t_datetime_input == '' && t_dropoff_input == '' && t_2ndpickup_input == '' && t_2nddatetime_input == '' &&
+    //        t_2nddropoff_input == '' && t_transpotation_details == '') {
 
-            transportation = 1;
-            return true;
-
-
-        } else {
-            if (t_transportation_type == "Airport Transfer") {
-                if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_airport_cb_i == false && t_airport_cb_o == false) ||
-                    t_InputFileTransportation == '' || t_transpotation_details == '') {
-                    alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-                    return false;
-                } else {
-                    transportation = 0;
-                    return true;
-                }
-            } else if (t_transportation_type == "Daily Transfer") {
-                if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_dt_optradio_1 == false && t_dt_optradio_2 == false)) {
-                    alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-                    return false;
-                } else if (t_dt_optradio_1 == true) {
-                    if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '') {
-                        alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-                        return false;
-                    } else {
-                        transportation = 0;
-                        return true;
-                    }
-                } else if (t_dt_optradio_2 == true) {
-                    if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '' || t_2ndpickup_input == '' || t_2nddatetime_input == '' ||
-                        t_2nddropoff_input == '' || t_transpotation_details == '') {
-                        alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-                        return false;
-                    } else {
-                        transportation = 0;
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-
-    function getMealsArrangementFieldsValues() {
-        m_meal_reservation = $('#meal_reservation').val();
-        m_reason_input = $('#reason_input').val();
-        m_breakfast_cb = $('#breakfast_cb').is(':checked');
-        m_am_snack_cb = $('#am_snack_cb').is(':checked');
-        m_lunch_cb = $('#lunch_cb').is(':checked');
-        m_pm_snack_cb = $('#pm_snack_cb').is(':checked');
-        m_dinner_cb = $('#dinner_cb').is(':checked');
+    //        transportation = 1;
+    //        return true;
 
 
-        if (m_meal_reservation == '' && m_reason_input == '' && m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false) {
-            mealsArrangement = 1;
-            return true;
+    //    } else {
+    //        if (t_transportation_type == "Airport Transfer") {
+    //            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_airport_cb_i == false && t_airport_cb_o == false) ||
+    //                t_InputFileTransportation == '' || t_transpotation_details == '') {
+    //                alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                return false;
+    //            } else {
+    //                transportation = 0;
+    //                return true;
+    //            }
+    //        } else if (t_transportation_type == "Daily Transfer") {
+    //            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_dt_optradio_1 == false && t_dt_optradio_2 == false)) {
+    //                alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                return false;
+    //            } else if (t_dt_optradio_1 == true) {
+    //                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '') {
+    //                    alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                    return false;
+    //                } else {
+    //                    transportation = 0;
+    //                    return true;
+    //                }
+    //            } else if (t_dt_optradio_2 == true) {
+    //                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '' || t_2ndpickup_input == '' || t_2nddatetime_input == '' ||
+    //                    t_2nddropoff_input == '' || t_transpotation_details == '') {
+    //                    alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                    return false;
+    //                } else {
+    //                    transportation = 0;
+    //                    return true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
-        } else {
-            if (m_meal_reservation == '' || m_reason_input == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
-                alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a meal...");
-                return false;
-            } else {
-                mealsArrangement = 0;
-                return true;
-            }
-        }
+    //function getMealsArrangementFieldsValues() {
+    //    m_meal_reservation = $('#meal_reservation').val();
+    //    m_reason_input = $('#reason_input').val();
+    //    m_breakfast_cb = $('#breakfast_cb').is(':checked');
+    //    m_am_snack_cb = $('#am_snack_cb').is(':checked');
+    //    m_lunch_cb = $('#lunch_cb').is(':checked');
+    //    m_pm_snack_cb = $('#pm_snack_cb').is(':checked');
+    //    m_dinner_cb = $('#dinner_cb').is(':checked');
 
-    }
 
-    function getOutHouseBookingFieldsValues() {
-        o_off_site_hotel_name = $('#off_site_hotel_name').val();
-        o_off_site_room_type = $('#off_site_room_type').val();
-        o_off_site_date = $('#off_site_date').val();
-        o_off_site_mode_of_payment = $('#off_site_mode_of_payment').val();
-        o_off_site_reason = $('#off_site_reason').val();
-        o_off_site_remarks_input = $('#off_site_remarks_input').val();
+    //    if (m_meal_reservation == '' && m_reason_input == '' && m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false) {
+    //        mealsArrangement = 1;
+    //        return true;
 
-        if (o_off_site_hotel_name == '' && o_off_site_room_type == '' && o_off_site_date == '' && o_off_site_mode_of_payment == '' && o_off_site_reason == '' && o_off_site_remarks_input == '') {
-            outHouseBooking = 1;
-            return true;
+    //    } else {
+    //        if (m_meal_reservation == '' || m_reason_input == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
+    //            alert("Please make sure that no field is left blank or press the Clear button if you do not want to arrange a meal...");
+    //            return false;
+    //        } else {
+    //            mealsArrangement = 0;
+    //            return true;
+    //        }
+    //    }
 
-        } else {
-            if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '' || o_off_site_remarks_input == '') {
-                alert("Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
-                return false;
-            } else {
-                outHouseBooking = 0;
-                return true;
-            }
-        }
+    //}
 
-    }
+    //function getOutHouseBookingFieldsValues() {
+    //    o_off_site_hotel_name = $('#off_site_hotel_name').val();
+    //    o_off_site_room_type = $('#off_site_room_type').val();
+    //    o_off_site_date = $('#off_site_date').val();
+    //    o_off_site_mode_of_payment = $('#off_site_mode_of_payment').val();
+    //    o_off_site_reason = $('#off_site_reason').val();
+    //    o_off_site_remarks_input = $('#off_site_remarks_input').val();
+
+    //    if (o_off_site_hotel_name == '' && o_off_site_room_type == '' && o_off_site_date == '' && o_off_site_mode_of_payment == '' && o_off_site_reason == '' && o_off_site_remarks_input == '') {
+    //        outHouseBooking = 1;
+    //        return true;
+
+    //    } else {
+    //        if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '' || o_off_site_remarks_input == '') {
+    //            alert("Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
+    //            return false;
+    //        } else {
+    //            outHouseBooking = 0;
+    //            return true;
+    //        }
+    //    }
+
+    //}
 
 
     $(document).on('click', '#modal_warning_request_yes', function () {
@@ -795,7 +795,7 @@
                         }
                     } else {
                         let message = "<p>Looks like the crew is already in the database. Please review the information shown below thoroughly." +
-                            "<br /><br />Trainee No.: <span id='checkforduplicate_mnno'>" + result.data.MNNO + "</span><br />" + 
+                            "<br /><br />Trainee No.: <span id='checkforduplicate_mnno'>" + result.data.MNNO + "</span><br />" +
                             "Rank: <span id='checkforduplicate_rank'>" + result.data.Rank + "</span>&nbsp;&nbsp;<span id='update_rank' class='fa fa-edit' title='Edit the Rank of this crew'></span><br />" +
                             "First Name: " + result.data.FName + "<br />" +
                             "Last Name: " + result.data.LName + "<br />" +
@@ -860,11 +860,11 @@
             url: '/SAMPortal/Forms/UpdateCrewRank',
             type: 'POST',
             dataType: 'JSON',
-            data: { mnno: checkforduplicate_mnno, newRank: newRank, oldRank: oldRank},
-            success: function(result) {
+            data: { mnno: checkforduplicate_mnno, newRank: newRank, oldRank: oldRank },
+            success: function (result) {
                 if (result.data === 1) {
                     $('.modal').modal('hide');
-                    $('#new_crew_registration input[type="text"]').val(''); 
+                    $('#new_crew_registration input[type="text"]').val('');
                     generateSuccessModal('update_success_modal', 2, '', 'Rank of the crew has been successfully updated!');
                 } else {
                     $('.modal').modal('hide');
@@ -1037,7 +1037,7 @@
                 $('#enroll_this_crew_warning').modal();
             }
         });
-        
+
     });
 
     $(document).on('click', '#enroll_this_crew_warning_yes', function () {
@@ -1076,7 +1076,7 @@
         i_accommodation_remarks_input = $('#accomodation_remarks_input').val();
 
         if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
-            generateWarningModal("on_site_accommodation_warning", 1, "", "Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
+            generateWarningModal("on_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
             return false;
         }
 
@@ -1085,4 +1085,156 @@
         saveAccomodation(parameters);
 
     });
+
+    //====================================================Off-Site Booking========================================================================
+
+    $(document).on('click', '#submit_out_house_booking', function () {
+        let mnno = mnnoAfterRegistration;
+        let rank = position;
+        let lastName = $('#LastName').val();
+        let firstName = $('#FirstName').val();
+        o_off_site_hotel_name = $('#off_site_hotel_name').val();
+        o_off_site_room_type = $('#off_site_room_type').val();
+        o_off_site_date = $('#off_site_date').val();
+        o_off_site_mode_of_payment = $('#off_site_mode_of_payment').val();
+        o_off_site_reason = $('#off_site_reason').val();
+        o_off_site_remarks_input = $('#off_site_remarks_input').val();
+
+        if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '' || o_off_site_remarks_input == '') {
+            //alert("Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
+            generateWarningModal("off_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
+            return false;
+        }
+
+        let parameters = [mnno, rank, lastName, firstName, o_off_site_date, o_off_site_hotel_name, o_off_site_room_type, o_off_site_mode_of_payment, o_off_site_reason, o_off_site_remarks_input];
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveOffSiteAccomodation',
+            type: 'post',
+            dataType: 'json',
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
+            data: { parameters: parameters },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data === 1) {
+                    //$('#modal_success_accommodation .modal-body p').html("Accommodation Request Successful!");
+                    //$('#modal_success_accommodation').modal();
+                    generateSuccessModal("off_site_accommodation_success", 2, "", "Accommodation Request Successful!")
+                } else {
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //$('.modal-danger').modal();
+                    generateDangerModal("off_site_accommodation_error", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+
+                }
+
+            }
+        });
+        //SaveOffSiteAccomodation
+
+
+    });
+
+    //====================================================Transportation========================================================================
+
+    $(document).on('click', '#submit_transportation', function () {
+
+        let mnno = mnnoAfterRegistration;
+        let rank = position;
+        let lastName = $('#LastName').val();
+        let firstName = $('#FirstName').val();
+
+        t_transportation_type = $('#transportation_type').val();
+        t_transportation_vehicle = $('#transportation_vehicle').val();
+        t_transportation_date = $('#transportation_date').val();
+        t_dt_optradio_1 = $('#dt_optradio_1').is(':checked');
+        t_dt_optradio_2 = $('#dt_optradio_2').is(':checked');
+        t_airport_cb_i = $('#airport_cb_i').is(':checked');
+        t_airport_cb_o = $('#airport_cb_o').is(':checked');
+        t_InputFileTransportation = $('#InputFileTransportation').val();
+        t_pickup_input = $('#pickup_input').val();
+        t_datetime_input = $('#datetime_input').val();
+        t_dropoff_input = $('#dropoff_input').val();
+        t_2ndpickup_input = $('#2ndpickup_input').val();
+        t_2nddatetime_input = $('#2nddatetime_input').val();
+        t_2nddropoff_input = $('#2nddropoff_input').val();
+        t_transpotation_details = $('#transportation_details').val();
+        t_outputTransportation = $('#outputTransportation').val();
+
+        let splitString = $('#InputFileTransportation').val().split("\\");
+        let fileName = splitString[splitString.length - 1];
+        let fileNameSplit = fileName.split(".");
+        let fileExtension = fileNameSplit[fileNameSplit.length - 1];
+
+        let parameters = [mnno, rank, firstName, lastName, t_transportation_type, t_transportation_vehicle, t_transportation_date, t_dt_optradio_1, t_dt_optradio_2, t_airport_cb_i, t_airport_cb_o, t_pickup_input, t_outputTransportation,
+            t_datetime_input, t_dropoff_input, t_2ndpickup_input, t_2nddatetime_input, t_2nddropoff_input, t_transpotation_details, fileExtension]
+
+        if (t_transportation_type === '') {
+            generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+            return false;
+
+        } if (t_transportation_type == "Airport Transfer") {
+            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_airport_cb_i == false && t_airport_cb_o == false) ||
+                t_InputFileTransportation == '' || t_transpotation_details == '') {
+                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+                return false;
+            }
+        } else if (t_transportation_type == "Daily Transfer") {
+            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_dt_optradio_1 == false && t_dt_optradio_2 == false)) {
+                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+                return false;
+            } else if (t_dt_optradio_1 == true) {
+                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '') {
+                    generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+                    return false;
+                }
+            } else if (t_dt_optradio_2 == true) {
+                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '' || t_2ndpickup_input == '' || t_2nddatetime_input == '' ||
+                    t_2nddropoff_input == '' || t_transpotation_details == '') {
+                    generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+                    return false;
+                }
+            }
+        }
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveTransportation',
+            type: 'post',
+            dataType: 'json',
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
+            data: { parameters: parameters },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data === 1) {
+                    generateSuccessModal("transportation_accommodation_success", 2, "", "Request sent successfully!")
+
+                } else {
+                    generateDangerModal("transportation_accommodation_danger", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+
+                }
+            }
+        });
+
+    });
+
+    //====================================================Meal Arrangement=======================================================================
+
+    $(document).on('click', '#submit_meals_arrangement', function () {
+        m_meal_reservation = $('#meal_reservation').val();
+        m_reason_input = $('#reason_input').val();
+        m_breakfast_cb = $('#breakfast_cb').is(':checked');
+        m_am_snack_cb = $('#am_snack_cb').is(':checked');
+        m_lunch_cb = $('#lunch_cb').is(':checked');
+        m_pm_snack_cb = $('#pm_snack_cb').is(':checked');
+        m_dinner_cb = $('#dinner_cb').is(':checked');
+
+
+        if (m_meal_reservation == '' || m_reason_input == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
+            generateWarningModal("meals_arrangement_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a meal...");
+            return false;
+        }
+    })
 });
