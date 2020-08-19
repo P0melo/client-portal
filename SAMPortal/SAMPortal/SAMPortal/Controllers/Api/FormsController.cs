@@ -78,23 +78,26 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
-        //public IHttpActionResult GetMealsProvisionByReference(string referenceId)
-        //{
-        //    var data = _context.tblmeal_provision.Where(m => m.reference_id== referenceId).Select(m => new MealProvisionLog
-        //    {
-        //        Id = m.meal_id,
-        //        Breakfast = m.meal_b,
-        //        MorningSnack = m.meal_ms,
-        //        Lunch = m.meal_l,
-        //        AfternoonSnack = m.meal_as,
-        //        Dinner = m.meal_d,
-        //        FromDate = m.meal_date_from,
-        //        ToDate = m.meal_date_to,
-        //        Reason = m.meal_reason,
-        //    }).ToList();
+        public IHttpActionResult GetMealsProvisionByReference(string referenceId)
+        {
+            //var data = _context.tblmeal_provision.Where(m => m.reference_id == referenceId).Select(m => new MealProvisionLog
+            //{
+            //    Id = m.meal_id,
+            //    Breakfast = m.meal_b,
+            //    MorningSnack = m.meal_ms,
+            //    Lunch = m.meal_l,
+            //    AfternoonSnack = m.meal_as,
+            //    Dinner = m.meal_d,
+            //    FromDate = m.meal_date_from,
+            //    ToDate = m.meal_date_to,
+            //    Reason = m.meal_reason,
+            //}).ToList();
 
-        //    return Ok(data);
-        //}
+            var data = _context.Database.SqlQuery<MealProvisionLog>("SELECT meal_id as Id, meal_b as Breakfast, meal_ms as MorningSnack, meal_l as Lunch, meal_as as AfternoonSnack, meal_d as Dinner, " +
+                "meal_date_from as FromDate, meal_date_to as ToDate, meal_reason as Reason FROM tblmeal_provision WHERE reference_id = '" + referenceId + "'").ToList();
+
+            return Ok(data);
+        }
 
         public IHttpActionResult GetCrewDetailsForAccomodation(string mnno)
         {

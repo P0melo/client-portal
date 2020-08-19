@@ -1223,6 +1223,11 @@
     //====================================================Meal Arrangement=======================================================================
 
     $(document).on('click', '#submit_meals_arrangement', function () {
+        let mnno = mnnoAfterRegistration;
+        let rank = position;
+        let lastName = $('#LastName').val();
+        let firstName = $('#FirstName').val();
+        
         m_meal_reservation = $('#meal_reservation').val();
         m_reason_input = $('#reason_input').val();
         m_breakfast_cb = $('#breakfast_cb').is(':checked');
@@ -1231,10 +1236,33 @@
         m_pm_snack_cb = $('#pm_snack_cb').is(':checked');
         m_dinner_cb = $('#dinner_cb').is(':checked');
 
+        let parameters = [mnno, rank, "", m_meal_reservation, m_reason_input, m_breakfast_cb, m_am_snack_cb, m_lunch_cb, m_pm_snack_cb, m_dinner_cb];
 
         if (m_meal_reservation == '' || m_reason_input == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
             generateWarningModal("meals_arrangement_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a meal...");
             return false;
         }
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveMealProvision',
+            type: 'post',
+            dataType: 'json',
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
+            data: { parameters: parameters },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    //$('#modal-success .modal-body p').html("Meal Request Successful!");
+                    //$('#modal-success').modal();
+                    generateSuccessModal("meal_provision_success", 2, "", "Meal Request Successful!");
+                } else {
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //$('.modal-danger').modal();
+                    generateDangerModal("meal_provision_danger", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
+            }
+        });
     })
 });
