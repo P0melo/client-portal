@@ -69,7 +69,7 @@
         chosenCrewRank = $(this).parent().prev().prev().prev().prev().prev().prev().html();
         chosenCrewName = $(this).parent().prev().prev().prev().prev().prev().html();
 
-        $('#modal_search_crew_warning .modal-body p').html("Are you sure you want to choose this crew?");
+        $('#modal_search_crew_warning .modal-body p').html("Are you sure you want to choose this crew? <br /><br />" + chosenCrewMnno + " " + chosenCrewName);
         $('#modal_search_crew_warning').modal();
     });
 

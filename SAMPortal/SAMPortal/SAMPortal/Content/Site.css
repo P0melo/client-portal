@@ -710,3 +710,7 @@ div#test_diva{
 .mandatory {
     color: red;
 }
+
+#daily_transfer_table div table tbody tr th {
+    text-align: center
+}

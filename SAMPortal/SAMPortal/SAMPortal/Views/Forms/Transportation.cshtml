@@ -63,8 +63,8 @@
 
 
         <div class="col-lg-6 form-group" style="padding-left: 0px; padding-right: 0px;">
-            <div class="col-xs-12">
-                <label for="transportation_date" class="control-label">Date</label>
+            <div class="col-xs-6" id="inbound_date">
+                <label for="transportation_date_inbound" class="control-label">Inbound Date</label>
                 <div class="input-group">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
@@ -73,32 +73,43 @@
                 </div>
 
             </div>
+            <div class="col-xs-6" id="outbound_date">
+                <label for="transportation_date_outbound" class="control-label">Outbound Date</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="transportation_date_outbound" disabled>
+                </div>
+
+            </div>
+
         </div>
 
         @*<div class="col-lg-12 form-group">
-                <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
-                <div class="col-xs-12 col-md-12 col-lg-10">
-                    <select id="transportation_destination" class="form-control">
-                        @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfDestinations"]); i++)
-                        {
-                            <option value="@System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]">
-                                @System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]
-                            </option>
-                        }
-                    </select>
+            <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <select id="transportation_destination" class="form-control">
+                    @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfDestinations"]); i++)
+                    {
+                        <option value="@System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]">
+                            @System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]
+                        </option>
+                    }
+                </select>
 
-                </div>
-            </div>*@
+            </div>
+        </div>*@
 
         @*<div class="col-lg-12 form-group">
-                <label for="transportation_destination" class="col-md-2 control-label">Daily Transfer</label>
-                <div class="col-xs-12 col-md-12 col-lg-10">
-                    <select id="transportation_destination" class="form-control">
-                        <option value="1">One Trip</option>
-                        <option value="2">Two Trips</option>
-                    </select>
-                </div>
-            </div>*@
+            <label for="transportation_destination" class="col-md-2 control-label">Daily Transfer</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <select id="transportation_destination" class="form-control">
+                    <option value="1">One Trip</option>
+                    <option value="2">Two Trips</option>
+                </select>
+            </div>
+        </div>*@
 
         <div class="daily_transfer col-xs-12 col-lg-12 form-group" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
@@ -106,27 +117,27 @@
                     <label for="transportation_destination" class="control-label">Daily Transfer</label>
                 </div>
                 <div class="col-xs-12">
-                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_1" value="1">One Trip</label>
+                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_1" value="1" checked>One-way</label>
                 </div>
                 <div class="col-xs-12">
-                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_2" value="2">Two Trips (Vice Versa)</label>
+                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_2" value="2">Round-trip</label>
                 </div>
 
             </div>
         </div>
         @*<div class="col-md-12 col-lg-12 form-group">
-                <label for="transportation_details" class="col-md-2 control-label">Details</label>
-                <div class="col-xs-12 col-md-12 col-lg-10">
-                    <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
-                </div>
-            </div>*@
+            <label for="transportation_details" class="col-md-2 control-label">Details</label>
+            <div class="col-xs-12 col-md-12 col-lg-10">
+                <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
+            </div>
+        </div>*@
 
         <div class="airport_transfer col-xs-12 col-lg-12 form-group" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
                 <label for="transportation_destination" class="control-label">Airport Transfer</label>
                 <div class="col-xs-12 checkbox">
                     <label class="col-xs-6">
-                        <input id="airport_cb_i" value="1" type="checkbox">
+                        <input id="airport_cb_i" value="1" type="checkbox" checked>
                         Inbound
                     </label>
                 </div>
@@ -154,35 +165,89 @@
             <label for="transportation_name" class="col-md-12 control-label">Details</label>
             <div class="col-xs-12 col-md-12 col-lg-12 ">
                 <input id="pickup_input" type="text" class="form-group form-control" placeholder="Pick Up Point" style="border-radius: 3px;" />
-                <input id="datetime_input" type="text" class="form-group form-control" placeholder="Pick Up Date and Time" style="border-radius: 3px;" />
+                @*<input id="datetime_input" type="text" class="form-group form-control" placeholder="Pick Up Date and Time" style="border-radius: 3px;" />*@
                 <input id="dropoff_input" type="text" class="form-group form-control" placeholder="Drop Off Point" style="border-radius: 3px;" />
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="pick_up_date" placeholder="Choose date">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="pick_up_time" placeholder="Choose time">
+                </div>
             </div>
         </div>
 
         @*<div class="col-lg-6 form-group two_trip_details">
-                <label for="transportation_name" class="col-md-4 control-label">Details</label>
-                <div class="col-xs-12 col-md-12 col-lg-8 ">
-                    <input id="twotrips_1stpickup_input" type="text" class="form-group form-control" placeholder="1st Pick Up Point" style="border-radius: 3px;" />
-                    <input id="twotrips_1stdatetime_input" type="text" class="form-group form-control" placeholder="1st Pick Up Date and Time" style="border-radius: 3px;" />
-                    <input id="twotrips_1stdropoff_input" type="text" class="form-group form-control" placeholder="1st Drop Off Point" style="border-radius: 3px;" />
-                </div>
-            </div>*@
+            <label for="transportation_name" class="col-md-4 control-label">Details</label>
+            <div class="col-xs-12 col-md-12 col-lg-8 ">
+                <input id="twotrips_1stpickup_input" type="text" class="form-group form-control" placeholder="1st Pick Up Point" style="border-radius: 3px;" />
+                <input id="twotrips_1stdatetime_input" type="text" class="form-group form-control" placeholder="1st Pick Up Date and Time" style="border-radius: 3px;" />
+                <input id="twotrips_1stdropoff_input" type="text" class="form-group form-control" placeholder="1st Drop Off Point" style="border-radius: 3px;" />
+            </div>
+        </div>*@
 
         <div class="col-xs-12 col-lg-6 form-group two_trip_details" style="padding-left: 0px; padding-right: 0px;">
             <label for="transportation_name" class="col-md-12 control-label">Details</label>
 
             <div class="col-xs-12 col-md-12 col-lg-12 ">
                 <input id="2ndpickup_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Point" style="border-radius: 3px;" />
-                <input id="2nddatetime_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Date and Time" style="border-radius: 3px;" />
+                @*<input id="2nddatetime_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Date and Time" style="border-radius: 3px;" />*@
                 <input id="2nddropoff_input" type="text" class="form-group form-control" placeholder="2nd Drop Off Point" style="border-radius: 3px;" />
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="pick_up_date_2" placeholder="Choose date">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="pick_up_time_2" placeholder="Choose time">
+                </div>
             </div>
         </div>
 
+        <div id="daily_transfer_table" style="display: none">
+            <div class="col-xs-12">
+                <a id="add_daily_transfer">Add to table...</a>
+            </div>
+            <div class="box-body col-xs-12">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Type</th>
+                            <th>Pick-up</th>
+                            <th>Drop-off</th>
+                            <th>Date and Time</th>
+                            <th>2nd Pick-up</th>
+                            <th>2nd Drop-off</th>
+                            <th>Date and Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+            </div>
+        </div>
         <div class="col-xs-12 form-group" style="display:inline-block; padding-left: 0px; padding-right: 0px;">
             <label for="transportation_details" class="col-md-2 control-label">Remarks</label>
             @*<div class="col-xs-12 col-md-12 col-lg-10">
-                    <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
-                </div>*@
+                <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
+            </div>*@
             <textarea class="form-control" rows="5" id="transportation_details"></textarea>
         </div>
 

@@ -299,7 +299,7 @@ namespace SAMPortal.Controllers
             {
                 middleName = middleName.Substring(0, 1);
             }
-            
+
             if (ModelState.IsValid)
             {
                 try
@@ -865,6 +865,14 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
+        public ActionResult SaveAirportTransfer(params string[] parameters)
+        {
+            var jsonResult = Json(new { data = "" },
+            JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
         public ActionResult UpdateOnSiteReservation(params string[] parameters)
         {
             var jsonResult = new JsonResult();
@@ -1122,7 +1130,7 @@ namespace SAMPortal.Controllers
                     string data = logging.ConvertToLoggingParameter(parameters);
                     logging.Log(GetUser(), "UpdateCrewRank", data);
 
-                    sendEmail.Send(GetIdentity(), (int)Enum.Requests.UpdateCrewRank, "mnno:"+mnno+"|newRank:"+newRank+ "|oldRank:" + oldRank);
+                    sendEmail.Send(GetIdentity(), (int)Enum.Requests.UpdateCrewRank, "mnno:" + mnno + "|newRank:" + newRank + "|oldRank:" + oldRank);
 
                     flag = 1;
 
@@ -1165,7 +1173,7 @@ namespace SAMPortal.Controllers
 
             try
             {
-                _context.Database.ExecuteSqlCommand("UPDATE tblnewcrewrequest SET Position = @rank, FirstName = @firstname, LastName = @lastname, MiddleName = @middleInitial, BirthPlace  = @birthPlace, Birthday = @birthdate, Picture = @picture " + 
+                _context.Database.ExecuteSqlCommand("UPDATE tblnewcrewrequest SET Position = @rank, FirstName = @firstname, LastName = @lastname, MiddleName = @middleInitial, BirthPlace  = @birthPlace, Birthday = @birthdate, Picture = @picture " +
                     "WHERE MNNO = @tempNo",
                     new MySqlParameter("@rank", rank),
                     new MySqlParameter("@firstname", firstname),
@@ -1176,7 +1184,8 @@ namespace SAMPortal.Controllers
                     new MySqlParameter("@picture", byteArr),
                     new MySqlParameter("@tempNo", tempNo));
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return Json(new { logId = logging.LogError(GetUser(), "UpdateNewCrewRequest", e) },
                     JsonRequestBehavior.AllowGet);

@@ -36,6 +36,7 @@ namespace SAMPortal
                       "~/admin-lte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
                       "~/admin-lte/bower_components/bootstrap-daterangepicker/daterangepicker.css",
                       "~/admin-lte/plugins/pace/pace.css",
+                      "~/Content/jquery.timepicker.min.css",
                       "~/Content/select2-4.0.6-rc.1/dist/css/select2.min.css",
                       "~/Content/select2-4.0.6-rc.1/dist/css/select2-bootstrap.min.css",
                       "~/DataTables/datatables.min.css"
@@ -51,6 +52,7 @@ namespace SAMPortal
              "~/admin-lte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
              "~/admin-lte/bower_components/moment/moment.js",
              "~/admin-lte/bower_components/bootstrap-daterangepicker/daterangepicker.js",
+             "~/Scripts/jquery.timepicker.min.js",
              "~/Content/select2-4.0.6-rc.1/dist/js/select2.min.js",
              "~/Scripts/jquery.blockUi.js",
              "~/DataTables/datatables.min.js",
