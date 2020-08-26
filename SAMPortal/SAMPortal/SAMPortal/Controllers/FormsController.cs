@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SAMPortal.Enum;
 using System.Web.Helpers;
 using System.Security.Principal;
+using System.Runtime.InteropServices;
 
 namespace SAMPortal.Controllers
 {
@@ -868,22 +869,64 @@ namespace SAMPortal.Controllers
         public ActionResult SaveTransportationParameter(params string[] parameters)
         {
             JsonResult jsonResult = new JsonResult();
-
+            var user = GetUser();
             //saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
             var mnno = parameters[0];
             var rank = parameters[1];
-            var name = parameters[2];
+            var name = parameters[2].Split(',');
+            var firstName = name[1].Split(' ')[0];
+            var lastName = name[0];
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
-            var inbound = parameters[6];
-            var outbound = parameters[7];
+            var inbound = parameters[6] == "true" ? 1 : 0; ;
+            var outbound = parameters[7] == "true" ? 1 : 0; ;
             var inboundDate = parameters[8];
             var outboundDate = parameters[9];
             var file = parameters[10];
             var fileExtension = parameters[11];
+            var status = "Requested";
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+            var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
+            var dateBooked = DateTime.Now;
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy) " +
+                        "VALUE (@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy)",
+                        new MySqlParameter("@mnno", mnno),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@firstName", firstName),
+                        new MySqlParameter("@lastName", lastName),
+                        new MySqlParameter("@company", company),
+                        new MySqlParameter("@type", type),
+                        new MySqlParameter("@vehicle", vehicle),
+                        new MySqlParameter("@status", status),
+                        new MySqlParameter("@notes", notes),
+                        new MySqlParameter("@referenceId", referenceId),
+                        new MySqlParameter("@dateBooked", dateBooked),
+                        new MySqlParameter("@requestedBy", user));
 
+                    var transportationId = _context.Database.ExecuteSqlCommand("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
+                        new MySqlParameter("@referenceId", referenceId));
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tblairport_transfer_details (Inbound, Outbound, InboundDate, OutboundDate, FileType, Attachment, TransportationId) " +
+                        "VALUE (@inbound, @outbound, @inboundDate, @outboundDate, @fileType, @attachment, @transportationId)",
+                        new MySqlParameter("@inbound", inbound),
+                        new MySqlParameter("@outbound", outbound),
+                        new MySqlParameter("@inboundDate", inboundDate),
+                        new MySqlParameter("@outboundDate", outboundDate),
+                        new MySqlParameter("@fileType", fileExtension),
+                        new MySqlParameter("@attachment", file),
+                        new MySqlParameter("@transportationId", transportationId));
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
 
             jsonResult = Json(new { data = "" },
             JsonRequestBehavior.AllowGet);
