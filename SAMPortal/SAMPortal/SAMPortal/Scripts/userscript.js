@@ -311,7 +311,14 @@ $(document).on('change', '#InputFile', function () {
     $('#inputFilename').html($(this).val());
     var inputFile = document.getElementById('InputFile');
     var reader = new FileReader();
-    reader.readAsDataURL(inputFile.files[0]);
+    try {
+        reader.readAsDataURL(inputFile.files[0]);
+
+    } catch (err) {
+        generateWarningModal("transportation_attacment_warning_modal", 2, "", "Please make sure that you insert a valid attachment.")
+        return false;
+    }
+
     reader.onload = function () {
         inputFile = reader.result;
         $('#output').val(inputFile);

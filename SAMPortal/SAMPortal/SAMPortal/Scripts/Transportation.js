@@ -130,13 +130,7 @@
         let notes = $('#transportation_details').val();
 
         if ($('#transportation_type').val() == "Airport Transfer") {
-            if (mnno === "" || file === "" || date === "") {
-                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
-                return false;
-            }
 
-            let inbound = $('#airport_cb_i').is(':checked');
-            let outbound = $('#airport_cb_o').is(':checked');
             let inboundDate = $('#transportation_date').val();
             let outboundDate = $('#transportation_date_outbound').val();
             let file = $('#output').val();
@@ -144,10 +138,37 @@
             let fileName = splitString[splitString.length - 1];
             let fileNameSplit = fileName.split(".");
             let fileExtension = fileNameSplit[fileNameSplit.length - 1];
+            let inbound = $('#airport_cb_i').is(':checked');
+            let outbound = $('#airport_cb_o').is(':checked');
 
-            saveTransportationParameter[mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
+            saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
 
-            generateWarningModal("save_transportation_warning", 1, "", "Are you sure you want to submit?");
+            if (mnno === "" || file === "" || date === "") {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                return false;
+            }
+
+            if (inbound == false && inbound == false) {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                return false;
+            }
+
+            if (inbound == true) {
+                if ($('#transportation_date').val().trim() == "") {
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                    return false;
+                }
+            }
+
+            if (outbound == true) {
+                if ($('#transportation_date_outbound').val().trim() == "") {
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                    return false;
+                }
+            }
+
+            generateWarningModal("save_transportation_warning", 1, "save_airport_transportation_warning_yes", "Are you sure you want to submit?");
+
         } else {
             //if (mnno === "" || date === "") {
             //    $('#meal_err_msg').css('display', 'inline-block');
@@ -228,6 +249,19 @@
         //    $('#meal_err_msg').css('display', 'inline-block');
         //}
 
+    });
+
+    $(document).on('click', '#save_airport_transportation_warning_yes', function () {
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveTransportationParameter',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { parameters: saveTransportationParameter },
+            succes: function (result) {
+                alert(1);
+            }
+        });
     });
 
     $(document).on('click', '#modal_close_btn', function () {

@@ -865,6 +865,32 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
+        public ActionResult SaveTransportationParameter(params string[] parameters)
+        {
+            JsonResult jsonResult = new JsonResult();
+
+            //saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
+            var mnno = parameters[0];
+            var rank = parameters[1];
+            var name = parameters[2];
+            var type = parameters[3];
+            var vehicle = parameters[4];
+            var notes = parameters[5];
+            var inbound = parameters[6];
+            var outbound = parameters[7];
+            var inboundDate = parameters[8];
+            var outboundDate = parameters[9];
+            var file = parameters[10];
+            var fileExtension = parameters[11];
+
+
+
+            jsonResult = Json(new { data = "" },
+            JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
         public ActionResult SaveAirportTransfer(params string[] parameters)
         {
             var jsonResult = Json(new { data = "" },
