@@ -10,6 +10,10 @@ using SAMPortal.Enum;
 using System.Web.Helpers;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using System.Web.Script.Serialization;
+using Org.BouncyCastle.Crypto.Tls;
+using Org.BouncyCastle.Asn1.Mozilla;
+using Newtonsoft.Json;
 
 namespace SAMPortal.Controllers
 {
@@ -482,7 +486,6 @@ namespace SAMPortal.Controllers
 
                     sendEmail.Send(User.Identity, (int)Enum.Requests.MealProvision, "date:" + date + "|breakfast:" + breakfast_cb + "|amsnack:" + am_snack_cb + "|lunch:" + lunch_cb + "|pmsnack:" + pm_snack_cb + "|dinner:" + dinner_cb + "|referenceid:" + reference_id);
 
-
                     flag = 1;
                 }
                 catch (Exception e)
@@ -866,7 +869,7 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
-        public ActionResult SaveTransportationParameter(params string[] parameters)
+        public ActionResult SaveAirportTransportation(params string[] parameters)
         {
             JsonResult jsonResult = new JsonResult();
             var user = GetUser();
@@ -874,15 +877,15 @@ namespace SAMPortal.Controllers
             var mnno = parameters[0];
             var rank = parameters[1];
             var name = parameters[2].Split(',');
-            var firstName = name[1].Split(' ')[0];
+            var firstName = name[1].Split(' ')[1];
             var lastName = name[0];
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
             var inbound = parameters[6] == "true" ? 1 : 0; ;
             var outbound = parameters[7] == "true" ? 1 : 0; ;
-            var inboundDate = parameters[8];
-            var outboundDate = parameters[9];
+            var inboundDate = DateTime.ParseExact(parameters[8], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            var outboundDate = DateTime.ParseExact(parameters[9], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
             var file = parameters[10];
             var fileExtension = parameters[11];
             var status = "Requested";
@@ -890,6 +893,7 @@ namespace SAMPortal.Controllers
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
             var dateBooked = DateTime.Now;
 
+            var flag = 0;
             if (ModelState.IsValid)
             {
                 try
@@ -909,8 +913,8 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@dateBooked", dateBooked),
                         new MySqlParameter("@requestedBy", user));
 
-                    var transportationId = _context.Database.ExecuteSqlCommand("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
-                        new MySqlParameter("@referenceId", referenceId));
+                    var transportationId = _context.Database.SqlQuery<int>("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
+                        new MySqlParameter("@referenceId", referenceId)).FirstOrDefault();
 
                     _context.Database.ExecuteSqlCommand("INSERT INTO tblairport_transfer_details (Inbound, Outbound, InboundDate, OutboundDate, FileType, Attachment, TransportationId) " +
                         "VALUE (@inbound, @outbound, @inboundDate, @outboundDate, @fileType, @attachment, @transportationId)",
@@ -921,27 +925,131 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@fileType", fileExtension),
                         new MySqlParameter("@attachment", file),
                         new MySqlParameter("@transportationId", transportationId));
+
+                    //for logging
+                    string[] logparameters = { "mnno:"+mnno, "rank:"+rank, "lastName:"+lastName, "firstName:"+firstName, "company:"+company, "type:" + type, "vehicle:" + vehicle, "status:" + status, "referenceId: " + dateBooked,
+                        "inbound:" + inbound, "outbound:" + outbound, "inboundDate:" + inboundDate, "outboundDate:" + outboundDate, "fileType:" + fileExtension, "attachment:" + file};
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "SaveAirportTransportation", data);
+
+                    //For Email Notif
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.TransportationRequest, "");
+
+                    flag = 1;
+
                 }
                 catch (Exception e)
                 {
-
+                    flag = logging.LogError(user, "SaveAirportTransportation", e);
                 }
             }
 
-            jsonResult = Json(new { data = "" },
+            jsonResult = Json(new { data = flag },
             JsonRequestBehavior.AllowGet);
 
             return jsonResult;
         }
 
-        public ActionResult SaveAirportTransfer(params string[] parameters)
+        public ActionResult SaveDailyTransportation(params string[] parameters)
         {
-            var jsonResult = Json(new { data = "" },
+            JsonResult jsonResult = new JsonResult();
+            var flag = 0;
+            var user = GetUser();
+
+            var mnno = parameters[0];
+            var rank = parameters[1];
+            var name = parameters[2].Split(',');
+            var firstName = name[1].Split(' ')[1];
+            var lastName = name[0];
+            var type = parameters[3];
+            var vehicle = parameters[4];
+            var notes = parameters[5];
+
+            var status = "Requested";
+            var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
+            var dateBooked = DateTime.Now;
+            var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
+
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            dynamic details = jsonSerializer.DeserializeObject(parameters[6]);
+
+            var stringToAppend = "";
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy) " +
+                        "Values(@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy)",
+                        new MySqlParameter("@mnno", mnno),
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@firstName", firstName),
+                        new MySqlParameter("@lastName", lastName),
+                        new MySqlParameter("@company", company),
+                        new MySqlParameter("@type", type),
+                        new MySqlParameter("@vehicle", vehicle),
+                        new MySqlParameter("@status", status),
+                        new MySqlParameter("@notes", notes),
+                        new MySqlParameter("@referenceId", referenceId),
+                        new MySqlParameter("@dateBooked", dateBooked),
+                        new MySqlParameter("@requestedBy", user)
+                        );
+
+                    var transportationId = _context.Database.SqlQuery<int>("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
+                           new MySqlParameter("@referenceId", referenceId)).FirstOrDefault();
+
+                    foreach (var items in details)
+                    {
+                        int dtType = 0;
+
+                        if (items[0] == "One-way")
+                        {
+                            dtType = 0;
+                        }
+                        else if (items[0] == "Round-trip")
+                        {
+                            dtType = 1;
+                        }
+
+                        var pickUp = items[1];
+                        var dropOff = items[2];
+                        var pickup_date_time = items[3];
+                        var pickUp2 = items[4];
+                        var dropOff2 = items[5];
+                        var pickup_date_time2 = items[6];
+
+                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + "),";
+                    }
+
+                    stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
+                           "VALUES " + stringToAppend);
+
+                    //for logging
+                    string[] logparameters = { "mnno:"+mnno, "rank:"+rank, "lastName:"+lastName, "firstName:"+firstName, "company:"+company, "type:" + type, "vehicle:" + vehicle, "status:" + status, "referenceId: " + dateBooked,
+                        "foreign key in tbldaily_transfer_details:" + transportationId};
+
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+                    logging.Log(user, "SaveDailyTransportation", data);
+
+                    //For Email Notif
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.TransportationRequest, "");
+
+                    flag = 1;
+                }
+                catch (Exception e)
+                {
+                    flag = logging.LogError(user, "SaveDailyTransportation", e);
+                }
+
+            }
+
+            jsonResult = Json(new { data = flag },
             JsonRequestBehavior.AllowGet);
 
             return jsonResult;
         }
-
         public ActionResult UpdateOnSiteReservation(params string[] parameters)
         {
             var jsonResult = new JsonResult();

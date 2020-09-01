@@ -121,6 +121,10 @@
     var saveTranspoDetails = "";
     var saveDate = "";
     var saveNotes = "";
+
+    var saveDailyTransportationParameter = [];
+    var dailyTransferDetails = [];
+
     $(document).on('click', '#save_transportation_btn', function () {
         let mnno = $('#mnno_input').val();
         let rank = $('#rank_input').val();
@@ -128,6 +132,11 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
+
+        if (mnno === "") {
+            generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+            return false;
+        }
 
         if ($('#transportation_type').val() == "Airport Transfer") {
 
@@ -169,12 +178,15 @@
 
             generateWarningModal("save_transportation_warning", 1, "save_airport_transportation_warning_yes", "Are you sure you want to submit?");
 
-        } else {
-            //if (mnno === "" || date === "") {
-            //    $('#meal_err_msg').css('display', 'inline-block');
-            //    return false;
-            //}
+        } else if ($('#transportation_type').val() == "Daily Transfer") {
+            if (dailyTransferDetails.length == 0) {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure to add details before clicking submit...");
+                return false;
+            }
 
+            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails)]
+
+            generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
 
         }
 
@@ -254,12 +266,33 @@
     $(document).on('click', '#save_airport_transportation_warning_yes', function () {
 
         $.ajax({
-            url: '/SAMPortal/Forms/SaveTransportationParameter',
+            url: '/SAMPortal/Forms/SaveAirportTransfer',
             type: 'POST',
             dataType: 'JSON',
             data: { parameters: saveTransportationParameter },
             succes: function (result) {
-                alert(1);
+                if (result.data == 1) {
+                    generateSuccessModal("save_airport_transfer_modal", 2, "", "Airport Transfer request successfully submitted");
+                } else {
+                    generateDangerModal("save_airport_transfer_danger", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
+                }
+            }
+        });
+
+    });
+
+    $(document).on('click', '#save_daily_transportation_warning_yes', function () {
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveDailyTransportation',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { parameters: saveDailyTransportationParameter },
+            success: function (result) {
+                if (result.data == 1) {
+                    generateSuccessModal("save_daily_transfer_modal", 2, "", "Daily Transportation request successfully submitted!");
+                } else {
+                    generateDangerModal("save_daily_transfer_danger", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
+                }
             }
         });
     });
@@ -300,6 +333,8 @@
         }
     }
 
+    var dailyTransferCounter = 0;
+
     $(document).on('click', '#add_daily_transfer', function () {
         let type = $('input[name=dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";
         let pickup = $('#pickup_input').val();
@@ -311,6 +346,7 @@
         let pickup_date_2 = "";
         let pickup_time_2 = "";
 
+        let entry = [];
 
         if (pickup == '' || dropoff == '' || pickup_date == '' || pickup_time == '') {
 
@@ -332,9 +368,23 @@
         }
 
         let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
-            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter +"' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
 
         $('#daily_transfer_table div table tbody').append(details);
+
+        entry[0] = type;
+        entry[1] = pickup;
+        entry[2] = dropoff;
+        entry[3] = pickup_date + " " + pickup_time;
+        entry[4] = pickup_2;
+        entry[5] = dropoff_2;
+        entry[6] = pickup_2 != '' ? pickup_date_2 + " " + pickup_time_2 : "";
+        entry[7] = dailyTransferCounter;
+
+        dailyTransferDetails.push(entry);
+
+        dailyTransferCounter++;
+
     });
 
     var dailyTransferEntryToRemove = "";
@@ -361,7 +411,14 @@
     });
 
     $(document).on('click', '#transportation_warning_yes', function () {
+        
+        let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
+
+        //code below is ES6 so beware...
+        dailyTransferDetails = dailyTransferDetails.filter(item => item[7] != id);
+
         dailyTransferEntryToRemove.remove();
+
     });
 
 });
