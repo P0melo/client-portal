@@ -4,6 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
+using System.Web.Mvc;
+using MySql.Data.MySqlClient;
 using SAMPortal.Models;
 
 namespace SAMPortal.Controllers.Api
@@ -62,14 +65,31 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
-        public IHttpActionResult GetTransportationRequestById(int recordId)
-        {
-            var data = _context.Database.SqlQuery<TransportationModel>("SELECT tp.companyName, Inbound, Outbound, OneTrip, TwoTrips, Status, PickUp, DateTimeOfPickUp, " +
-                            "DropOff, SecondPickUp, SecondDateTimeOfPickUp, SecondDropOff, Notes FROM tbltransportation t JOIN tbltpcompany tp ON t.Company = tp.companyID " +
-                            "WHERE Id = " + recordId).ToList();
+        //public IHttpActionResult GetTransportationRequestById(int recordId)
+        //{
+        //    //var data = _context.Database.SqlQuery<TransportationModel>("SELECT tp.companyName, Inbound, Outbound, OneTrip, TwoTrips, Status, PickUp, DateTimeOfPickUp, " +
+        //    //                "DropOff, SecondPickUp, SecondDateTimeOfPickUp, SecondDropOff, Notes FROM tbltransportation t JOIN tbltpcompany tp ON t.Company = tp.companyID " +
+        //    //                "WHERE Id = " + recordId).ToList();
 
-            return Ok(data);
-        }
+        //    var type = _context.Database.SqlQuery<string>("SELECT Type FROM tbltransportation WHERE Id = @id", new MySqlParameter("@id", recordId)).FirstOrDefault();
+
+        //    if (type.Equals("Daily Transfer"))
+        //    {
+        //        List<DailyTransportationModel> dt_data = new List<DailyTransportationModel>();
+
+        //        var data = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace " +
+        //                                                               "FROM tbldaily_transfer_details " +
+        //                                                               "WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).ToList();
+
+        //        return Ok(data);
+        //    }
+        //    else if(type.Equals("Airport Transfer"))
+        //    {
+        //        //var data = _context.Database.SqlQuery<>
+        //    }
+
+        //    return Ok("");
+        //}
 
         public IHttpActionResult GetSpecialScheduleRequests()
         {

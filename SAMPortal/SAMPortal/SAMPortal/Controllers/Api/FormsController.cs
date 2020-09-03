@@ -160,11 +160,13 @@ namespace SAMPortal.Controllers.Api
 
         public IHttpActionResult GetTransportationAttachment(int recordId)
         {
-            var data = _context.tbltransportations.Where(m => m.Id == recordId).Select(m => new Attachment
-            {
-                FileType = m.FileType,
-                Picture = m.Attachment
-            }).ToList();
+            //var data = _context.tbltransportations.Where(m => m.Id == recordId).Select(m => new Attachment
+            //{
+            //    FileType = m.FileType,
+            //    Picture = m.Attachment
+            //}).ToList();
+
+            var data = _context.Database.SqlQuery<Attachment>("SELECT FileType, Attachment as Picture FROM tblairport_transfer_details WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).ToList();
 
             return Ok(data);
         }

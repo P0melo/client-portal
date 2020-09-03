@@ -267,11 +267,11 @@ namespace SAMPortal.Controllers
             //JsonResult transportationResponse = new JsonResult();
             //JsonResult mealsResponse = new JsonResult();
             //JsonResult outHouseBookingResponse = new JsonResult();
-
-            var byteArr = new object();
+           
             DateTime dateValue = new DateTime();
-            int flag = 0;
 
+            int flag = 0;
+            var byteArr = new object();
             if (inputFile != "")
             {
                 byte[] bytes = Convert.FromBase64String(inputFile.Split(',')[1]);
@@ -873,6 +873,8 @@ namespace SAMPortal.Controllers
         {
             JsonResult jsonResult = new JsonResult();
             var user = GetUser();
+            DateTime? inboundDate = null;
+            DateTime? outboundDate = null;
             //saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
             var mnno = parameters[0];
             var rank = parameters[1];
@@ -882,18 +884,39 @@ namespace SAMPortal.Controllers
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
-            var inbound = parameters[6] == "true" ? 1 : 0; ;
-            var outbound = parameters[7] == "true" ? 1 : 0; ;
-            var inboundDate = DateTime.ParseExact(parameters[8], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
-            var outboundDate = DateTime.ParseExact(parameters[9], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
-            var file = parameters[10];
+            var inbound = parameters[6] == "true" ? 1 : 0;
+            var outbound = parameters[7] == "true" ? 1 : 0;
+
+            int flag = 0;
+            var byteArr = new object();
+            if (parameters[10] != "")
+            {
+                byte[] bytes = Convert.FromBase64String(parameters[10].Split(',')[1]);
+                byteArr = bytes;
+            }
+            else
+            {
+                byteArr = null;
+            }
+
+
+            if (parameters[8] != "")
+            {
+                inboundDate = DateTime.ParseExact(parameters[8], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            }
+
+            if (parameters[9] != "")
+            {
+                outboundDate = DateTime.ParseExact(parameters[9], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            }
+
+            var file = byteArr;
             var fileExtension = parameters[11];
             var status = "Requested";
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
             var dateBooked = DateTime.Now;
 
-            var flag = 0;
             if (ModelState.IsValid)
             {
                 try
@@ -1413,6 +1436,42 @@ namespace SAMPortal.Controllers
             };
 
             return PartialView("_UpdateNewCrewRequest", ncrvm);
+        }
+
+        public ActionResult GetTransportationRequestById(int recordId)
+        {
+
+            JsonResult jsonResult = new JsonResult();
+
+            var typeAndNotes = _context.Database.SqlQuery<DailyTransportationTypeAndNotes>("SELECT Type, Notes FROM tbltransportation WHERE Id = @id", new MySqlParameter("@id", recordId)).FirstOrDefault();
+
+            if (typeAndNotes.Type.Equals("Daily Transfer"))
+            {
+                var data = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace " +
+                                                                       "FROM tbldaily_transfer_details " +
+                                                                       "WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).ToList();
+
+                jsonResult = Json(new { data, typeAndNotes },
+                   JsonRequestBehavior.AllowGet);
+
+                return jsonResult;
+            }
+            else if (typeAndNotes.Type.Equals("Airport Transfer"))
+            {
+                var data = _context.Database.SqlQuery<AirportTransportationModel>("SELECT Inbound, Outbound, InboundDate, OutboundDate " +
+                                                                       "FROM tblairport_transfer_details " +
+                                                                       "WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).FirstOrDefault();
+
+                jsonResult = Json(new { data, typeAndNotes },
+                   JsonRequestBehavior.AllowGet);
+
+                return jsonResult;
+            }
+
+            jsonResult = Json(new { data = "" },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
         }
 
     }

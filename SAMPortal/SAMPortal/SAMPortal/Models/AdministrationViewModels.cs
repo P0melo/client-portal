@@ -103,6 +103,34 @@ namespace SAMPortal.Models
         public string Notes { get; set; }
     }
 
+    public class AirportTransportationModel
+    {
+        public int Inbound { get; set; }
+        public int Outbound { get; set; }
+        public DateTime? InboundDate { get; set; }
+        public DateTime? OutboundDate { get; set; }
+        //public string FileType { get; set; }
+        //public byte[] Attachment { get; set; }
+    }
+
+    public class DailyTransportationModel
+    {
+        public int IsRoundTrip { get; set; }
+        public string PickUpPlace { get; set; }
+        public string DateTimeOfPickUp { get; set; }
+        public string DropOffPlace { get; set; }
+        public string SecondPickUpPlace { get; set; }
+        public string SecondDateTimeOfPickUp { get; set; }
+        public string SecondDropOffPlace { get; set; }
+    }
+
+    public class DailyTransportationTypeAndNotes
+    {
+        public string Type { get; set; }
+        public string Notes { get; set; }
+
+    }
+
     public class TransportationRequestModel
     {
         public string MNNO { get; set; }

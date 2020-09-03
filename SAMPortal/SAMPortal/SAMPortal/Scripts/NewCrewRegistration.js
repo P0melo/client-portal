@@ -32,11 +32,43 @@
     $('#meal_reservation').daterangepicker();
     $('#meal_reservation').val('');
     $('#transportation_date').datepicker();
+    $('#transportation_date_outbound').datepicker();
+
+    var dailyTransferDateMonth = date.getMonth() + 1;
+    var dailyTransferDateDay = date.getDate();
+
+    var dailyTransferDateOutput = (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' +
+        (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + date.getFullYear();
+
+    $('#pick_up_date').datepicker().val(dailyTransferDateOutput);
+    $('#pick_up_date_2').datepicker().val(dailyTransferDateOutput);
+    $('#pick_up_time').timepicker({ interval: '15' }).val('08:00 AM');
+    $('#pick_up_time_2').timepicker({ interval: '15' }).val('08:00 AM');
 
     $('#datepicker').prev().click(function () {
         $('#datepicker').datepicker("show");
     });
 
+    $('#accomodation_date').prev().click(function () {
+        $('#accomodation_date').datepicker("show");
+    });
+
+    $('#off_site_date').prev().click(function () {
+        $('#off_site_date').datepicker("show");
+    });
+
+    $('#transportation_date').prev().click(function () {
+        $('#transportation_date').datepicker("show");
+    });
+
+    $('#transportation_date_outbound').prev().click(function () {
+        $('#transportation_date_outbound').datepicker("show");
+    });
+
+    $('#meal_reservation').prev().click(function () {
+        $('#meal_reservation').daterangepicker("show.daterangepicker");
+    });
+    
     $("#update_rank_modal #position_update").select2({ theme: "bootstrap", placeholder: "Select Rank", width: "auto" });
 
     $("#new_crew_registration #position").select2({ theme: "bootstrap", placeholder: "Select Rank", width: 'auto' });
@@ -177,52 +209,116 @@
     });
 
     /******************Transportation Arrangement*************************/
+    var dailyTransferCounter = 0;
+
+    var dailyTransferEntryToRemove = "";
+    $(document).on('click', '#remove_daily_transfer_entry', function () {
+        let row = $(this).parent().parent();
+        let type = row.children().eq(0).html();
+        let pickup = row.children().eq(1).html();
+        let dropoff = row.children().eq(2).html();
+        let pickup_date_time = row.children().eq(3).html();
+        let pickup_2 = row.children().eq(4).html();
+        let dropoff_2 = row.children().eq(5).html();
+        let pickup_date_time_2 = row.children().eq(6).html();
+        let rowEntry = ""
+
+        if (pickup_2.trim() != "") {
+            rowEntry = type + ", " + pickup + ", " + dropoff + ", " + pickup_date_time + ", " + pickup_2 + ", " + dropoff_2 + ", " + pickup_date_time_2;
+        } else {
+            rowEntry = type + ", " + pickup + ", " + dropoff + ", " + pickup_date_time
+        }
+
+        dailyTransferEntryToRemove = row;
+
+        generateWarningModal("transportation_warning", 1, "transportation_warning_yes", "Are you sure you want to remove this item? <br /><br /> " + rowEntry);
+    });
 
     $(document).on('change', '#transportation_type', function () {
-        //$('#transportation_type').val('');
-        $('#transportation_vehicle').val('');
-        $('#transportation_date').val('');
-        $('#dt_optradio_1').prop('checked', false);
-        $('#dt_optradio_2').prop('checked', false);
-        $('#airport_cb_i').prop('checked', false);
-        $('#airport_cb_o').prop('checked', false);
-        $('#InputFileTransportation').val('');
-        $('#pickup_input').val('');
-        $('#datetime_input').val('');
-        $('#dropoff_input').val('');
-        $('#2ndpickup_input').val('');
-        $('#2nddatetime_input').val('');
-        $('#2nddropoff_input').val('');
-        $('#transportation_details').val('');
-        var selected = $("#transportation_type option:selected").val();
+        ////$('#transportation_type').val('');
+        //$('#transportation_vehicle').val('');
+        //$('#transportation_date').val('');
+        //$('#dt_optradio_1').prop('checked', true);
+        //$('#dt_optradio_2').prop('checked', false);
+        //$('#airport_cb_i').prop('checked', true);
+        //$('#airport_cb_o').prop('checked', false);
+        //$('#InputFileTransportation').val('');
+        //$('#pickup_input').val('');
+        //$('#datetime_input').val('');
+        //$('#dropoff_input').val('');
+        //$('#2ndpickup_input').val('');
+        //$('#2nddatetime_input').val('');
+        //$('#2nddropoff_input').val('');
+        //$('#transportation_details').val('');
+        //var selected = $("#transportation_type option:selected").val();
 
+        //if (selected === "Daily Transfer") {
+        //    $('.daily_transfer').css('display', 'inline-block');
+        //    $('.airport_transfer').css('display', 'none');
+        //    //$('#airport_cb_i').prop('checked', false);
+        //    //$('#airport_cb_o').prop('checked', false);
+
+        //} else if (selected === "Airport Transfer") {
+        //    $('.airport_transfer').css('display', 'inline-block');
+        //    $('.daily_transfer').css('display', 'none');
+        //    //$('input[name=dt_optradio]').prop('checked', false);
+
+        //    $('.one_trip_details').css('display', 'none');
+        //    $('.two_trip_details').css('display', 'none');
+        //}
+
+        var selected = $("#transportation_type option:selected").val();
         if (selected === "Daily Transfer") {
             $('.daily_transfer').css('display', 'inline-block');
             $('.airport_transfer').css('display', 'none');
-            //$('#airport_cb_i').prop('checked', false);
-            //$('#airport_cb_o').prop('checked', false);
+
+            $('#airport_cb_i').prop('checked', true);
+            $('#airport_cb_o').prop('checked', false);
+
+            $('.one_trip_details').css('display', 'block');
+            //$('#dt_optradio_1]').prop('checked', true);
+            $('#inbound_date').parent().css('display', 'none');
+            $('#daily_transfer_table').css('display', 'block');
+
+            $('#output').val("");
+            $('#InputFile').val("");
 
         } else if (selected === "Airport Transfer") {
             $('.airport_transfer').css('display', 'inline-block');
             $('.daily_transfer').css('display', 'none');
-            //$('input[name=dt_optradio]').prop('checked', false);
+
+            $('#inbound_date').parent().css('display', 'inline-block');
+            $('#daily_transfer_table').css('display', 'none');
 
             $('.one_trip_details').css('display', 'none');
             $('.two_trip_details').css('display', 'none');
         }
+
     });
 
+    //$(document).on('click', 'input[name=dt_optradio]', function () {
+    //    var selected = $('input[name=dt_optradio]:checked').val();
+
+    //    if (selected === "1") {
+    //        $('.one_trip_details').css('display', 'inline-block');
+    //        $('.two_trip_details').css('display', 'none');
+
+    //        $('#2ndpickup_input').val('');
+    //        $('#2nddatetime_input').val('');
+    //        $('#2nddropoff_input').val('');
+
+    //    } else if (selected === "2") {
+    //        $('.one_trip_details').css('display', 'inline-block');
+    //        $('.two_trip_details').css('display', 'inline-block');
+    //    }
+
+    //});
     $(document).on('click', 'input[name=dt_optradio]', function () {
         var selected = $('input[name=dt_optradio]:checked').val();
 
         if (selected === "1") {
             $('.one_trip_details').css('display', 'inline-block');
             $('.two_trip_details').css('display', 'none');
-
-            $('#2ndpickup_input').val('');
-            $('#2nddatetime_input').val('');
-            $('#2nddropoff_input').val('');
-
         } else if (selected === "2") {
             $('.one_trip_details').css('display', 'inline-block');
             $('.two_trip_details').css('display', 'inline-block');
@@ -230,6 +326,77 @@
 
     });
 
+    $(document).on('change', '#airport_cb_i', function () {
+        $('#transportation_date').val('');
+        if ($('#airport_cb_i').is(':checked')) {
+            $('#transportation_date').prop('disabled', false);
+        } else {
+            $('#transportation_date').prop('disabled', true);
+
+        }
+    });
+
+    $(document).on('change', '#airport_cb_o', function () {
+        $('#transportation_date_outbound').val('');
+        if ($('#airport_cb_o').is(':checked')) {
+            $('#transportation_date_outbound').prop('disabled', false);
+        } else {
+            $('#transportation_date_outbound').prop('disabled', true);
+
+        }
+    });
+
+    $(document).on('click', '#add_daily_transfer', function () {
+        let type = $('input[name=dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";
+        let pickup = $('#pickup_input').val();
+        let dropoff = $('#dropoff_input').val();
+        let pickup_date = $('#pick_up_date').val();
+        let pickup_time = $('#pick_up_time').val();
+        let pickup_2 = "";
+        let dropoff_2 = "";
+        let pickup_date_2 = "";
+        let pickup_time_2 = "";
+
+        let entry = [];
+
+        if (pickup == '' || dropoff == '' || pickup_date == '' || pickup_time == '') {
+
+            generateWarningModal("transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking 'Add to table'");
+            return false;
+        }
+
+        if ($('#2ndpickup_input').is(':visible') === true) {
+            pickup_2 = $('#2ndpickup_input').val();
+            dropoff_2 = $('#2nddropoff_input').val();
+            pickup_date_2 = $('#pick_up_date_2').val();
+            pickup_time_2 = $('#pick_up_time_2').val();
+
+            if (pickup_2 == '' || dropoff_2 == '' || pickup_date_2 == '' || pickup_time_2 == '') {
+
+                generateWarningModal("transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking 'Add to table'");
+                return false;
+            }
+        }
+
+        let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+
+        $('#daily_transfer_table div table tbody').append(details);
+
+        entry[0] = type;
+        entry[1] = pickup;
+        entry[2] = dropoff;
+        entry[3] = pickup_date + " " + pickup_time;
+        entry[4] = pickup_2;
+        entry[5] = dropoff_2;
+        entry[6] = pickup_2 != '' ? pickup_date_2 + " " + pickup_time_2 : "";
+        entry[7] = dailyTransferCounter;
+
+        dailyTransferDetails.push(entry);
+
+        dailyTransferCounter++;
+
+    });
 
     //*****************************Clear Fields*********************************
     $(document).on('click', '#clear_in_house_booking', function () {
@@ -253,10 +420,10 @@
         $('#transportation_type').val('');
         $('#transportation_vehicle').val('');
         $('#transportation_date').val('');
-        $('#dt_optradio_1').prop('checked', false);
-        $('#dt_optradio_2').prop('checked', false);
-        $('#airport_cb_i').prop('checked', false);
-        $('#airport_cb_o').prop('checked', false);
+        //$('#dt_optradio_1').prop('checked', false);
+        //$('#dt_optradio_2').prop('checked', false);
+        //$('#airport_cb_i').prop('checked', false);
+        //$('#airport_cb_o').prop('checked', false);
         $('#InputFileTransportation').val('');
         $('#outputTransportation').val('');
         $('#pickup_input').val('');
@@ -266,6 +433,8 @@
         $('#2nddatetime_input').val('');
         $('#2nddropoff_input').val('');
         $('#transportation_details').val('');
+        dailyTransferDetails = [];
+        $('#daily_transfer_table div table tbody').html('');
     }
 
     $(document).on('click', '#clear_meals_arrangement', function () {
@@ -1137,88 +1306,186 @@
     });
 
     //====================================================Transportation========================================================================
+    var saveTransportationParameter = [];
+    var saveTranspoDetails = "";
+    var saveDate = "";
+    var saveNotes = "";
+
+    var saveDailyTransportationParameter = [];
+    var dailyTransferDetails = [];
 
     $(document).on('click', '#submit_transportation', function () {
 
         let mnno = mnnoAfterRegistration;
         let rank = position;
-        let lastName = $('#LastName').val();
-        let firstName = $('#FirstName').val();
+        let name = $('#LastName').val() + ", " + $('#FirstName').val();
+        let type = $('#transportation_type option:selected').val();
+        let vehicle = $('#transportation_vehicle').val();
+        let notes = $('#transportation_details').val();
 
-        t_transportation_type = $('#transportation_type').val();
-        t_transportation_vehicle = $('#transportation_vehicle').val();
-        t_transportation_date = $('#transportation_date').val();
-        t_dt_optradio_1 = $('#dt_optradio_1').is(':checked');
-        t_dt_optradio_2 = $('#dt_optradio_2').is(':checked');
-        t_airport_cb_i = $('#airport_cb_i').is(':checked');
-        t_airport_cb_o = $('#airport_cb_o').is(':checked');
-        t_InputFileTransportation = $('#InputFileTransportation').val();
-        t_pickup_input = $('#pickup_input').val();
-        t_datetime_input = $('#datetime_input').val();
-        t_dropoff_input = $('#dropoff_input').val();
-        t_2ndpickup_input = $('#2ndpickup_input').val();
-        t_2nddatetime_input = $('#2nddatetime_input').val();
-        t_2nddropoff_input = $('#2nddropoff_input').val();
-        t_transpotation_details = $('#transportation_details').val();
-        t_outputTransportation = $('#outputTransportation').val();
+        if ($('#transportation_type').val() == "Airport Transfer") {
 
-        let splitString = $('#InputFileTransportation').val().split("\\");
-        let fileName = splitString[splitString.length - 1];
-        let fileNameSplit = fileName.split(".");
-        let fileExtension = fileNameSplit[fileNameSplit.length - 1];
+            let inboundDate = $('#transportation_date').val();
+            let outboundDate = $('#transportation_date_outbound').val();
+            let file = $('#output').val();
+            let splitString = $('#InputFile').val().split("\\");
+            let fileName = splitString[splitString.length - 1];
+            let fileNameSplit = fileName.split(".");
+            let fileExtension = fileNameSplit[fileNameSplit.length - 1];
+            let inbound = $('#airport_cb_i').is(':checked');
+            let outbound = $('#airport_cb_o').is(':checked');
 
-        let parameters = [mnno, rank, firstName, lastName, t_transportation_type, t_transportation_vehicle, t_transportation_date, t_dt_optradio_1, t_dt_optradio_2, t_airport_cb_i, t_airport_cb_o, t_pickup_input, t_outputTransportation,
-            t_datetime_input, t_dropoff_input, t_2ndpickup_input, t_2nddatetime_input, t_2nddropoff_input, t_transpotation_details, fileExtension]
+            saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
 
-        if (t_transportation_type === '') {
-            generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-            return false;
-
-        } if (t_transportation_type == "Airport Transfer") {
-            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_airport_cb_i == false && t_airport_cb_o == false) ||
-                t_InputFileTransportation == '' || t_transpotation_details == '') {
-                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+            if (file === "") {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
                 return false;
             }
-        } else if (t_transportation_type == "Daily Transfer") {
-            if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_dt_optradio_1 == false && t_dt_optradio_2 == false)) {
-                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+
+            if (inbound == false && outbound == false) {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
                 return false;
-            } else if (t_dt_optradio_1 == true) {
-                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '') {
-                    generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
-                    return false;
-                }
-            } else if (t_dt_optradio_2 == true) {
-                if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '' || t_2ndpickup_input == '' || t_2nddatetime_input == '' ||
-                    t_2nddropoff_input == '' || t_transpotation_details == '') {
-                    generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+            }
+
+            if (inbound == true) {
+                if ($('#transportation_date').val().trim() == "") {
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
                     return false;
                 }
             }
+
+            if (outbound == true) {
+                if ($('#transportation_date_outbound').val().trim() == "") {
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                    return false;
+                }
+            }
+
+            generateWarningModal("save_transportation_warning", 1, "save_airport_transportation_warning_yes", "Are you sure you want to submit?");
+
+        } else if ($('#transportation_type').val() == "Daily Transfer") {
+            if (dailyTransferDetails.length == 0) {
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure to add details before clicking submit...");
+                return false;
+            }
+
+            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails)]
+
+            generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
+
         }
 
+    });
+
+
+    $(document).on('click', '#save_daily_transportation_warning_yes', function () {
         $.ajax({
-            url: '/SAMPortal/Forms/SaveTransportation',
-            type: 'post',
-            dataType: 'json',
-            beforeSend: function () {
-                $.blockUI({ message: null });
-            },
-            data: { parameters: parameters },
+            url: '/SAMPortal/Forms/SaveDailyTransportation',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { parameters: saveDailyTransportationParameter },
             success: function (result) {
-                $.unblockUI();
-                if (result.data === 1) {
-                    generateSuccessModal("transportation_accommodation_success", 2, "", "Request sent successfully!")
-
+                if (result.data == 1) {
+                    generateSuccessModal("save_daily_transfer_modal", 2, "", "Daily Transportation request successfully submitted!");
                 } else {
-                    generateDangerModal("transportation_accommodation_danger", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-
+                    generateDangerModal("save_daily_transfer_danger", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
                 }
             }
         });
+    });
+
+
+    $(document).on('click', '#transportation_warning_yes', function () {
+
+        let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
+
+        //code below is ES6 so beware...
+        dailyTransferDetails = dailyTransferDetails.filter(item => item[7] != id);
+
+        dailyTransferEntryToRemove.remove();
 
     });
+    //$(document).on('click', '#submit_transportation', function () {
+
+    //    let mnno = mnnoAfterRegistration;
+    //    let rank = position;
+    //    let lastName = $('#LastName').val();
+    //    let firstName = $('#FirstName').val();
+
+    //    t_transportation_type = $('#transportation_type').val();
+    //    t_transportation_vehicle = $('#transportation_vehicle').val();
+    //    t_transportation_date = $('#transportation_date').val();
+    //    t_dt_optradio_1 = $('#dt_optradio_1').is(':checked');
+    //    t_dt_optradio_2 = $('#dt_optradio_2').is(':checked');
+    //    t_airport_cb_i = $('#airport_cb_i').is(':checked');
+    //    t_airport_cb_o = $('#airport_cb_o').is(':checked');
+    //    t_InputFileTransportation = $('#InputFileTransportation').val();
+    //    t_pickup_input = $('#pickup_input').val();
+    //    t_datetime_input = $('#datetime_input').val();
+    //    t_dropoff_input = $('#dropoff_input').val();
+    //    t_2ndpickup_input = $('#2ndpickup_input').val();
+    //    t_2nddatetime_input = $('#2nddatetime_input').val();
+    //    t_2nddropoff_input = $('#2nddropoff_input').val();
+    //    t_transpotation_details = $('#transportation_details').val();
+    //    t_outputTransportation = $('#outputTransportation').val();
+
+    //    let splitString = $('#InputFileTransportation').val().split("\\");
+    //    let fileName = splitString[splitString.length - 1];
+    //    let fileNameSplit = fileName.split(".");
+    //    let fileExtension = fileNameSplit[fileNameSplit.length - 1];
+
+    //    let parameters = [mnno, rank, firstName, lastName, t_transportation_type, t_transportation_vehicle, t_transportation_date, t_dt_optradio_1, t_dt_optradio_2, t_airport_cb_i, t_airport_cb_o, t_pickup_input, t_outputTransportation,
+    //        t_datetime_input, t_dropoff_input, t_2ndpickup_input, t_2nddatetime_input, t_2nddropoff_input, t_transpotation_details, fileExtension]
+
+    //    if (t_transportation_type === '') {
+    //        generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //        return false;
+
+    //    } if (t_transportation_type == "Airport Transfer") {
+    //        if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_airport_cb_i == false && t_airport_cb_o == false) ||
+    //            t_InputFileTransportation == '' || t_transpotation_details == '') {
+    //            generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //            return false;
+    //        }
+    //    } else if (t_transportation_type == "Daily Transfer") {
+    //        if (t_transportation_type == '' || t_transportation_vehicle == '' || t_transportation_date == '' || (t_dt_optradio_1 == false && t_dt_optradio_2 == false)) {
+    //            generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //            return false;
+    //        } else if (t_dt_optradio_1 == true) {
+    //            if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '') {
+    //                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                return false;
+    //            }
+    //        } else if (t_dt_optradio_2 == true) {
+    //            if (t_pickup_input == '' || t_datetime_input == '' || t_dropoff_input == '' || t_2ndpickup_input == '' || t_2nddatetime_input == '' ||
+    //                t_2nddropoff_input == '' || t_transpotation_details == '') {
+    //                generateWarningModal("transportation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a transportation...");
+    //                return false;
+    //            }
+    //        }
+    //    }
+
+    //    $.ajax({
+    //        url: '/SAMPortal/Forms/SaveTransportation',
+    //        type: 'post',
+    //        dataType: 'json',
+    //        beforeSend: function () {
+    //            $.blockUI({ message: null });
+    //        },
+    //        data: { parameters: parameters },
+    //        success: function (result) {
+    //            $.unblockUI();
+    //            if (result.data === 1) {
+    //                generateSuccessModal("transportation_accommodation_success", 2, "", "Request sent successfully!")
+
+    //            } else {
+    //                generateDangerModal("transportation_accommodation_danger", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+
+    //            }
+    //        }
+    //    });
+
+    //});
 
     //====================================================Meal Arrangement=======================================================================
 
