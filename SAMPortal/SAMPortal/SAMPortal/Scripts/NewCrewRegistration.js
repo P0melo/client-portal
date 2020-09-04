@@ -46,27 +46,27 @@
     $('#pick_up_time_2').timepicker({ interval: '15' }).val('08:00 AM');
 
     $('#datepicker').prev().click(function () {
-        $('#datepicker').datepicker("show");
+        $(this).next().focus();
     });
 
     $('#accomodation_date').prev().click(function () {
-        $('#accomodation_date').datepicker("show");
+        $(this).next().focus();
     });
 
     $('#off_site_date').prev().click(function () {
-        $('#off_site_date').datepicker("show");
+        $(this).next().focus();
     });
 
     $('#transportation_date').prev().click(function () {
-        $('#transportation_date').datepicker("show");
+        $(this).next().focus();
     });
 
     $('#transportation_date_outbound').prev().click(function () {
-        $('#transportation_date_outbound').datepicker("show");
+        $(this).next().focus();
     });
 
     $('#meal_reservation').prev().click(function () {
-        $('#meal_reservation').daterangepicker("show.daterangepicker");
+        $(this).next().focus();
     });
     
     $("#update_rank_modal #position_update").select2({ theme: "bootstrap", placeholder: "Select Rank", width: "auto" });

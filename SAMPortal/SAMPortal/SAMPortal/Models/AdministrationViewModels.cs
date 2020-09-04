@@ -45,6 +45,7 @@ namespace SAMPortal.Models
         public DateTime CheckOutDate { get; set; }
         public int ModeOfPayment { get; set; }
         public string ReasonOfStay { get; set; }
+        public string BookerRemarks { get; set; }
 
         public String[] ToArray()
         {

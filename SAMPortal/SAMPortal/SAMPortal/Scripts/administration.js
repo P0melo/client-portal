@@ -100,7 +100,7 @@
                         var room = result[i].RoomType === 1 ? "Single (Deluxe Room)" : "Double (Deluxe Room)";
 
                         content += "<tr><td><a id='" + result[i].Id + "'>" + result[i].MNNO + "</a></td><td>" + result[i].Rank + "</td><td>" + name + "</td><td>" + result[i].HotelName + "</td><td>" + room + "</td>" +
-                            "<td>" + (result[i].CheckInDate.split('T')[0]) + "</td><td>" + (result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td></tr>";
+                            "<td>" + (result[i].CheckInDate.split('T')[0]) + "</td><td>" + (result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
                     }
                 } else {
                     if (offSiteAccommodationTable !== "") {
@@ -680,6 +680,8 @@
                     //$('#modal_success').modal();
                     generateSuccessModal("approve_special_schedule", 2, "", "The REQUEST has been successfully APPROVED!");
 
+                } else if (result.status == "Error") {
+                    generateDangerModal("save_new_crew_error_modal", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to IT Department for investigation.");
                 }
             }
         });

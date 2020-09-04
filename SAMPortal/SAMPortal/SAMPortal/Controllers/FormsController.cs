@@ -356,7 +356,7 @@ namespace SAMPortal.Controllers
                     logging.Log(user, "KeySequenceChange", data3);
 
                     //For Email Notif
-                    //sendEmail.Send(User.Identity, (int)Enum.Requests.NewCrewRequest, "");
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.NewCrewRequest, "");
 
                     //flag = 1;
                 }
@@ -620,7 +620,7 @@ namespace SAMPortal.Controllers
                     flag = 1;
 
                     //For Email Notif
-                    //sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
 
                 }
                 catch (Exception e)

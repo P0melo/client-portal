@@ -509,7 +509,7 @@ namespace SAMPortal.Controllers
             var jsonStatus = (int)Status.Initialize;
 
             var user = User.Identity.Name;
-
+            var flag = 0;
             if (ModelState.IsValid)
             {
                 try
@@ -523,26 +523,24 @@ namespace SAMPortal.Controllers
                     logging.Log(user, "ApproveSpecialSchedule", data);
 
                     //send notification to client
-                    var requestDetail = _cadetContext.Database.SqlQuery<SpecialCourseRequest>("SELECT CourseName, StartDate, NumberOfParticipants, Notes, DateRequested FROM tblspecialcourserequests WHERE Id = " + recordId).FirstOrDefault();
+                    var requestDetail = _cadetContext.Database.SqlQuery<SpecialCourseRequest>("SELECT CourseName, StartDate, NumberOfParticipants, Notes, DateRequested, RequestedBy FROM tblspecialcourserequests WHERE Id = " + recordId).FirstOrDefault();
                     var formatStartDate = requestDetail.StartDate.ToString("MM/dd/yyyy");
                     var formatDateRequested = requestDetail.DateRequested.ToString("MM/dd/yyyy");
                     string[] parameters = { requestDetail.CourseName, formatStartDate, requestDetail.NumberOfParticipants.ToString(), requestDetail.Notes, formatDateRequested, requestDetail.RequestedBy };
                     mail.SendNotificationToClient(requestDetail.RequestedBy, (int)Requests.SpecialScheduleRequest, parameters, (int)ApprovalStatus.Aprroved);
 
                     jsonStatus = (int)Status.Success;
+                    flag = 1;
                 }
                 catch (Exception e)
                 {
-                    var exception = Json(new { data = e.Message },
-                  JsonRequestBehavior.AllowGet);
-
-                    return exception;
+                    flag = logging.LogError(user, "ApproveSpecialSchedule", e);
                 }
 
             }
 
-            var jsonResult = Json(new { data = jsonStatus },
-                  JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { data = flag },
+                JsonRequestBehavior.AllowGet);
 
             return jsonResult;
         }
