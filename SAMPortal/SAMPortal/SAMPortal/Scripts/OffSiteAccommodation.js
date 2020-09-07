@@ -11,6 +11,10 @@
 
     $('#off_site_date').daterangepicker();
 
+    $('#off_site_date').prev().click(function () {
+        $(this).next().focus();
+    });
+
     //=== set breadcrumbs
     $('.content-header h1').html("Off-Site Accommodation");
     $('.content-header ol #home_lnk').html('<a href="/SAMPortal/"><i class="fa fa-home"></i> Home</a>');
@@ -38,9 +42,10 @@
         var remarks = $('#off_site_remarks_input').val();
 
         if (mnno === "" || rank === "" || date === "" || remarks.trim() === "") {
-            $('#off_site_err_msg').css('display', 'block');
+            //$('#off_site_err_msg').css('display', 'block');
+            generateWarningModal('off_site_accommodation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
         } else {
-            $('#off_site_err_msg').css('display', 'none');
+            //$('#off_site_err_msg').css('display', 'none');
 
             $('#modal_offSiteAccommodation_submit .modal-body p').html("Are you sure you want to submit?");
             $('#modal_offSiteAccommodation_submit').modal();

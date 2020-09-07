@@ -162,7 +162,7 @@
                 for (var i = 0; i < result.length; i++) {
                     content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + (result[i].LastName + ", " + result[i].FirstName) + "</td><td>" + result[i].HotelName + "</td>" +
                         "<td>" + (result[i].RoomType == 1 ? "Single (deluxe room)" : "Double (deluxe room)") + "</td><td>" + result[i].CheckInDate.split('T')[0] + "</td><td>" + result[i].CheckOutDate.split('T')[0] + "</td>" +
-                        "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].ReservationBy + "</td><td>" + result[i].Status + "</td><td>" + result[i].Remarks + "</td></tr>";
+                        "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].ReservationBy + "</td><td>" + result[i].Status + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
                 }
 
                 $('#off_site_accommodation_requests_tbl tbody').html(content);

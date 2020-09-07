@@ -118,6 +118,7 @@ namespace SAMPortal.Models
         public int ModeOfPayment { get; set; }
         public string ReservationBy { get; set; }
         public string Status { get; set; }
+        public string BookerRemarks { get; set; }
     }
 
     public class OnSiteAccommodationRequests

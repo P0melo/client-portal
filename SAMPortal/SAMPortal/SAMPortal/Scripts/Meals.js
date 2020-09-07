@@ -12,6 +12,10 @@
     }
     $('#meal_reservation').daterangepicker();
 
+    $('#meal_reservation').prev().click(function () {
+        $(this).next().focus();
+    });
+
     //===set breadcrumbs
     $('.content-header h1').html("Meals");
     $('.content-header ol #home_lnk').html('<a href="/SAMPortal/"><i class="fa fa-home"></i> Home</a>');
@@ -161,7 +165,8 @@
             $('.modal-warning').modal();
         } else {
             if (mnno === "" || rank === "" || name === "" || reason.trim() === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
-                $('#meal_err_msg').css('display', 'block');
+                //$('#meal_err_msg').css('display', 'block');
+                generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
             } else {
                 $('#meal_err_msg').css('display', 'none');
                 saveMealProvistionParameter = [mnno, rank, name, date, reason, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];

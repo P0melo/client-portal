@@ -119,7 +119,7 @@ namespace SAMPortal.Controllers.Api
             var company = GetCompany();
 
             var data = _context.Database.SqlQuery<OffSiteAccommodationRequests>("SELECT Mnno, `Rank`, FirstName, LastName, HotelName, RoomType, CheckInDate" + 
-                                                                            ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company",
+                                                                            ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status, BookerRemarks FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company",
                                                                             new MySqlParameter("@company", company)).ToList();
 
             return Ok(data);

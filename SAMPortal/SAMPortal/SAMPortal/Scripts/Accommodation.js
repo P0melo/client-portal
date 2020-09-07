@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     var date = new Date();
     $('.custom_treeview-menu').find('span').css('color', '#b8c7ce');
     $('#accommodation_lnk').find('span').css('color', 'white');
@@ -13,6 +14,10 @@
     $('.content-header ol #current_page').html("Accommodation");
     //===
     $('#accomodation_date').daterangepicker();
+
+    $('#accomodation_date').prev().click(function () {
+        $(this).next().focus();
+    });
 
     $(document).on('click', '#accommodation_search_btn', function () {
         var mnno = $('#mnno_input').val();
@@ -81,7 +86,8 @@
         var remarks = $('#accomodation_remarks_input').val();
 
         if (mnno === "" || rank === "" || name === "" || remarks.trim() === "") {
-            $('#accomodation_err_msg').css('display', 'block');
+            //$('#accomodation_err_msg').css('display', 'block');
+            generateWarningModal('on_site_accommodation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
         } else {
 
             $('#modal_warning_accommodation_submit .modal-body p').html("Are you sure you want to submit?");

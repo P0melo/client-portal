@@ -33,6 +33,14 @@
     $('#transportation_date').datepicker();
     $('#transportation_date_outbound').datepicker();
 
+    $('#transportation_date').prev().click(function () {
+        $(this).next().focus();
+    });
+
+    $('#transportation_date_outbound').prev().click(function () {
+        $(this).next().focus();
+    });
+
     var dailyTransferDate = new Date();
 
     var dailyTransferDateMonth = dailyTransferDate.getMonth() + 1;

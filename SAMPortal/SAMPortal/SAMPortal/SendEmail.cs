@@ -180,7 +180,7 @@ namespace SAMPortal
             if (request == (int)Requests.NewCrewRequest)
             {
                 string rank = parameters[0];
-                string recordId = parameters[7];
+                //string recordId = parameters[7];
                 string lastName = parameters[1];
                 string firstName = parameters[2];
                 string middleInitial = parameters[3];

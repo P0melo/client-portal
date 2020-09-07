@@ -37,7 +37,7 @@
                 <input id="name_input" type="text" class="form-control" disabled />
             </div>
         </div>
-        <div class="col-sm-6 form-group" style="padding-left: 0px; padding-right: 0px;">
+        <div class="col-sm-6 form-group pull-right" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
                 <label for="meal_provision" class="control-label">Date</label>
                 <div class="input-group">
@@ -49,7 +49,8 @@
             </div>
             <!-- /.input group -->
         </div>
-        <div class="form-group col-xs-12 col-lg-6">
+        <div class="form-group col-xs-12 col-lg-6 pull-right">
+            <label for="meal" class="control-label">Meal<span class="mandatory">*</span></label>
             <div class="col-xs-12 checkbox">
                 <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
                     <input id="breakfast_cb" type="checkbox" style="margin-top: 0px;">
@@ -79,9 +80,9 @@
             </div>
 
         </div>
-            <div class="form-group col-xs-6" style="padding-left: 0px; padding-right: 0px;">
+            <div class="form-group col-xs-12 pull-right" style="padding-left: 0px; padding-right: 0px;">
                 <div class="col-xs-12">
-                    <label for="mnno" class="control-label">Remarks</label>
+                    <label for="remarks" class="control-label">Remarks<span class="mandatory">*</span></label>
                     <textarea id="reason_input" class="form-control" placeholder="Required" style="resize: none" maxlength="250"></textarea>
                     @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
                 </div>
