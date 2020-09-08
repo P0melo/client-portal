@@ -18,12 +18,12 @@ function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) 
 }
 
 //footerType: 1 = 'Yes' and 'No', 2 = 'Ok'
-function generateSuccessModal(modalId, footerType, modalButtonId, modalMessage) {
+function generateSuccessModal(modalId, footerType, modalButtonId, modalMessage, modalButtonNoId) {
     $('.modal_success_template').attr('id', modalId);
     $('.modal_success_template .modal-content .modal-body p').html(modalMessage);
 
     if (footerType === 1) {
-        $('.modal_success_template .modal-content .modal-footer').html('<button type="button" id="' + modalButtonId + '" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button><button type="button" class="btn btn-outline pull-right" data-dismiss="modal"> No</button>');
+        $('.modal_success_template .modal-content .modal-footer').html('<button type="button" id="' + modalButtonId + '" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button><button type="button" id="' + modalButtonNoId + '" class="btn btn-outline pull-right" data-dismiss="modal"> No</button>');
         $('#' + modalId).modal();
 
     } else if (footerType === 2) {
@@ -411,6 +411,11 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
         }
     });
 });
+var myEnrolledCrewTable = "";
+var enrollThisCrewParameters = [];
+
+var crewNameToBeEnrolled = "";
+var crewNameToBeEnrolledContact = "";
 
 function enrollThisCrew(parameters) {
     $.ajax({

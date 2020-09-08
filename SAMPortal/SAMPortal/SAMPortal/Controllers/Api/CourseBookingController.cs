@@ -170,10 +170,16 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
-
         public IHttpActionResult GetEarliesTimeOfCourse(int schedId)
         {
             var data = _context.Database.SqlQuery<CourseFirstDateTime>("SELECT SchedDate, TimeFrom FROM tbltraining_attendees WHERE schedid = '" + schedId + "' ORDER BY SchedDate ASC, TimeFrom ASC LIMIT 1").FirstOrDefault();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetNumberOfAllEnrollees(int schedId)
+        {
+            var data = _context.Database.SqlQuery<int>("select count(*) AS Count from tblscheddata sd join tblcrew c on sd.MNNo = c.MNNo where SchedID = @schedId", new MySqlParameter("@schedId", schedId)).FirstOrDefault();
 
             return Ok(data);
         }

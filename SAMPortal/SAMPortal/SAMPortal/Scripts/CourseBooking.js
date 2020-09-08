@@ -173,7 +173,6 @@
     });
 
     var myEnrollmentTable = "";
-    var myEnrolledCrewTable = "";
     $(document).on('click', '#enroll_crew', function () {
         totalEnrollees = [];
         courseStartDate = "";
@@ -296,65 +295,76 @@
         });
 
     });
-
-    var enrollThisCrewParameters = [];
-    var crewNameToBeEnrolled = "";
-    var crewNameToBeEnrolledContact = "";
-
     var enrollees;
     var maxEnrolless;
 
 
     $(document).on('click', '#enroll_this_crew', function () {
 
-        enrollees = parseInt(totalEnrollees[0]);
-        maxEnrolless = parseInt(totalEnrollees[1]);
+        let title = $('#enroll_modal .modal-title').html();
+        let schedId = title.split('-')[0].split(' ')[2];
+        let mnno = $(this).parent().parent().attr('id');
+        let rank = $(this).parent().prev().prev().prev().html();
+        crewNameToBeEnrolled = $(this).parent().prev().prev().html();
+        crewNameToBeEnrolledContact = $(this).parent().prev().html();
 
-        var startDate = new Date(courseStartDate);
-        var d = new Date();
+        $.ajax({
+            url: '/SAMPortal/api/CourseBooking/GetNumberOfAllEnrollees',
+            dataType: 'JSON',
+            type: 'GET',
+            data: { schedId: schedId},
+            success: function (result) {
 
-        //var dateDiff = Math.abs(d.getTime() - d.getTime());
+                enrollees = result
+                maxEnrolless = parseInt(totalEnrollees[1]);
 
-        //var timeDiff = Math.abs(startDate.getTime() - d.getTime());
-        //var daysBeforeStart = (Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1);
+                var startDate = new Date(courseStartDate);
+                var d = new Date();
 
-        if (d.getTime() >= startDate.getTime()) {
-            $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course is finished or has already started.");
-            $('#enroll_this_crew_not_allowed').modal();
-            return false;
-        }
-        //(daysBeforeStart + 1) <= 7
-        if ((getWeekNumber(startDate) - getWeekNumber(d)) === 1) {
-            //$('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start in " + (daysBeforeStart + 1) + " day/s.");
-            $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start next week.");
-            $('#enroll_this_crew_not_allowed').modal();
-            return false;
-        }
+                //var dateDiff = Math.abs(d.getTime() - d.getTime());
 
-        if (enrollees >= maxEnrolless) {
-            $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course has already reached the maximum enrollees.");
-            $('#enroll_this_crew_not_allowed').modal();
-            return false;
-        }
+                //var timeDiff = Math.abs(startDate.getTime() - d.getTime());
+                //var daysBeforeStart = (Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1);
 
-        var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
-        var mnno = $(this).parent().parent().attr('id');
-        var rank = $(this).parent().prev().prev().prev().html();
+                if (d.getTime() >= startDate.getTime()) {
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course is finished or has already started.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
+                //(daysBeforeStart + 1) <= 7
+                if ((getWeekNumber(startDate) - getWeekNumber(d)) === 1) {
+                    //$('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start in " + (daysBeforeStart + 1) + " day/s.");
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start next week.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
 
-        var parameters = [];
-        parameters[0] = schedId;
-        parameters[1] = mnno;
-        parameters[2] = rank;
-        //parameters[3] = name;
+                if (enrollees >= maxEnrolless) {
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course has already reached the maximum enrollees.");
+                    $('#enroll_this_crew_not_allowed').modal();
+                    return false;
+                }
 
-        enrollThisCrewParameters = parameters;
-        //enrollThisCrew(enrollThisCrewParameters);
-        $('#enroll_this_crew_warning .modal-body p').html('Are you sure you want to enroll this crew?');
-        $('#enroll_this_crew_warning').modal();
+                //let schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
+
+                let parameters = [];
+                parameters[0] = schedId;
+                parameters[1] = mnno;
+                parameters[2] = rank;
+                //parameters[3] = name;
+
+                enrollThisCrewParameters = parameters;
+                //enrollThisCrew(enrollThisCrewParameters);
+                $('#enroll_this_crew_warning .modal-body p').html('Are you sure you want to enroll this crew?');
+                $('#enroll_this_crew_warning').modal();
+            }
+        });
+
+        
     });
 
     $(document).on('click', '#enroll_this_crew_warning_yes', function () {
-        totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
+        //totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
         enrollThisCrew(enrollThisCrewParameters);
     });
 

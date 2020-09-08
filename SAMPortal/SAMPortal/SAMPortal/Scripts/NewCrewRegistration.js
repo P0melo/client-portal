@@ -41,8 +41,19 @@
         (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + date.getFullYear();
 
     $('#pick_up_date').datepicker().val(dailyTransferDateOutput);
+
+    $('#pick_up_date').prev().click(function () {
+        $(this).next().focus();
+    });
+
     $('#pick_up_date_2').datepicker().val(dailyTransferDateOutput);
+
+    $('#pick_up_date_2').prev().click(function () {
+        $(this).next().focus();
+    });
+
     $('#pick_up_time').timepicker({ interval: '15' }).val('08:00 AM');
+
     $('#pick_up_time_2').timepicker({ interval: '15' }).val('08:00 AM');
 
     $('#datepicker').prev().click(function () {
@@ -67,6 +78,10 @@
 
     $('#meal_reservation').prev().click(function () {
         $(this).next().focus();
+    });
+
+    $(document).on('click', '#modal_success_new_crew_registration_no', function () {
+        window.location.reload();
     });
     
     $("#update_rank_modal #position_update").select2({ theme: "bootstrap", placeholder: "Select Rank", width: "auto" });
@@ -758,7 +773,7 @@
                     mnnoAfterRegistration = "Temp" + result.tempId;
                     //$('#modal-success .modal-body p').html("New Crew Request Sent!<br/><br/>Would you like to enroll the newly registered crew or book him/her to our other services?");
                     //$('#modal-success').modal();
-                    generateSuccessModal("modal_success_new_crew_registration", 1, "modal_success_new_crew_registration_yes", "New Crew Request Sent!<br/><br/>Would you like to enroll the newly registered crew or book him/her to our other services?")
+                    generateSuccessModal("modal_success_new_crew_registration", 1, "modal_success_new_crew_registration_yes", "New Crew Request Sent!<br/><br/>Would you like to enroll the newly registered crew or book him/her to our other services?", "modal_success_new_crew_registration_no")
 
                 } else if (result.status == "Error") {
                     generateDangerModal("save_new_crew_error_modal", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
@@ -1356,7 +1371,7 @@
 
             if (outbound == true) {
                 if ($('#transportation_date_outbound').val().trim() == "") {
-                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking Submit");
                     return false;
                 }
             }
@@ -1373,10 +1388,29 @@
 
             generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
 
+        } else if ($('#transportation_type').val() == "Daily Transfer" || $('#transportation_vehicle').val() == "") {
+            generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking Submit");
         }
 
     });
 
+    $(document).on('click', '#save_airport_transportation_warning_yes', function () {
+
+        $.ajax({
+            url: '/SAMPortal/Forms/SaveAirportTransportation',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { parameters: saveTransportationParameter },
+            success: function (result) {
+                if (result.data == 1) {
+                    generateSuccessModal("save_airport_transfer_modal", 2, "", "Airport Transfer request successfully submitted...");
+                } else {
+                    generateDangerModal("save_airport_transfer_danger", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
+                }
+            }
+        });
+
+    });
 
     $(document).on('click', '#save_daily_transportation_warning_yes', function () {
         $.ajax({
@@ -1483,7 +1517,7 @@
 
     //            }
     //        }
-    //    });
+    //    }); 
 
     //});
 
