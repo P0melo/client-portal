@@ -69,7 +69,7 @@
                         requestStatus = "Denied";
                     }
                     content += "<tr id='" + result[i].Id + "'><td><a id='update_new_crew_request'>" + result[i].MNNO + "</a></td><td>" + result[i].Position + "</td><td><a id='" + result[i].Position + "~" + result[i].LastName + "~" + result[i].FirstName + "~" + result[i].MiddleInitial + "'>" + result[i].LastName + ", " + result[i].FirstName + " " + result[i].MiddleInitial + "</a></td>" +
-                        "<td id='" + result[i].Birthday + "'>" + formatDate(result[i].Birthday) + "</td><td>" + result[i].BirthPlace + "</td>" +
+                        "<td id='" + result[i].Birthday + "'>" + newCrewRequestsFormatDate(result[i].Birthday) + "</td><td>" + result[i].BirthPlace + "</td>" +
                         "<td>" + result[i].EnteredBy + "</td><td>" + requestStatus + "</td></tr> ";
                 }
 
@@ -233,7 +233,7 @@
                 $('#e_name_input').val(e_name);
                 $('#e_reservation_type').val(result.ReservationType);
                 $('#e_room_type').val(result.RoomType);
-                $('#e_accomodation_date').daterangepicker({ startDate: formatDate(result.CheckInDate), endDate: formatDate(result.CheckOutDate) });
+                $('#e_accomodation_date').daterangepicker({ startDate: newCrewRequestsFormatDate(result.CheckInDate), endDate: newCrewRequestsFormatDate(result.CheckOutDate) });
                 $('#e_mode_of_payment').val(result.Payment);
                 $('#e_accomodation_reason').val(result.Reason);
                 $('#e_accomodation_remarks_input').val(result.Remarks);
@@ -298,7 +298,7 @@
         });
     });
 
-    function formatDate(rawDate) {
+    function newCrewRequestsFormatDate(rawDate) {
         var data = rawDate.split('T')[0];
         var dataSplit = data.split('-');
 
