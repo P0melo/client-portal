@@ -194,19 +194,12 @@
 
                 for (var i = 0; i < data.length; i++) {
                     content += '<tr style="' + style + '"><td><a id="detailed_view" name="' + data[i].Id + '">' + data[i].Mnno + '</a></td><td>' + data[i].Rank + '</td><td>' + data[i].LastName + ', ' + data[i].FirstName + '</td><td>' + data[i].Type + '</td>' +
-                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + (data[i].Date.split('T')[0]) + '</td><td>' + result[i].Status + '</td><td style="padding: 1px"><button title="View Attachment" style="width: 100%" id="view_attachment" class="btn btn-default"><i class="fa fa-paperclip"></i></button></td></tr>';
+                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + (data[i].Date.split('T')[0]) + '</td><td>' + result[i].Status + '</td></tr>';
                 }
 
                 $('#transportation_requests_tbl tbody').html(content);
 
-                transportationTable = $('#transportation_requests_tbl').DataTable({
-                    "order": [],
-                    "columnDefs": [{
-                        "targets": [8],
-                        "searchable": false,
-                        "orderable": false
-                    }]
-                });
+                transportationTable = $('#transportation_requests_tbl').DataTable();
 
                 $('#transportation_requests_tbl').css('width', 'inherit');
 

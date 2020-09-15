@@ -151,4 +151,11 @@ namespace SAMPortal.Models
         public string Remarks { get; set; }
 
     }
+
+    public class ServerDate
+    {
+        public string Day { get; set; }
+        public string Month { get; set; }
+        public string Year { get; set; }
+    }
 }

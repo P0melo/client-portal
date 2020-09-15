@@ -193,7 +193,9 @@ namespace SAMPortal.Controllers.Api
 
         public IHttpActionResult GetServerDate()
         {
-            var data = _context.Database.SqlQuery<string>("SELECT CURDATE()").FirstOrDefault();
+            var data = _context.Database.SqlQuery<string>("SELECT DATE_FORMAT(CURDATE(), '%d-%m-%Y')").FirstOrDefault();
+
+
 
             return Ok(data);
         }

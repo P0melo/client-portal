@@ -71,11 +71,12 @@ function verify_btn_validation(firstname, lastname, birthdate, rank, birthplace)
 
 
 function fixServerDateFormat(serverDate) {
-    let parts = serverDate.split('/');
-    let yearDate = parts[2].split(' ');
-    //alert(parts);
+    let parts = serverDate.split('-');
+    //let yearDate = parts[2].split(' ');
     //dd/MM/YYYY
-    return yearDate[0] + "-" + (parts[1].length == 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length == 1 ? "0" + parts[0] : parts[0]) + "T" + yearDate[1];
+    //return yearDate[0] + "-" + (parts[1].length == 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length == 1 ? "0" + parts[0] : parts[0]) + "T" + yearDate[1];
+    //YYYY-MM-ddT00:00:00
+    return parts[2] + "-" + parts[1] + "-" + parts[0] + "T00:00:00";
 }
 
 
@@ -136,7 +137,6 @@ function generateOCourseListTable(result) {
     //course_list_tbl_tbody
     getServerDate().then(function (data) {
         serverDate = data;
-
         if (o_courseTable != "") {
             o_courseTable.destroy();
         }
@@ -232,12 +232,13 @@ function getWeekNumber(myDate) {
 }
 
 function generateIndicator(data, serverDate) {
-    //alert(fixServerDateFormat(serverDate));
+    //alert(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)));
     //alert(data.DateFrom);
-    //alert(getWeekNumber(fixServerDateFormat(serverDate)));
     if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) === 2 && data.Slots < data.MinCapacity) {
+        //alert('orange');
         return "<span id='indicator_orange' class='pull-right'><i style='color: orange; font-size: large' class='fa fa-warning'></i></span>";
     } else if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity) {
+        //alert('red');
         return "<span id='indicator_red' class='pull-right'><i style='color: red; font-size: large'' class='fa fa-ban'></i></span>";
     }
 

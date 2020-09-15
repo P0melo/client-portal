@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\projectfromfileserver\SAMPortal\SAMPortal\SAMPortal\dbidentity.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\markkevin.boy.UMTC\Source\Repos\P0melo\client-portal\SAMPortal\SAMPortal\SAMPortal\dbidentity.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

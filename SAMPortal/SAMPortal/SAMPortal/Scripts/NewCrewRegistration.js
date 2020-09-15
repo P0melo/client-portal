@@ -1273,6 +1273,10 @@
     //====================================================Off-Site Booking========================================================================
 
     $(document).on('click', '#submit_out_house_booking', function () {
+        generateWarningModal("submit_out_house_booking_modal", 1, "submit_out_house_booking_modal_yes", "Are you sure you want to submit?");
+    });
+
+    $(document).on('click', '#submit_out_house_booking_modal_yes', function () {
         let mnno = mnnoAfterRegistration;
         let rank = position;
         let lastName = $('#LastName').val();
@@ -1524,6 +1528,10 @@
     //====================================================Meal Arrangement=======================================================================
 
     $(document).on('click', '#submit_meals_arrangement', function () {
+        generateWarningModal("submit_meals_arrangement_modal", 1, "submit_meals_arrangement_modal_yes", "Are you sure you want to submit?");
+    });
+
+    $(document).on('click', '#submit_meals_arrangement_modal_yes', function () {
         let mnno = mnnoAfterRegistration;
         let rank = position;
         let lastName = $('#LastName').val();
