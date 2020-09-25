@@ -18,12 +18,12 @@
 
                     <div class="col-xs-12 col-sm-6">
                         <label for="first_name" class="control-label">First Name<span class="mandatory">*</span></label>
-                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name", @tabindex = 1 })
                         @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-xs-12 col-sm-6 form-group">
                         <label for="position" class="control-label">Rank<span class="mandatory">*</span></label>
-                        @Html.DropDownListFor(m => m.Position, new SelectList(Model.Ranks, "crewrank", "rankdesc"), "Select Rank", htmlAttributes: new { @class = "form-control", Id = "position" })
+                        @Html.DropDownListFor(m => m.Position, new SelectList(Model.Ranks, "crewrank", "rankdesc"), "Select Rank", htmlAttributes: new { @class = "form-control", Id = "position", @tabindex = 4 })
                     </div>
 
                 </div>
@@ -31,17 +31,17 @@
                 <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;">
                     <div class="col-xs-12 col-sm-6 form-group">
                         <label for="last_name" class="control-label">Last Name<span class="mandatory">*</span></label>
-                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name", @tabindex = 2 })
                     </div>
                     <div class="col-xs-12 col-sm-6 form-group">
                         <label for="birth_place" class="control-label">Birth Place<span class="mandatory">*</span></label>
-                        @Html.TextBoxFor(m => m.BirthPlace, new { @class = "form-control", @placeholder = "Birth Place" })
+                        @Html.TextBoxFor(m => m.BirthPlace, new { @class = "form-control", @placeholder = "Birth Place", @tabindex = 5 })
                     </div>
                 </div>
                 <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;">
                     <div class="col-xs-12 col-sm-6 form-group">
                         <label for="middle_name" class="control-label">Middle Initial</label>
-                        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control", @placeholder = "Middle Initial" })
+                        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control", @placeholder = "Middle Initial", @tabindex = 3 })
                     </div>
                     <div class="col-xs-12 col-sm-6 form-group">
                         <label for="birthday" class="control-label">Birthday<span class="mandatory">*</span></label>
@@ -49,7 +49,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @placeholder = "mm/dd/yyyy", Id = "datepicker" })
+                            @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @placeholder = "dd/mm/yyyy", Id = "datepicker", @tabindex = 6 })
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,8 @@
                     <div class="col-xs-12 form-group" id="check_for_duplicate_div">
                         @*<label for="verify" class="control-label"></label>*@
                         <div class="col-xs-12" style="padding: 0px;">
-                            <input type="button" class="btn btn-default pull-right" id="submit_request_btn" value="Submit" />
+                            <input type="button" class="btn btn-default pull-right" id="submit_request_btn" value="Submit" style="margin-left: 10px;" />
+                            <input type="button" class="btn btn-default pull-right" id="clear_request_btn" value="Clear" />
                         </div>
                     </div>
                     @*<div class="col-xs-12 col-sm-6 form-group" id="submit_new_crew_request_div" hidden>
@@ -174,7 +175,7 @@
                     <span>
                         (
                         <input style="vertical-align: top;" type="radio" id="date_rb_single" name="date_rb" value="single_date" checked>
-                        <label for="o_date_rb" style="font-weight: normal !important;">Single</label>
+                        <label for="o_date_rb" style="font-weight: normal !important;">Per-month</label>
                         &nbsp;
                         <input style="vertical-align: top;" type="radio" id="date_rb_range" name="date_rb" value="multiple_date">
                         <label for="o_date_rb" style="font-weight: normal !important;">Range</label>)
@@ -242,7 +243,7 @@
                     <span>
                         (
                         <input style="vertical-align: top;" type="radio" id="o_date_rb_single" name="o_date_rb" value="o_single_date" checked>
-                        <label for="o_date_rb" style="font-weight: normal !important;">Single</label>
+                        <label for="o_date_rb" style="font-weight: normal !important;">Per-month</label>
                         &nbsp;
                         <input style="vertical-align: top;" type="radio" id="o_date_rb_range" name="o_date_rb" value="o_multiple_date">
                         <label for="o_date_rb" style="font-weight: normal !important;">Range</label>)
@@ -348,7 +349,7 @@
 
                 </div>
                 &nbsp;
-                <p style="padding-top: 5px;" class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
+                <p style="padding-top: 10px; font-size: medium" class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
             </div>
 
             <div class="col-lg-12 form-group" style="padding-left: 0px; padding-right: 0px;">
@@ -383,9 +384,9 @@
             </div>
             <div class="form-group col-lg-12" style="padding-left: 0px; padding-right: 0px;">
                 <div class="col-xs-12">
-                    <label for="accomodation_remarks" class="control-label">Remarks<span class="mandatory">*</span></label>
+                    <label for="accomodation_remarks" class="control-label">Remarks</label>
                     @*<input id="accomodation_remarks_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
-                    <textarea id="accomodation_remarks_input" placeholder="Required" class="form-control" maxlength="250" style="resize: none;"></textarea>
+                    <textarea id="accomodation_remarks_input" class="form-control" maxlength="250" style="resize: none;"></textarea>
                 </div>
             </div>
             <div class="form-group col-sm-12" style="padding-left: 0px; padding-right: 0px;">
@@ -515,11 +516,13 @@
             </div>
 
             <div class="col-xs-12 form-group one_trip_details" style="padding-left: 0px; padding-right: 0px;">
-                <label for="transportation_name" class="col-md-12 control-label">Details</label>
+                <label for="transportation_name" class="col-md-12 control-label">First Pick-up/Drop-off point<span class="mandatory">*</span></label>
                 <div class="col-xs-12 col-md-12 col-lg-12 ">
-                    <input id="pickup_input" type="text" class="form-group form-control" placeholder="Pick Up Point" style="border-radius: 3px;" />
+                    <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                    <input id="pickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
                     @*<input id="datetime_input" type="text" class="form-group form-control" placeholder="Pick Up Date and Time" style="border-radius: 3px;" />*@
-                    <input id="dropoff_input" type="text" class="form-group form-control" placeholder="Drop Off Point" style="border-radius: 3px;" />
+                    <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                    <input id="dropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
                 </div>
                 <div class="col-xs-6">
                     <div class="input-group">
@@ -540,12 +543,14 @@
             </div>
 
             <div class="col-xs-12 form-group two_trip_details" style="padding-left: 0px; padding-right: 0px;">
-                <label for="transportation_name" class="col-md-12 control-label">Details<span class="mandatory">*</span></label>
+                <label for="transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
 
                 <div class="col-xs-12 col-md-12 col-lg-12 ">
-                    <input id="2ndpickup_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Point" style="border-radius: 3px;" />
+                    <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                    <input id="2ndpickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
                     @*<input id="2nddatetime_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Date and Time" style="border-radius: 3px;" />*@
-                    <input id="2nddropoff_input" type="text" class="form-group form-control" placeholder="2nd Drop Off Point" style="border-radius: 3px;" />
+                    <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                    <input id="2nddropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
                 </div>
                 <div class="col-xs-6">
                     <div class="input-group">
@@ -693,9 +698,9 @@
 
             <div class="form-group col-lg-12" style="padding-left: 0px; padding-right: 0px;">
                 <div class="col-xs-12">
-                    <label for="off_site_remarks" class="control-label">Remarks<span class="mandatory">*</span></label>
+                    <label for="off_site_remarks" class="control-label">Remarks</label>
                     @*<input id="off_site_remarks_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
-                    <textarea id="off_site_remarks_input" placeholder="Required" class="form-control" maxlength="250" style="resize: none;"></textarea>
+                    <textarea id="off_site_remarks_input" class="form-control" maxlength="250" style="resize: none;"></textarea>
                 </div>
             </div>
             <div class="form-group col-sm-12" style="padding-left: 0px; padding-right: 0px;">
@@ -758,9 +763,9 @@
             </div>
             <div class="form-group col-lg-12" style="padding-left: 0px; padding-right: 0px;">
                 <div class="col-xs-12">
-                    <label for="mnno" class="control-label">Reason<span class="mandatory">*</span></label>
+                    <label for="mnno" class="control-label">Remarks</label>
                     @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
-                    <textarea id="reason_input" placeholder="Required" class="form-control" maxlength="250" style="resize: none;"></textarea>
+                    <textarea id="reason_input" class="form-control" maxlength="250" style="resize: none;"></textarea>
 
                 </div>
             </div>
@@ -1182,7 +1187,6 @@
                             <th>Trainee No.</th>
                             <th>Rank</th>
                             <th>Name</th>
-                            <th>Contact No.</th>
                         </tr>
                     </thead>
                     <tbody id="course_enrollee_tbl_body"></tbody>

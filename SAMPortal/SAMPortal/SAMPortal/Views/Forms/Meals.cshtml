@@ -58,18 +58,8 @@
                 </label>
 
                 <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
-                    <input id="am_snack_cb" type="checkbox" style="margin-top: 0px;">
-                    Morning Snack
-                </label>
-
-                <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
                     <input id="lunch_cb" type="checkbox" style="margin-top: 0px;">
                     Lunch
-                </label>
-
-                <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
-                    <input id="pm_snack_cb" type="checkbox" style="margin-top: 0px;">
-                    Afternoon Snack
                 </label>
 
                 <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
@@ -77,48 +67,66 @@
                     Dinner
                 </label>
 
+                <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
+                    <input id="am_snack_cb" type="checkbox" style="margin-top: 0px;">
+                    Morning Snack
+                </label>
+
+                <label class="col-lg-4 col-xs-12" style="margin-bottom: 20px;">
+                    <input id="pm_snack_cb" type="checkbox" style="margin-top: 0px;">
+                    Afternoon Snack
+                </label>
+
             </div>
 
         </div>
-            <div class="form-group col-xs-12 pull-right" style="padding-left: 0px; padding-right: 0px;">
-                <div class="col-xs-12">
-                    <label for="remarks" class="control-label">Remarks<span class="mandatory">*</span></label>
-                    <textarea id="reason_input" class="form-control" placeholder="Required" style="resize: none" maxlength="250"></textarea>
-                    @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
-                </div>
+        <div class="form-group col-xs-12 pull-right" style="padding-left: 0px; padding-right: 0px;">
+            <div class="col-xs-12 col-lg-6">
+                <label for="remarks" class="control-label">Dietary Requirement</label>
+                <input id="dietaryRequirement_input" class="form-control"  />
+                @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
             </div>
+        </div>
 
+        <div class="form-group col-xs-12 pull-right" style="padding-left: 0px; padding-right: 0px;">
+            <div class="col-xs-12">
+                <label for="remarks" class="control-label">Remarks</label>
+                <textarea id="reason_input" class="form-control" style="resize: none" maxlength="250"></textarea>
+                @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
             <div class="form-group col-sm-12">
-                <div class="form-group col-sm-12">
-                    <span id="meal_err_msg" style="color: red; display: none">**Fields must not be left blank</span>
-                    <button type="button" id="save_meal_btn" class="btn btn-default pull-right">Submit</button>
-                </div>
+                @*<span id="meal_err_msg" style="color: red; display: none">**Fields must not be left blank</span>*@
+                <button type="button" id="save_meal_btn" class="btn btn-default pull-right">Submit</button>
             </div>
-
-            <div id="meal_tbl_div">
-
-                <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
-                    <thead>
-                        <tr>
-                            <td colspan="5">Meal Provision Log</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">No</td>
-                            <td colspan="2">Meal Date</td>
-                            <td rowspan="2">Reason</td>
-                            <td rowspan="2">Reference ID</td>
-                        </tr>
-                        <tr>
-                            <td>From</td>
-                            <td>To</td>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-
         </div>
+
+        <div id="meal_tbl_div">
+
+            <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+                <thead>
+                    <tr>
+                        <td colspan="5">Meal Provision Log</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">No</td>
+                        <td colspan="2">Meal Date</td>
+                        <td rowspan="2">Reason</td>
+                        <td rowspan="2">Reference ID</td>
+                    </tr>
+                    <tr>
+                        <td>From</td>
+                        <td>To</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+    </div>
 </div>
 
 

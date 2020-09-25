@@ -13,7 +13,9 @@
     $('.content-header ol #home_lnk').html('<a href="/SAMPortal/"><i class="fa fa-home"></i> Home</a>');
     $('.content-header ol #current_page').html("Accommodation");
     //===
-    $('#accomodation_date').daterangepicker();
+    $('#accomodation_date').daterangepicker({locale : {
+        format: 'DD/MM/YYYY'
+    }});
 
     $('#accomodation_date').prev().click(function () {
         $(this).next().focus();
@@ -85,7 +87,7 @@
         var reason = $('#accomodation_reason option:selected').val();
         var remarks = $('#accomodation_remarks_input').val();
 
-        if (mnno === "" || rank === "" || name === "" || remarks.trim() === "") {
+        if (mnno === "" || rank === "" || name === "") {
             //$('#accomodation_err_msg').css('display', 'block');
             generateWarningModal('on_site_accommodation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
         } else {

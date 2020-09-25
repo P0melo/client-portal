@@ -17,6 +17,37 @@ function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) 
 
 }
 
+
+function refreshBookingTable() {
+    let currentMonth = $('#month_select option:selected').val();
+    let currentYear = $('#year_input').val();
+
+    let o_currentMonth = $('#o_month_select option:selected').val();
+    let o_currentYear = $('#o_year_input').val();
+
+    if ($('#date_rb_range').is(':checked') === false) {
+        getCourseList(currentMonth, currentYear);
+    } else {
+
+        let currentMonthTo = $('#month_select_yc_to option:selected').val();
+        let currentMonthFrom = $('#month_select_yc_from option:selected').val();
+
+        getCourseListRange(currentMonthFrom, currentMonthTo, currentYear);
+    }
+
+    if ($('#o_date_rb_range').is(':checked') === false) {
+
+        getOCourseList(o_currentMonth, o_currentYear);
+    } else {
+
+        let o_currentMonthTo = $('#o_month_select_yc_to option:selected').val();
+        let o_currentMonthFrom = $('#o_month_select_yc_from option:selected').val();
+
+        getOCourseListRange(o_currentMonthFrom, o_currentMonthTo, o_currentYear);
+
+    }
+}
+
 //footerType: 1 = 'Yes' and 'No', 2 = 'Ok'
 function generateSuccessModal(modalId, footerType, modalButtonId, modalMessage, modalButtonNoId) {
     $('.modal_success_template').attr('id', modalId);
@@ -143,8 +174,8 @@ function generateOCourseListTable(result) {
 
         for (var i = 0; i < result.length; i++) {
             content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
-                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + result[i].DateFrom.split('T')[0] +
-                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'><button id='enroll_crew' class='btn btn-default' style='width: 100%'>" + renderButtonFontAwesome() + "</button></td></tr>";
+                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + fixDateFormat(result[i].DateFrom.split('T')[0]) +
+                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'>" + renderButtonFontAwesome(result[i], serverDate) + "</td></tr>";
         }
 
         $('#o_course_list_tbl_tbody').html(content);
@@ -165,12 +196,26 @@ function generateOCourseListTable(result) {
 
 }
 
-function renderButtonFontAwesome() {
-    if ($('.content-wrapper section h1').html() == "Register New Crew") {
-        return "<i class='fa fa-user-plus'></i>"
-    } else {
-        return "<i class='fa fa-plus'></i>"
-    }
+function renderButtonFontAwesome(data, serverDate) {
+    let date = new Date();
+
+    let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
+
+    if (!(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity)) {
+        if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)){
+            return "-";
+        }
+
+        if ($('.content-wrapper section h1').html() == "Register New Crew") {
+            return "<button id='enroll_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-user-plus'></i></button>"
+
+        } else {
+            return "<button id='enroll_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-plus'></i></button>"
+        }
+    } 
+
+    return "-";
+
 }
 
 var courseTable = "";
@@ -191,8 +236,8 @@ function generateCourseListTable(result) {
         for (var i = 0; i < result.length; i++) {
 
             content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
-                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + result[i].DateFrom.split('T')[0] +
-                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'><button id='enroll_crew' class='btn btn-default' style='width: 100%'>" + renderButtonFontAwesome() + "</button></td></tr>";
+                "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + fixDateFormat(result[i].DateFrom.split('T')[0]) +
+                "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'>" + renderButtonFontAwesome(result[i], serverDate) + "</td></tr>";
 
         }
 
@@ -359,7 +404,7 @@ $(document).on('click', '#course_list_tbl tr td a', function () {
 
                     for (var i = 0; i < result.length; i++) {
                         content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                            (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td></tr>";
+                            (result[i].MName === null ? "" : result[i].MName) + "</td></tr>";
                     }
 
                     $('#course_enrollee_tbl_body').html(content);
@@ -400,7 +445,7 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
                     for (var i = 0; i < result.length; i++) {
                         content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                            (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td></tr>";
+                            (result[i].MName === null ? "" : result[i].MName) + "</td></tr>";
                     }
 
                     $('#course_enrollee_tbl_body').html(content);
@@ -504,6 +549,13 @@ function saveAccomodation(parameters) {
         }
     });
 }
+
+function fixDateFormat(date) {
+    let dateSplit = date.split('-');
+    return dateSplit[2] + "/" + dateSplit[1] + "/" + dateSplit[0];
+}
+
+
 
 $(document).ready(function () {
 

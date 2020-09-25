@@ -10,7 +10,11 @@
         $('#course_reservation_lnk').parent().addClass('active menu-open');
         $('#course_reservation_lnk').next().show();
     }
-    $('#meal_reservation').daterangepicker();
+    $('#meal_reservation').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
 
     $('#meal_reservation').prev().click(function () {
         $(this).next().focus();
@@ -157,6 +161,8 @@
         var pm_snack_cb = $('#pm_snack_cb').prop('checked');
         var dinner_cb = $('#dinner_cb').prop('checked');
         var reason = $('#reason_input').val();
+        var dietaryRequirement = $('#dietaryRequirement_input').val();
+        alert(dietaryRequirement);
 
         var dateDiff = getDateDiff(date);
 
@@ -164,12 +170,12 @@
             $('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
             $('.modal-warning').modal();
         } else {
-            if (mnno === "" || rank === "" || name === "" || reason.trim() === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
+            if (mnno === "" || rank === "" || name === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
                 //$('#meal_err_msg').css('display', 'block');
                 generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
             } else {
                 $('#meal_err_msg').css('display', 'none');
-                saveMealProvistionParameter = [mnno, rank, name, date, reason, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
+                saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
 
                 $('#modal_warning_meal .modal-body p').html("Are you sure you want to submit?");
                 $('#modal_warning_meal').modal();

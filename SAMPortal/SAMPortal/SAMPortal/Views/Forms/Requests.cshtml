@@ -160,7 +160,7 @@
                     <th>Type</th>
                     <th>Vehicle</th>
                     <th>Date Booked</th>
-                    <th>Date</th>
+                    @*<th>Date</th>*@
                     <th>Status</th>
                 </tr>
             </thead>
@@ -220,21 +220,23 @@
             </div>
             <div class="modal-body">
                 <div class="col-xs-12">
-                    <div class="col-lg-12 form-group" id="inbound_div">
+                    @*<div class="col-lg-12 form-group" id="inbound_div">
                         <label>Inbound: </label>
                         <span id="inbound"></span>
-                    </div>
+                    </div>*@
                     <div class="col-lg-12 form-group" id="inboundDate_div">
-                        <label>Inbound Date: </label>
-                        <span id="inboundDate"></span>
+                        <label class="col-xs-2" style="padding:0;">Inbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="inboundDate" style="padding:0;"></span>
                     </div>
-                    <div class="col-lg-12 form-group" id="Outbound_div">
+                    @*<div class="col-lg-12 form-group" id="Outbound_div">
                         <label>Outbound: </label>
                         <span id="outbound"></span>
-                    </div>
+                    </div>*@
                     <div class="col-lg-12 form-group" id="OutboundDate_div">
-                        <label>Outbound Date: </label>
-                        <span id="outboundDate"></span>
+                        <label class="col-xs-2" style="padding:0;">Outbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="outboundDate" style="padding:0;"></span>
                     </div>
                     <div class="col-lg-12 form-group" id="attachment_div">
                         <label>Attachment: </label>

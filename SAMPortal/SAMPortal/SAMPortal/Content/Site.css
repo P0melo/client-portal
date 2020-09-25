@@ -148,10 +148,10 @@ textarea {
     text-align: center;
 }
 
-    #dashboard_btn a {
-        padding: 20px;
-        font-size: 24px;
-    }
+#dashboard_btn a {
+    padding: 20px;
+    font-size: 24px;
+}
 
 /*select.form-control + .chosen-container.chosen-container-single .chosen-single {
     display: block;
@@ -615,18 +615,18 @@ span.card_icon {
     border-bottom: 1px solid #d2d6de !important;
 }
 
-    .cards_div:hover {
-        box-shadow: 0px 0px 0px grey;
-        -webkit-transition: box-shadow .2s ease-out;
-        box-shadow: .8px .9px 3px grey;
-    }
+.cards_div:hover {
+    box-shadow: 0px 0px 0px grey;
+    -webkit-transition: box-shadow .2s ease-out;
+    box-shadow: .8px .9px 3px grey;
+}
 
-    .cards_div:hover {
-        box-shadow: 1px 8px 20px grey;
-        -webkit-transition: box-shadow .2s ease-in;
-        cursor: pointer;
-        /*/*margin-top: -5px;*/
-    }
+.cards_div:hover {
+    box-shadow: 1px 8px 20px grey;
+    -webkit-transition: box-shadow .2s ease-in;
+    cursor: pointer;
+    /*/*margin-top: -5px;*/
+}
 
 .acards {
     color: inherit;
@@ -713,4 +713,8 @@ div#test_diva{
 
 #daily_transfer_table div table tbody tr th {
     text-align: center
+}
+
+#pick_up_time_2 {
+    z-index: 0;
 }

@@ -30,8 +30,8 @@
 
     $('#transportation_lnk').parent().addClass('active');
 
-    $('#transportation_date').datepicker();
-    $('#transportation_date_outbound').datepicker();
+    $('#transportation_date').datepicker({ format: "dd/mm/yyyy" });
+    $('#transportation_date_outbound').datepicker({ format: "dd/mm/yyyy" });
 
     $('#transportation_date').prev().click(function () {
         $(this).next().focus();
@@ -46,13 +46,13 @@
     var dailyTransferDateMonth = dailyTransferDate.getMonth() + 1;
     var dailyTransferDateDay = dailyTransferDate.getDate();
 
-    var dailyTransferDateOutput = (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' +
-        (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + dailyTransferDate.getFullYear();
+    var dailyTransferDateOutput = (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' + dailyTransferDate.getFullYear();
+        
 
-    $('#pick_up_date').datepicker().val(dailyTransferDateOutput);
-    $('#pick_up_date_2').datepicker().val(dailyTransferDateOutput);
-    $('#pick_up_time').timepicker({interval: '15'}).val('08:00 AM');
-    $('#pick_up_time_2').timepicker({ interval: '15' }).val('08:00 AM');
+    $('#pick_up_date').datepicker({ format: "dd/mm/yyyy"}).val(dailyTransferDateOutput);
+    $('#pick_up_date_2').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
+    $('#pick_up_time').timepicker({interval: '15', timeFormat: 'HH:mm'}).val('08:00');
+    $('#pick_up_time_2').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
 
     $(document).on('click', '#transportation_search_btn', function () {
         var mnno = $('#transportation_mnno_input').val();
@@ -271,6 +271,31 @@
     }
 
     var dailyTransferCounter = 0;
+
+    $(document).on('change', 'input[name=dt_optradio]', function () {
+        $('#pickup_input').val('');
+        $('#dropoff_input').val('');
+        $('#2ndpickup_input').val('');
+        $('#2nddropoff_input').val('');
+    });
+
+    $(document).on('change', '#pickup_input', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#2ndpickup_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#dropoff_input', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#2nddropoff_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#pick_up_date', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#pick_up_date_2').val($(this).val());
+        }
+    });
 
     $(document).on('click', '#add_daily_transfer', function () {
         let type = $('input[name=dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";

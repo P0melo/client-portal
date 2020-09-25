@@ -194,7 +194,7 @@
 
                 for (var i = 0; i < data.length; i++) {
                     content += '<tr style="' + style + '"><td><a id="detailed_view" name="' + data[i].Id + '">' + data[i].Mnno + '</a></td><td>' + data[i].Rank + '</td><td>' + data[i].LastName + ', ' + data[i].FirstName + '</td><td>' + data[i].Type + '</td>' +
-                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + (data[i].Date.split('T')[0]) + '</td><td>' + result[i].Status + '</td></tr>';
+                        '<td>' + data[i].Vehicle + '</td><td>' + (fixDateFormat(data[i].DateBooked.split('T')[0]) + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + result[i].Status + '</td></tr>';
                 }
 
                 $('#transportation_requests_tbl tbody').html(content);
@@ -377,9 +377,7 @@
                     let inboundDate = result.data.InboundDate === null ? "-----------------" : formatDate(result.data.InboundDate);
                     let outboundDate = result.data.OutboundDate === null ? "-----------------" : formatDate(result.data.OutboundDate);
 
-                    $('.modal_airport_transportation .modal-body #inbound').html(inbound);
                     $('.modal_airport_transportation .modal-body #inboundDate').html(inboundDate);
-                    $('.modal_airport_transportation .modal-body #outbound').html(outbound);
                     $('.modal_airport_transportation .modal-body #outboundDate').html(outboundDate);
                     $('.modal_airport_transportation .modal-body #notes').val(result.typeAndNotes.Notes);
                     $('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
@@ -669,8 +667,8 @@
 
     });
 
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
     ];
 
     function formatDate(data) {
@@ -683,7 +681,7 @@
 
         var fdate = new Date(parseInt(result));
 
-        return fdate.getDate() + "." +monthNames[fdate.getMonth()] + "." + fdate.getFullYear();
+        return fdate.getDate() + " " +monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
     }
 
 });

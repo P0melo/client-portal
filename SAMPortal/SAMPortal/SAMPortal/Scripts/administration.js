@@ -100,7 +100,7 @@
                         var room = result[i].RoomType === 1 ? "Single (Deluxe Room)" : "Double (Deluxe Room)";
 
                         content += "<tr><td><a id='" + result[i].Id + "'>" + result[i].MNNO + "</a></td><td>" + result[i].Rank + "</td><td>" + name + "</td><td>" + result[i].HotelName + "</td><td>" + room + "</td>" +
-                            "<td>" + (result[i].CheckInDate.split('T')[0]) + "</td><td>" + (result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
+                            "<td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
                     }
                 } else {
                     if (offSiteAccommodationTable !== "") {
@@ -472,7 +472,7 @@
                     }
 
                     content += '<tr style="' + style + '"><td><a id="detailed_view" name="' + data[i].Id + '">' + data[i].Mnno + '</a></td><td>' + data[i].Rank + '</td><td>' + data[i].LastName + ', ' + data[i].FirstName + '</td><td>' + data[i].Type + '</td>' +
-                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + (data[i].Date.split('T')[0]) + '</td><td style="padding: 1px" id="' + data[i].Id + '"><button title="View Attachment" style="width: 100%" id="view_attachment" class="btn btn-default"><i class="fa fa-paperclip"></i></button></td></tr>';
+                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td style="padding: 1px" id="' + data[i].Id + '"><button title="View Attachment" style="width: 100%" id="view_attachment" class="btn btn-default"><i class="fa fa-paperclip"></i></button></td></tr>';
                 }
 
                 $('#review_transportation_tbl_body').html(content);
@@ -610,8 +610,8 @@
                 var content = "";
 
                 for (var i = 0; i < result.length; i++) {
-                    content += "<tr id='" + result[i].Id + "'><td>" + result[i].CourseName + "</td><td>" + (result[i].StartDate.split('T')[0]) + "</td><td>" + result[i].NumberOfParticipants + "</td><td>" + result[i].Notes + "</td>" +
-                        "<td>" + (result[i].DateRequested.split('T')[0]) + "</td><td>" + result[i].RequestedBy + "</td><td style='padding: 1px'><button title='Approve' id='special_schedule_approve_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-check form-group'></i></button><button title='Deny' id='special_schedule_deny_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-close form-group'></button></td></tr>";
+                    content += "<tr id='" + result[i].Id + "'><td>" + result[i].CourseName + "</td><td>" + fixDateFormat(result[i].StartDate.split('T')[0]) + "</td><td>" + result[i].NumberOfParticipants + "</td><td>" + result[i].Notes + "</td>" +
+                        "<td>" + fixDateFormat(result[i].DateRequested.split('T')[0]) + "</td><td>" + result[i].RequestedBy + "</td><td style='padding: 1px'><button title='Approve' id='special_schedule_approve_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-check form-group'></i></button><button title='Deny' id='special_schedule_deny_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-close form-group'></button></td></tr>";
                 }
 
                 $('#review_special_schedule_requests_tbl tbody').html(content);

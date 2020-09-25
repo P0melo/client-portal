@@ -62,30 +62,6 @@
         </div>
 
 
-        <div class="col-lg-6 form-group pull-right" style="padding-left: 0px; padding-right: 0px;">
-            <div class="col-xs-6" id="inbound_date">
-                <label for="transportation_date_inbound" class="control-label">Inbound Date</label>
-                <div class="input-group">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control pull-right" id="transportation_date">
-                </div>
-
-            </div>
-            <div class="col-xs-6" id="outbound_date">
-                <label for="transportation_date_outbound" class="control-label">Outbound Date</label>
-                <div class="input-group">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control pull-right" id="transportation_date_outbound" disabled>
-                </div>
-
-            </div>
-
-        </div>
-
         @*<div class="col-lg-12 form-group">
             <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
             <div class="col-xs-12 col-md-12 col-lg-10">
@@ -111,19 +87,17 @@
             </div>
         </div>*@
 
-        <div class="daily_transfer col-xs-12 col-lg-12 form-group" style="padding-left: 0px; padding-right: 0px;">
+        <div class="daily_transfer col-xs-12 form-group" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
-                <div class="col-xs-12">
-                    <label for="transportation_destination" class="control-label">Daily Transfer</label>
-                </div>
-                <div class="col-xs-12">
-                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_1" value="1" checked>One-way</label>
-                </div>
-                <div class="col-xs-12">
-                    <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_2" value="2">Round-trip</label>
-                </div>
-
+                <label for="transportation_destination" class="control-label">Daily Transfer</label>
             </div>
+            <div class="col-xs-12">
+                <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_1" value="1" checked>One-way</label>
+            </div>
+            <div class="col-xs-12">
+                <label class="radio-inline"><input type="radio" name="dt_optradio" id="dt_optradio_2" value="2">Round-trip</label>
+            </div>
+
         </div>
         @*<div class="col-md-12 col-lg-12 form-group">
             <label for="transportation_details" class="col-md-2 control-label">Details</label>
@@ -150,23 +124,51 @@
             </div>
         </div>
 
-        <div class="airport_transfer col-xs-12 col-lg-6 form-group" style="padding-left: 0px; padding-right: 0px;">
-            <div class="col-xs-12">
-                <label for="InputFile" class="control-label">Attach Flight Details<span class="mandatory">*</span></label>
-                <div class="col-xs-12 form-control">
-                    <input type="file" id="InputFile">
-                    @*<p class="help-block col-sm-12 control-label pull-left">Please insert a picture if there's any</p>*@
+
+        <div class="col-lg-6 form-group pull-left" style="padding-left: 0px; padding-right: 0px;">
+            <div class="col-xs-6" id="inbound_date">
+                <label for="transportation_date_inbound" class="control-label">Inbound Date</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="transportation_date">
                 </div>
+
             </div>
-            <input type="text" id="output" hidden>
+            <div class="col-xs-6" id="outbound_date">
+                <label for="transportation_date_outbound" class="control-label">Outbound Date</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="transportation_date_outbound" disabled>
+                </div>
+
+            </div>
+
         </div>
 
+        @*<div class="col-xs-12" style="padding: 0;">*@
+            <div class="airport_transfer col-xs-6 form-group" style="padding-left: 0px; padding-right: 0px;">
+                <div class="col-xs-12">
+                    <label for="InputFile" class="control-label">Attach Flight Details<span class="mandatory">*</span></label>
+                    <div class="col-xs-12 form-control">
+                        <input type="file" id="InputFile">
+                        @*<p class="help-block col-sm-12 control-label pull-left">Please insert a picture if there's any</p>*@
+                    </div>
+                </div>
+                <input type="text" id="output" hidden>
+            </div>
+        @*</div>*@
         <div class="col-xs-12 col-lg-6 form-group one_trip_details" style="padding-left: 0px; padding-right: 0px;">
-            <label for="transportation_name" class="col-md-12 control-label">Details<span class="mandatory">*</span></label>
+            <label for="transportation_name" class="col-md-12 control-label">First Pick-up/Drop-off point<span class="mandatory">*</span></label>
             <div class="col-xs-12 col-md-12 col-lg-12 ">
-                <input id="pickup_input" type="text" class="form-group form-control" placeholder="Pick Up Point" style="border-radius: 3px;" />
+                <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                <input id="pickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
                 @*<input id="datetime_input" type="text" class="form-group form-control" placeholder="Pick Up Date and Time" style="border-radius: 3px;" />*@
-                <input id="dropoff_input" type="text" class="form-group form-control" placeholder="Drop Off Point" style="border-radius: 3px;" />
+                <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                <input id="dropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
             </div>
             <div class="col-xs-6">
                 <div class="input-group">
@@ -196,12 +198,14 @@
         </div>*@
 
         <div class="col-xs-12 col-lg-6 form-group two_trip_details" style="padding-left: 0px; padding-right: 0px;">
-            <label for="transportation_name" class="col-md-12 control-label">Details</label>
+            <label for="transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
 
             <div class="col-xs-12 col-md-12 col-lg-12 ">
-                <input id="2ndpickup_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Point" style="border-radius: 3px;" />
+                <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                <input id="2ndpickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled/>
                 @*<input id="2nddatetime_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Date and Time" style="border-radius: 3px;" />*@
-                <input id="2nddropoff_input" type="text" class="form-group form-control" placeholder="2nd Drop Off Point" style="border-radius: 3px;" />
+                <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                <input id="2nddropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled/>
             </div>
             <div class="col-xs-6">
                 <div class="input-group">

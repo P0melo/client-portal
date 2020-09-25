@@ -115,7 +115,7 @@
     $('#course_list_lnk').parent().addClass('active');
 
 
-    $('#date_select').datepicker();
+    $('#date_select').datepicker({ format: "dd/mm/yyyy" });
 
     var inputWidth = document.getElementById('date_select').clientWidth + "px";
 
@@ -274,7 +274,7 @@
 
                         for (var i = 0; i < result.length; i++) {
                             content += "<tr id='" + result[i].MNNO + "'><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + result[i].Contact + "</td><td style='padding: 1px'><button id='swap_this_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-user-plus'></i></button></td></tr>";
+                                (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 1px'><button id='swap_this_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-user-plus'></i></button></td></tr>";
                         }
 
                         $('#swap_enrollees_tbl tbody').html(content);
@@ -532,7 +532,7 @@
                 for (var i = 0; i < result.length; i++) {
 
                     content1 += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                        (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td><td style='padding: 1px'>" +
+                        (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 1px'>" +
                         "<button id='swap_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-exchange'></i></button></td>" +
                         "<td style='padding: 1px'><button id='remove_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td><td>" + i + "</td></tr> ";
                 }
@@ -544,13 +544,13 @@
                 myEnrolledCrewTable = $('#enrolled_crews_tbl').DataTable({
                     pageLength: 5, lengthChange: false, info: false,
                     "columnDefs": [{
+                        "targets": [2],
+                        "orderable": false
+                    }, {
+                        "targets": [3],
+                        "orderable": false
+                    }, {
                         "targets": [4],
-                        "orderable": false
-                    }, {
-                        "targets": [5],
-                        "orderable": false
-                    }, {
-                        "targets": [6],
                         "visible": false
                     }],
                     order: [[5, 'desc']]
@@ -592,7 +592,7 @@
                     }
 
                     content1 += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                        (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + (result[i].Contact === null ? "N/A" : result[i].Contact) + "</td><td style='padding: 1px'>" + buttons + "</td><td>" + i + "</td></tr> ";
+                        (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 1px'>" + buttons + "</td><td>" + i + "</td></tr> ";
                 }
 
 
@@ -602,13 +602,13 @@
                 myEnrolledCrewTable = $('#enrolled_crews_tbl').DataTable({
                     pageLength: 5, lengthChange: false, info: false,
                     "columnDefs": [{
-                        "targets": [4],
+                        "targets": [3],
                         "orderable": false
                     }, {
-                        "targets": [5],
+                        "targets": [4],
                         "visible": false
                     }],
-                    order: [[5, 'desc']]
+                    order: [[4, 'desc']]
                 });
 
                 $('#enrolled_crews_tbl').css('width', 'inherit');
@@ -634,7 +634,7 @@
 
                         for (var i = 0; i < result.length; i++) {
                             content += "<tr id='" + result[i].MNNO + "'><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                                (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + result[i].Contact + "</td><td style='padding: 1px'><button id='enroll_this_crew' class='btn btn-default'" +
+                                (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 1px'><button id='enroll_this_crew' class='btn btn-default'" +
                                 " style='width: 100%'><i class='fa fa-user-plus'></i></button></td></tr>";
                         }
 
@@ -644,7 +644,7 @@
                             pageLength: 5,
                             lengthChange: false,
                             "columnDefs": [{
-                                "targets": [4],
+                                "targets": [3],
                                 "orderable": false
                             }]
                         });
@@ -658,38 +658,7 @@
 
         //alert($('#date_rb_range').is(':checked'));
 
-        var currentMonth = $('#month_select option:selected').val();
-        var currentYear = $('#year_input').val();
-
-        var o_currentMonth = $('#o_month_select option:selected').val();
-        var o_currentYear = $('#o_year_input').val();
-
-        if ($('#date_rb_range').is(':checked') === false) {
-            getCourseList(currentMonth, currentYear);
-        } else {
-            let currentMonthTo = $('#month_select_yc_to option:selected').val();
-            getCourseListRange(currentMonth, currentMonthTo, currentYear);
-        }
-
-        if ($('#o_date_rb_range').is(':checked') === false) {
-            getOCourseList(o_currentMonth, o_currentYear);
-        } else {
-            let o_currentMonthTo = $('#o_month_select_yc_to option:selected').val();
-            getOCourseListRange(o_currentMonth, o_currentMonthTo, o_currentYear);
-
-        }
-
-        //if (currentMonth < 10) {
-        //    getCourseList(currentMonth, currentYear);
-        //} else {
-        //    getCourseList(currentMonth, currentYear);
-        //}
-
-        //if (o_currentMonth < 10) {
-        //    getOCourseList(o_currentMonth, o_currentYear);
-        //} else {
-        //    getOCourseList(currentMonth, currentYear);
-        //}
+        refreshBookingTable();
 
     });
 

@@ -288,7 +288,7 @@ namespace SAMPortal.Controllers
 
             try
             {
-                dateValue = DateTime.ParseExact(datepicker, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                dateValue = DateTime.ParseExact(datepicker, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             }
             catch (Exception e)
             {
@@ -423,18 +423,19 @@ namespace SAMPortal.Controllers
             string name = parameters[2];
             string date = parameters[3];
             string reason = parameters[4];
-            bool breakfast_cb = parameters[5] == "true";
-            bool am_snack_cb = parameters[6] == "true";
-            bool lunch_cb = parameters[7] == "true";
-            bool pm_snack_cb = parameters[8] == "true";
-            bool dinner_cb = parameters[9] == "true";
+            string dietaryRequirement = parameters[5];
+            bool breakfast_cb = parameters[6] == "true";
+            bool am_snack_cb = parameters[7] == "true";
+            bool lunch_cb = parameters[8] == "true";
+            bool pm_snack_cb = parameters[9] == "true";
+            bool dinner_cb = parameters[10] == "true";
 
             var guid = GetGuid(user);
 
             string[] dateSplit = date.Split('-');
 
-            DateTime dateFrom = DateTime.ParseExact(dateSplit[0].Trim(), "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
-            DateTime dateTo = DateTime.ParseExact(dateSplit[1].Trim(), "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            DateTime dateFrom = DateTime.ParseExact(dateSplit[0].Trim(), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+            DateTime dateTo = DateTime.ParseExact(dateSplit[1].Trim(), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-PH"));
 
             //string vDateFrom = dateFrom.ToString("yyyy-MM-dd");
 
@@ -456,9 +457,9 @@ namespace SAMPortal.Controllers
                                     ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
 
                         _context.Database.ExecuteSqlCommand("INSERT INTO tblmeal_provision (MNNO, meal_group, meal_b, meal_l, meal_d, meal_ms, meal_as, meal_date_from, meal_date_to, " +
-                            "meal_reason, meal_assigned_by, meal_date_assigned, reference_id)" +
+                            "meal_reason, meal_assigned_by, meal_date_assigned, reference_id, dietaryRequirement)" +
                                     "VALUE (@mnno, @meal_group, @meal_b, @meal_l, @meal_d, @meal_ms, @meal_as, @meal_date_from, " +
-                                    "@meal_date_to, @meal_reason, @meal_assigned_by, @meal_date_assigned, @reference_id)",
+                                    "@meal_date_to, @meal_reason, @meal_assigned_by, @meal_date_assigned, @reference_id, @dietaryRequirement)",
                                     new MySqlParameter("@mnno", mnno),
                                     new MySqlParameter("@meal_group", 4),
                                     new MySqlParameter("@meal_b", breakfast_cb),
@@ -471,14 +472,15 @@ namespace SAMPortal.Controllers
                                     new MySqlParameter("@meal_reason", reason),
                                     new MySqlParameter("@meal_assigned_by", guid),
                                     new MySqlParameter("@meal_date_assigned", mealDateAssigned),
-                                    new MySqlParameter("@reference_id", reference_id));
+                                    new MySqlParameter("@reference_id", reference_id),
+                                    new MySqlParameter("@dietaryRequirement", dietaryRequirement));
 
                         dateFrom = dateFrom.AddDays(1);
 
                         //for logging
                         string[] logparameters = { "mnno:" + mnno, "mealgroup:" + 4, "meal_b:" + breakfast_cb, "meal_l:" + lunch_cb, "meal_d:" + dinner_cb, "meal_ms:" + am_snack_cb,
                                     "meal_as:" + pm_snack_cb, "meal_date_from:" + vDateFrom, "meal_date_to:" + vDateFrom, "meal_reason:" + reason, "meal_assigned_by:" + guid,
-                                    "meal_Date_assigned:" + mealDateAssigned, "reference_id:" + reference_id};
+                                    "meal_Date_assigned:" + mealDateAssigned, "reference_id:" + reference_id,"dietaryRequirement:"+dietaryRequirement};
                         string data = logging.ConvertToLoggingParameter(logparameters);
                         logging.Log(user, "SaveMealProvision", data);
 
@@ -803,7 +805,7 @@ namespace SAMPortal.Controllers
                 byteArr = null;
             }
 
-            var status = "Requested";
+            var status = "In Process";
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
 
             var flag = 0;
@@ -912,7 +914,7 @@ namespace SAMPortal.Controllers
 
             var file = byteArr;
             var fileExtension = parameters[11];
-            var status = "Requested";
+            var status = "In Process";
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
             var dateBooked = DateTime.Now;
@@ -988,7 +990,7 @@ namespace SAMPortal.Controllers
             var vehicle = parameters[4];
             var notes = parameters[5];
 
-            var status = "Requested";
+            var status = "In Process";
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
             var dateBooked = DateTime.Now;
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();

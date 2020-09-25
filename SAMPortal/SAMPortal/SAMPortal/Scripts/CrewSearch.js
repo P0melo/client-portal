@@ -44,14 +44,14 @@
                 }
 
                 for (var i = 0; i < result.length; i++) {
-                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + (result[i].Nation == null ? "" : result[i].Nation) + "</td><td>" + result[i].Birthday +
-                        "</td><td>" + result[i].Contact + "</td><td>" + result[i].Gender + "</td><td style='padding: 1px'>" + buttonType + "</td></tr>";
+                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + fixDateFormat(result[i].Birthday) +
+                        "</td><td>" + result[i].Gender + "</td><td style='padding: 1px'>" + buttonType + "</td></tr>";
                 }
 
                 $('#crew_list_tbl_tbody_search').html(content);
                 searchCrewTable = $('#crew_list_tbl_search').DataTable({
                     "columnDefs": [{
-                        "targets": [7],
+                        "targets": [5],
                         "searchable": false,
                         "orderable": false
                     }]
@@ -65,9 +65,9 @@
     var chosenCrewName = "";
     $(document).on('click', '#choose_this_crew', function () {
 
-        chosenCrewMnno = $(this).parent().prev().prev().prev().prev().prev().prev().prev().html();
-        chosenCrewRank = $(this).parent().prev().prev().prev().prev().prev().prev().html();
-        chosenCrewName = $(this).parent().prev().prev().prev().prev().prev().html();
+        chosenCrewMnno = $(this).parent().prev().prev().prev().prev().prev().html();
+        chosenCrewRank = $(this).parent().prev().prev().prev().prev().html();
+        chosenCrewName = $(this).parent().prev().prev().prev().html();
 
         $('#modal_search_crew_warning .modal-body p').html("Are you sure you want to choose this crew? <br /><br />" + chosenCrewMnno + " " + chosenCrewName);
         $('#modal_search_crew_warning').modal();

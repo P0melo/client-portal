@@ -24,15 +24,27 @@
     $('.content-header ol #current_page').html("Register New Crew");
     //===
 
-    $('#datepicker').datepicker();
-    $('#accomodation_date').daterangepicker();
+    $('#datepicker').datepicker({ format: "dd/mm/yyyy" });
+    $('#accomodation_date').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
     $('#accomodation_date').val('');
-    $('#off_site_date').daterangepicker();
+    $('#off_site_date').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
     $('#off_site_date').val('');
-    $('#meal_reservation').daterangepicker();
+    $('#meal_reservation').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
     $('#meal_reservation').val('');
-    $('#transportation_date').datepicker();
-    $('#transportation_date_outbound').datepicker();
+    $('#transportation_date').datepicker({ format: "dd/mm/yyyy" });
+    $('#transportation_date_outbound').datepicker({ format: "dd/mm/yyyy" });
 
     var dailyTransferDateMonth = date.getMonth() + 1;
     var dailyTransferDateDay = date.getDate();
@@ -52,9 +64,9 @@
         $(this).next().focus();
     });
 
-    $('#pick_up_time').timepicker({ interval: '15' }).val('08:00 AM');
+    $('#pick_up_time').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
 
-    $('#pick_up_time_2').timepicker({ interval: '15' }).val('08:00 AM');
+    $('#pick_up_time_2').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
 
     $('#datepicker').prev().click(function () {
         $(this).next().focus();
@@ -224,6 +236,31 @@
     });
 
     /******************Transportation Arrangement*************************/
+    $(document).on('change', 'input[name=dt_optradio]', function () {
+        $('#pickup_input').val('');
+        $('#dropoff_input').val('');
+        $('#2ndpickup_input').val('');
+        $('#2nddropoff_input').val('');
+    });
+
+    $(document).on('change', '#pickup_input', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#2ndpickup_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#dropoff_input', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#2nddropoff_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#pick_up_date', function () {
+        if ($('input[name=dt_optradio]:checked').val() == 2) {
+            $('#pick_up_date_2').val($(this).val());
+        }
+    });
+
     var dailyTransferCounter = 0;
 
     var dailyTransferEntryToRemove = "";
@@ -787,6 +824,31 @@
         $('#crouse_booking').css('display', 'block');
         $('#left_box').css('display', 'block');
         $('#right_box').css('display', 'block');
+
+        $('#FirstName').prop('disabled', true);
+        $('#LastName').prop('disabled', true);
+        $('#MiddleName').prop('disabled', true);
+        $('#BirthPlace').prop('disabled', true);
+        $('#datepicker').prop('disabled', true);
+        $('#new_crew_registration #position').prop('disabled', true);
+        $('#choose_image_input').prop('disabled', true);
+        $('#submit_request_btn').prop('disabled', true);
+    });
+
+    $(document).on('click', '#clear_request_btn', function () {
+        //$('#crouse_booking').css('display', 'none');
+        //$('#left_box').css('display', 'none');
+        //$('#right_box').css('display', 'none');
+
+        //$('#FirstName').prop('disabled', false);
+        //$('#LastName').prop('disabled', false);
+        //$('#MiddleName').prop('disabled', false);
+        //$('#BirthPlace').prop('disabled', false);
+        //$('#datepicker').prop('disabled', false);
+        //$('#new_crew_registration #position').prop('disabled', false);
+        //$('#choose_image_input').prop('disabled', false);
+        //$('#submit_request_btn').prop('disabled', false);
+        window.location.reload();
     });
 
     function submit_new_crew_request() {
@@ -1225,19 +1287,24 @@
     });
 
     $(document).on('click', '#enroll_this_crew_warning_yes', function () {
-        totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
+        //totalEnrollees[0] = parseInt(totalEnrollees[0]) + 1;
         enrollThisCrew(enrollThisCrewParameters);
+    });
+
+    $(document).on('hidden.bs.modal', '#crew_enrolled_modal', function () {
+        refreshBookingTable();
+
     });
 
     //=====================================================On-Site Booking===========================================================
 
     function getInHouseBookingFieldsValues() {
 
-        if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '' && i_accommodation_remarks_input == '') {
+        if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '') {
             inHouseBooking = 1;
             return true;
         } else {
-            if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
+            if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '') {
                 alert("Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
                 return false;
             } else {
@@ -1259,7 +1326,7 @@
         i_accommodation_reason = $('#accomodation_reason').val();
         i_accommodation_remarks_input = $('#accomodation_remarks_input').val();
 
-        if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '' || i_accommodation_remarks_input == '') {
+        if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '') {
             generateWarningModal("on_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
             return false;
         }
@@ -1288,7 +1355,7 @@
         o_off_site_reason = $('#off_site_reason').val();
         o_off_site_remarks_input = $('#off_site_remarks_input').val();
 
-        if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '' || o_off_site_remarks_input == '') {
+        if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '') {
             //alert("Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
             generateWarningModal("off_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
             return false;

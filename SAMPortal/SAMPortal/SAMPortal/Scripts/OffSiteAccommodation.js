@@ -41,7 +41,7 @@
         var reason = $('#off_site_reason option:selected').val();
         var remarks = $('#off_site_remarks_input').val();
 
-        if (mnno === "" || rank === "" || date === "" || remarks.trim() === "") {
+        if (mnno === "" || rank === "" || date === "") {
             //$('#off_site_err_msg').css('display', 'block');
             generateWarningModal('off_site_accommodation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
         } else {
