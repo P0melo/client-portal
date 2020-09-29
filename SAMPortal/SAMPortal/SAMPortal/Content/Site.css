@@ -493,7 +493,7 @@ input[type="password"]:-moz-placeholder {
     *overflow: hidden;
 }
 
-#dt_optradio_1, #dt_optradio_2 {
+#dt_optradio_1, #dt_optradio_2, #regular_optradio, #special_optradio, #block_booking_optradio {
     /*position: absolute;
     top: 0;
     left: 0;

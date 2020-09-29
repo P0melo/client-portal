@@ -480,7 +480,7 @@
                 transportationTable = $('#review_transportation_tbl').DataTable({
                     "order": [],
                     "columnDefs": [{
-                        "targets": [7],
+                        "targets": [6],
                         "searchable": false,
                         "orderable": false
                     }]
@@ -634,10 +634,19 @@
     }
 
     var specialScheduleId = "";
+    var specialScheduleRate = "";
     $(document).on('click', '#special_schedule_approve_btn', function () {
 
         specialScheduleId = $(this).parent().parent().attr('id');
 
+        //$('#special_schedule_modal .modal-body p').html('Are you sure you want to approve this request?');
+        //$('#special_schedule_modal').modal();
+
+        $('.modal_off_site_accommodation').modal();
+    });
+
+    $(document).on('click', '#modal_off_site_accommodation_ok', function () {
+        specialScheduleRate = $('input[name=rate_optradio]:checked').val();
         $('#special_schedule_modal .modal-body p').html('Are you sure you want to approve this request?');
         $('#special_schedule_modal').modal();
     });
@@ -662,6 +671,8 @@
                     //$('#modal_success').modal();
                     generateSuccessModal("deny_special_schedule", 2, "", "The REQUEST has been successfully DENIED!");
                 }
+            }, complete: function () {
+                getSpecialScheduleRequests();
             }
         });
 
@@ -673,7 +684,7 @@
             url: '/SAMPortal/Administration/ApproveSpecialSchedule',
             type: 'POST',
             dataType: 'JSON', 
-            data: { recordId: specialScheduleId },
+            data: { recordId: specialScheduleId,  rate: specialScheduleRate},
             success: function (result) {
                 if (result.data == 1) {
                     //$('#modal_success .modal-body p').html('Request successfuly apprpoved!');
@@ -683,6 +694,8 @@
                 } else if (result.status == "Error") {
                     generateDangerModal("save_new_crew_error_modal", "Please send the this error ID (" + (result.logId == null || result.logId == "" ? "000" : result.logId) + ") to IT Department for investigation.");
                 }
+            }, complete: function () {
+                getSpecialScheduleRequests();
             }
         });
 

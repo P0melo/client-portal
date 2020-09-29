@@ -163,7 +163,7 @@ namespace SAMPortal.Controllers
             int flag = 0;
 
             string courseName = parameters[0];
-            DateTime startDate = DateTime.ParseExact(parameters[1], "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime startDate = DateTime.ParseExact(parameters[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             //DateTime startDate = Convert.ToDateTime(parameters[1]);
             int numberOfParticipants = Convert.ToInt32(parameters[2]);
             string notes = parameters[3];

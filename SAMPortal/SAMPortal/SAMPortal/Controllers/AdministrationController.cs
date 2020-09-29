@@ -504,7 +504,7 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
-        public ActionResult ApproveSpecialSchedule(int recordId)
+        public ActionResult ApproveSpecialSchedule(int recordId, string rate)
         {
             var jsonStatus = (int)Status.Initialize;
 
@@ -514,11 +514,11 @@ namespace SAMPortal.Controllers
             {
                 try
                 {
-                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tblspecialcourserequests SET Status = 'Approved' WHERE Id = @id",
+                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tblspecialcourserequests SET Status = 'Approved', Rate = '" + rate + "' WHERE Id = @id",
                         new MySqlParameter("@id", recordId));
 
                     //For Logging
-                    string[] logparameters = { "status: Approved", "id:" + recordId };
+                    string[] logparameters = { "status: Approved", "id:" + recordId, "rate:" + rate };
                     string data = logging.ConvertToLoggingParameter(logparameters);
                     logging.Log(user, "ApproveSpecialSchedule", data);
 
