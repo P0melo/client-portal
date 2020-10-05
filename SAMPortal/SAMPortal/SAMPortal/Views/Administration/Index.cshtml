@@ -539,6 +539,99 @@
 </div>
 
 
+<div class="modal fade modal_airport_transportation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12">
+                    @*<div class="col-lg-12 form-group" id="inbound_div">
+                            <label>Inbound: </label>
+                            <span id="inbound"></span>
+                        </div>*@
+                    <div class="col-lg-12 form-group" id="inboundDate_div">
+                        <label class="col-xs-2" style="padding:0;">Inbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="inboundDate" style="padding:0;"></span>
+                    </div>
+                    @*<div class="col-lg-12 form-group" id="Outbound_div">
+                            <label>Outbound: </label>
+                            <span id="outbound"></span>
+                        </div>*@
+                    <div class="col-lg-12 form-group" id="OutboundDate_div">
+                        <label class="col-xs-2" style="padding:0;">Outbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="outboundDate" style="padding:0;"></span>
+                    </div>
+                    <div class="col-lg-12 form-group" id="label_attachment_div">
+                        <label>Attachment: </label>
+                    </div>
+                    <div class="col-lg-12 form-group" id="attachment_div" style="text-align:center">
+                        <span style="display: inline-block;" id="attachment"></span>
+                        @*<span style="display: block;" id="attachment"></span>*@
+
+                    </div>
+                    <div class="col-lg-12 form-group" id="notes_div">
+                        <label>Remarks: </label>
+                        <textarea class="form-control" rows="5" id="notes" disabled></textarea>
+                    </div>
+                </div>
+                &nbsp;
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default pull-right" id="transportation_confirm_btn" data-dismiss="modal">Complete</button>*@
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal_daily_transportation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12">
+                    <table class="table table-bordered" style="table-layout: fixed; word-break:break-word">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">Type</th>
+                                <th style="width: 17.5%">Pick-up</th>
+                                <th style="width: 17.5%">Drop-off</th>
+                                <th style="width: 10%">Date and Time</th>
+                                <th style="width: 17.5%">2nd Pick-up</th>
+                                <th style="width: 17.5%">2nd Drop-off</th>
+                                <th style="width: 10%">Date and Time</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="col-lg-12 form-group" id="notes_div">
+                        <label>Remarks: </label>
+                        <textarea class="form-control" rows="5" id="notes" disabled></textarea>
+                    </div>
+                </div>
+                &nbsp;
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default pull-right" id="transportation_confirm_btn" data-dismiss="modal">Complete</button>*@
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
     @Scripts.Render("~/bundles/administration")
 }

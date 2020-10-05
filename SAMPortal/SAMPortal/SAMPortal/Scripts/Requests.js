@@ -131,8 +131,8 @@
 
                 for (var i = 0; i < result.length; i++) {
                     var dateTime = result[i].DateRequested.split('T');
-                    content += "<tr><td>" + result[i].CourseName + "</td><td>" + (result[i].StartDate.split('T')[0]) + "</td><td>" + result[i].NumberOfParticipants + "</td><td>" + result[i].Notes + "</td>" +
-                        "<td>" + (dateTime[0] + ' ' + dateTime[1]) + "</td><td>" + result[i].RequestedBy + "</td><td>" + result[i].CompanyName + "</td><td>" + result[i].Status + "</td></tr>";
+                    content += "<tr><td>" + result[i].CourseName + "</td><td>" + fixDateFormat(result[i].StartDate.split('T')[0]) + "</td><td>" + result[i].NumberOfParticipants + "</td><td>" + result[i].Notes + "</td>" +
+                        "<td>" + (fixDateFormat(dateTime[0]) + ' ' + dateTime[1]) + "</td><td>" + result[i].RequestedBy + "</td><td>" + result[i].CompanyName + "</td><td>" + result[i].Status + "</td></tr>";
                 }
                 $('#special_schedule_requests_tbl tbody').html(content);
 
@@ -161,7 +161,7 @@
 
                 for (var i = 0; i < result.length; i++) {
                     content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + (result[i].LastName + ", " + result[i].FirstName) + "</td><td>" + result[i].HotelName + "</td>" +
-                        "<td>" + (result[i].RoomType == 1 ? "Single (deluxe room)" : "Double (deluxe room)") + "</td><td>" + result[i].CheckInDate.split('T')[0] + "</td><td>" + result[i].CheckOutDate.split('T')[0] + "</td>" +
+                        "<td>" + (result[i].RoomType == 1 ? "Single (deluxe room)" : "Double (deluxe room)") + "</td><td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td>" +
                         "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].ReservationBy + "</td><td>" + result[i].Status + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
                 }
 
@@ -299,7 +299,7 @@
         var month = dataSplit[1];
         var day = dataSplit[2];
 
-        return month + '/' + day + '/' + year;
+        return day + '/' + month + '/' + year;
     }
 
     var onSiteAccommodationRequests = "";
@@ -319,9 +319,11 @@
                 var data = result;
 
                 for (var i = 0; i < data.length; i++) {
+                    let checkInDate = data[i].CheckInDate.split('T');
+                    let checkOutDate = data[i].CheckOutDate.split('T');
 
                     content += "<tr><td><a id='" + data[i].Id + "'>" + data[i].MNNO + "</a></td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td>" +
-                        "<td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + data[i].CheckInDate.replace('T', ' ') + "</td><td>" + data[i].CheckOutDate.replace('T', ' ') + "</td><td>" + (data[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + data[i].Status + "</td></tr> ";
+                        "<td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] + "</td><td>" + (data[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + data[i].Status + "</td></tr> ";
                 }
 
                 $('#on_site_accommodation_requests_tbl tbody').html(content);
@@ -380,11 +382,12 @@
                     $('.modal_airport_transportation .modal-body #inboundDate').html(inboundDate);
                     $('.modal_airport_transportation .modal-body #outboundDate').html(outboundDate);
                     $('.modal_airport_transportation .modal-body #notes').val(result.typeAndNotes.Notes);
-                    $('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
+                    //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
+                    $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
                     //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
+                    renderImageForZoom(transportationRequestRecordId);
 
                     $('.modal_airport_transportation .modal-title').html(mnno + " - " + name);
-                    $('.modal_airport_transportation').modal();
                 }
                 //$('.modal_transportation .modal-body #company').html(result[0].CompanyName);
                 //$('.modal_transportation .modal-body #type').html(type);
@@ -433,30 +436,6 @@
         });
     });
 
-
-    //$(document).on('click', '#transportation_requests_tbl tbody tr td #view_attachment', function () {
-    //    $('.modal_picture .modal-title').html("Attached File");
-    //    $('.modal_picture .modal-body div').html("");
-    //    var row = $(this).parent().parent();
-    //    var src = transportationTable.row(row).data()[9];
-    //    var fileType = transportationTable.row(row).data()[10];
-    //    //alert(src);
-    //    $('.modal_picture .modal-title').html();
-    //    if (src !== 'null') {
-    //        if (fileType === "pdf" || fileType === "PDF") {
-    //            $('.modal_picture .modal-body div').html('<embed src="data:application/pdf;base64,' + src + '" frameborder="0" width="100%" height="400px">');
-    //        } else if (fileType === "jpg" || fileType === "jpeg" || fileType ==="JPG") {
-    //            $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + src + '" />');
-    //        } else if (fileType === "png" || fileType === "PNG") {
-    //            $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/png;base64,' + src + '" />');
-    //        }
-
-    //    } else {
-    //        $('.modal_picture .modal-body div').html('<p style="text-align: center">No data to show</p>');
-    //    }
-
-    //    $('.modal_picture').modal();
-    //});
 
     $(document).on('click', '#e_cancel_accomodation_btn', function () {
 
@@ -516,40 +495,42 @@
         $('#edit_onsite_booking_modal').modal('toggle');
     });
 
-    $(document).on('click', '.modal #view_attachment', function () {
-        $('.modal_picture .modal-header .modal-title').html("");
-        var recordId = $(this).attr('rid');
-        var src = "";
-        var fileType = "";
 
-        $.ajax({
-            url: '/SAMPortal/api/Forms/GetTransportationAttachment',
-            dataType: 'JSON',
-            type: 'GET',
-            data: { recordId: recordId },
-            success: function (result) {
-                src = result[0].Picture;
-                fileType = result[0].FileType;
-                if (src !== null && src !== "" && src !== "null") {
-                    if (fileType === "pdf" || fileType === "PDF") {
-                        $('.modal_picture .modal-body div').html('<embed src="data:application/pdf;base64,' + src + '" frameborder="0" width="100%" height="400px">');
-                    } else if (fileType === "jpg" || fileType === "jpeg" || fileType === "JPG") {
-                        $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + src + '" />');
-                    } else if (fileType === "png" || fileType === "PNG") {
-                        $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/png;base64,' + src + '" />');
-                    } else {
-                        $('.modal_picture .modal-body div').html('<p style="text-align: center">Could not show attachment. The type of the file uploaded is not a PDF/PNG or a JPEG type.</p>');
-                    }
 
-                } else {
-                    $('.modal_picture .modal-body div').html('<p style="text-align: center">No data to show</p>');
-                }
-            },
-            complete: function () {
-                $('.modal_picture').modal();
-            }
-        });
-    });
+    //$(document).on('click', '.modal #view_attachment', function () {
+    //    $('.modal_picture .modal-header .modal-title').html("");
+    //    var recordId = $(this).attr('rid');
+    //    var src = "";
+    //    var fileType = "";
+
+    //    $.ajax({
+    //        url: '/SAMPortal/api/Forms/GetTransportationAttachment',
+    //        dataType: 'JSON',
+    //        type: 'GET',
+    //        data: { recordId: recordId },
+    //        success: function (result) {
+    //            src = result[0].Picture;
+    //            fileType = result[0].FileType;
+    //            if (src !== null && src !== "" && src !== "null") {
+    //                if (fileType === "pdf" || fileType === "PDF") {
+    //                    $('.modal_picture .modal-body div').html('<embed src="data:application/pdf;base64,' + src + '" frameborder="0" width="100%" height="400px">');
+    //                } else if (fileType === "jpg" || fileType === "jpeg" || fileType === "JPG") {
+    //                    $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + src + '" />');
+    //                } else if (fileType === "png" || fileType === "PNG") {
+    //                    $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/png;base64,' + src + '" />');
+    //                } else {
+    //                    $('.modal_picture .modal-body div').html('<p style="text-align: center">Could not show attachment. The type of the file uploaded is not a PDF/PNG or a JPEG type.</p>');
+    //                }
+
+    //            } else {
+    //                $('.modal_picture .modal-body div').html('<p style="text-align: center">No data to show</p>');
+    //            }
+    //        },
+    //        complete: function () {
+    //            $('.modal_picture').modal();
+    //        }
+    //    });
+    //});
 
     // return values: 0 - not allowed to book, 1 - allowed to book
     function validateSchedule(date, serverDate) {
@@ -657,7 +638,7 @@
                 $('#LastName').val(lastName);
                 $('#BirthPlace').val(birthplace);
                 $('#datepicker').val(birthday);
-                $('#datepicker').datepicker();
+                $('#datepicker').datepicker({ format: 'dd/mm/yyyy'});
                 $('#modal_update_new_crew_request .modal-title').prepend(tempNo + ' - ');
 
                 $('#modal_update_new_crew_request').modal();
@@ -666,22 +647,5 @@
         });
 
     });
-
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
-    function formatDate(data) {
-
-        if (data == null) {
-            return "";
-        }
-
-        var result = data.replace(/[^0-9 +]/g, '');
-
-        var fdate = new Date(parseInt(result));
-
-        return fdate.getDate() + " " +monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
-    }
 
 });

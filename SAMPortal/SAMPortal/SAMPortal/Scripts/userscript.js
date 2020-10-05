@@ -17,6 +17,44 @@ function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) 
 
 }
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
+function renderImageForZoom(recordId) {
+    var src = "";
+    var fileType = "";
+
+    $.ajax({
+        url: '/SAMPortal/api/Forms/GetTransportationAttachment',
+        dataType: 'JSON',
+        type: 'GET',
+        data: { recordId: recordId },
+        success: function (result) {
+            src = result[0].Picture;
+            fileType = result[0].FileType;
+
+            if (src !== null && src !== "" && src !== "null") {
+                if (fileType === "pdf" || fileType === "PDF") {
+                    $('#attachment_div #attachment #imgForZoom').prop('src', 'data:application/pdf;base64,' + src);
+                } else if (fileType === "jpg" || fileType === "jpeg" || fileType === "JPG") {
+                    $('#attachment_div #attachment #imgForZoom').prop('src', 'data:image/jpeg;base64,' + src);
+
+                } else if (fileType === "png" || fileType === "PNG") {
+                    $('#attachment_div #attachment #imgForZoom').prop('src', 'data:image/png;base64,' + src);
+
+                }
+
+            } else {
+                $('.modal_picture .modal-body div').html('<p style="text-align: center">No data to show</p>');
+            }
+
+            $('.modal_airport_transportation').modal();
+            $('#attachment').zoom({ on: 'grab' });
+        }
+
+    });
+};
 
 function refreshBookingTable() {
     let currentMonth = $('#month_select option:selected').val();
@@ -506,6 +544,19 @@ function enrollThisCrew(parameters) {
             }
         }
     });
+}
+
+function formatDate(data) {
+
+    if (data == null) {
+        return "";
+    }
+
+    var result = data.replace(/[^0-9 +]/g, '');
+
+    var fdate = new Date(parseInt(result));
+
+    return fdate.getDate() + " " + monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
 }
 
 function saveAccomodation(parameters) {

@@ -55,6 +55,7 @@ namespace SAMPortal
              "~/Scripts/jquery.timepicker.min.js",
              "~/Content/select2-4.0.6-rc.1/dist/js/select2.min.js",
              "~/Scripts/jquery.blockUi.js",
+             "~/Scripts/jquery.zoom.min.js",
              "~/DataTables/datatables.min.js",
              "~/Scripts/userscript.js",
              "~/Scripts/dashboard.js",

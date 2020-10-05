@@ -163,7 +163,7 @@
                 var content = "";
                 for (var i = 0; i < result.length; i++) {
                     content += "<tr id='" + result[i].Id + "'><td>" + result[i].Position + "</td><td>" + result[i].MNNO + "</td><td><a id='" + result[i].Position + "~" + result[i].LastName + "~" + result[i].FirstName + "~" + result[i].MiddleInitial + "'>" + result[i].LastName + ", " + result[i].FirstName + " " + result[i].MiddleInitial + "</a></td>" +
-                        "<td id='" + result[i].Birthday + "'>" + formatDate(result[i].Birthday) + "</td><td>" + result[i].BirthPlace + "</td><td>" + result[i].CompanyName + "</td>" +
+                        "<td id='" + result[i].Birthday + "'>" + formatBDate(result[i].Birthday) + "</td><td>" + result[i].BirthPlace + "</td><td>" + result[i].CompanyName + "</td>" +
                         "<td style='padding: 1px'><button title='Approve' id='approve_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-check form-group'></i></button><button title='Deny' id='deny_btn' style='width: 50%' class='btn btn-default'><i class='fa fa-close form-group'></button></td></tr> ";
                 }
                 //<input id='approve_btn' class='btn btn-default' type='button' value='Approve' />&nbsp;<input id='deny_btn' class='btn btn-default' type=button value='Deny' />
@@ -222,7 +222,7 @@
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
 
-    function formatDate(data, redirect) {
+    function formatBDate(data, redirect) {
 
         if (data == null) {
             return "";
@@ -472,19 +472,12 @@
                     }
 
                     content += '<tr style="' + style + '"><td><a id="detailed_view" name="' + data[i].Id + '">' + data[i].Mnno + '</a></td><td>' + data[i].Rank + '</td><td>' + data[i].LastName + ', ' + data[i].FirstName + '</td><td>' + data[i].Type + '</td>' +
-                        '<td>' + data[i].Vehicle + '</td><td>' + (data[i].DateBooked.split('T')[0] + " " + data[i].DateBooked.split('T')[1]) + '</td><td style="padding: 1px" id="' + data[i].Id + '"><button title="View Attachment" style="width: 100%" id="view_attachment" class="btn btn-default"><i class="fa fa-paperclip"></i></button></td></tr>';
+                        '<td>' + data[i].Vehicle + '</td><td>' + (fixDateFormat(data[i].DateBooked.split('T')[0]) + " " + data[i].DateBooked.split('T')[1]) + '</td></tr>';
                 }
 
                 $('#review_transportation_tbl_body').html(content);
 
-                transportationTable = $('#review_transportation_tbl').DataTable({
-                    "order": [],
-                    "columnDefs": [{
-                        "targets": [6],
-                        "searchable": false,
-                        "orderable": false
-                    }]
-                });
+                transportationTable = $('#review_transportation_tbl').DataTable();
                    
                 $('#review_transportation_tbl').css('width', 'inherit');
             }
@@ -492,61 +485,59 @@
     }
 
     $(document).on('click', '#review_transportation_tbl_body tr td #detailed_view', function () {
-        //var row = $(this).parent().parent();
+        var row = $(this).parent().parent();
         transportationRequestRecordId = $(this).attr('name');
         var mnno = $(this).html();
-        var name = $(this).parent().next().next().html();
-        var vehicle = $(this).parent().next().next().next().next().html();
-        var type = $(this).parent().next().next().next().html();
+        var name = transportationTable.row(row).data()[2];
+        var vehicle = transportationTable.row(row).data()[4];
+        var type = transportationTable.row(row).data()[3];
+        $('.modal_daily_transportation table tbody').html('');
+
         $.ajax({
-            url: '/SAMPortal/api/Administration/GetTransportationRequestById',
+            url: '/SAMPortal/Forms/GetTransportationRequestById',
             type: 'get',
             dataType: 'json',
             data: { recordId: transportationRequestRecordId },
             success: function (result) {
-                $('.modal_transportation .modal-body #company').html(result[0].CompanyName);
-                $('.modal_transportation .modal-body #type').html(type);
-                $('.modal_transportation .modal-body #vehicle').html(vehicle);
-                $('.modal_transportation .modal-body #inbound').html(result[0].Inbound === 0 ? "No" : "Yes");
-                $('.modal_transportation .modal-body #outbound').html(result[0].Outbound === 0 ? "No" : "Yes");
-                $('.modal_transportation .modal-body #onetrip').html(result[0].OneTrip === 0 ? "No" : "Yes");
-                $('.modal_transportation .modal-body #twotrips').html(result[0].TwoTrips === 0 ? "No" : "Yes");
-                $('.modal_transportation .modal-body #pickup').html(result[0].PickUp === "" ? "N/A" : result[0].PickUp);
-                $('.modal_transportation .modal-body #dt_pickup').html(result[0].DateTimeOfPickUp === "" ? "N/A" : result[0].DateTimeOfPickUp);
-                $('.modal_transportation .modal-body #dropoff').html(result[0].DropOff === "" ? "N/A" : result[0].DropOff);
-                $('.modal_transportation .modal-body #pickup_2').html(result[0].SecondPickUp === "" ? "N/A" : result[0].SecondPickUp);
-                $('.modal_transportation .modal-body #dt_pickup_2').html(result[0].SecondDateTimeOfPickUp === "" ? "N/A" : result[0].SecondDateTimeOfPickUp);
-                $('.modal_transportation .modal-body #dropoff_2').html(result[0].SecondDropOff === "" ? "N/A" : result[0].SecondDropOff);
-                $('.modal_transportation .modal-body #notes').val(result[0].Notes === "" ? "N/A" : result[0].Notes);
+                if (result.typeAndNotes.Type == "Daily Transfer") {
+                    let content = "";
 
-                if (type === "Airport Transfer") {
-                    $('#one_trip_div').css('display', 'none');
-                    $('#two_trips_div').css('display', 'none');
-                    $('#pick_up_div').css('display', 'none');
-                    $('#dt_div').css('display', 'none');
-                    $('#drop_off_div').css('display', 'none');
-                    $('#second_pick_up_div').css('display', 'none');
-                    $('#dt_2_div').css('display', 'none');
-                    $('#second_drop_off_div').css('display', 'none');
+                    for (let i = 0; i < result.data.length; i++) {
+                        let type = result.data[i].IsRoundTrip == 1 ? "Round-trip" : "One-way";
+                        let pickUp = result.data[i].PickUpPlace;
+                        let dropOff = result.data[i].DropOffPlace;
+                        let dateTimePickUp = result.data[i].DateTimeOfPickUp;
 
-                    $('#inbound_div').css('display', 'block');
-                    $('#outbound_div').css('display', 'block');
-                } else {
-                    $('#inbound_div').css('display', 'none');
-                    $('#outbound_div').css('display', 'none');
+                        let pickUp2 = result.data[i].SecondPickUpPlace;
+                        let dropOff2 = result.data[i].SecondDropOffPlace;
+                        let dateTimePickUp2 = result.data[i].SecondDateTimeOfPickUp;
 
-                    $('#one_trip_div').css('display', 'block');
-                    $('#two_trips_div').css('display', 'block');
-                    $('#pick_up_div').css('display', 'block');
-                    $('#dt_div').css('display', 'block');
-                    $('#drop_off_div').css('display', 'block');
-                    $('#second_pick_up_div').css('display', 'block');
-                    $('#dt_2_div').css('display', 'block');
-                    $('#second_drop_off_div').css('display', 'block');
+                        content += "<tr><td>" + type + "</td><td>" + pickUp + "</td><td>" + dropOff + "</td><td>" + dateTimePickUp + "</td>" +
+                            "<td>" + pickUp2 + "</td><td>" + dropOff2 + "</td><td>" + dateTimePickUp2 + "</td></tr>"
+                    }
+
+                    $('.modal_daily_transportation table tbody').append(content);
+                    $('.modal_daily_transportation .modal-title').html(mnno + " - " + name);
+                    $('.modal_daily_transportation .modal-body #notes').val(result.typeAndNotes.Notes);
+                    $('.modal_daily_transportation').modal();
+
+                } else if (result.typeAndNotes.Type == "Airport Transfer") {
+                    let inbound = result.data.Inbound == 1 ? "Yes" : " No";
+                    let outbound = result.data.Outbound == 1 ? "Yes" : " No";
+                    let inboundDate = result.data.InboundDate === null ? "-----------------" : formatDate(result.data.InboundDate);
+                    let outboundDate = result.data.OutboundDate === null ? "-----------------" : formatDate(result.data.OutboundDate);
+
+                    $('.modal_airport_transportation .modal-body #inboundDate').html(inboundDate);
+                    $('.modal_airport_transportation .modal-body #outboundDate').html(outboundDate);
+                    $('.modal_airport_transportation .modal-body #notes').val(result.typeAndNotes.Notes);
+                    //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
+                    $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
+                    //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
+                    renderImageForZoom(transportationRequestRecordId);
+
+                    $('.modal_airport_transportation .modal-title').html(mnno + " - " + name);
                 }
 
-                $('.modal_transportation .modal-title').html(mnno + " - " + name);
-                $('.modal_transportation').modal();
             }
         });
     });

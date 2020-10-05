@@ -1,9 +1,9 @@
 ﻿var date = new Date();
 
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+const BMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function formatDate(data, redirect) {
+function formatBDate(data, redirect) {
 
     if (data == null) {
         return "";
@@ -17,7 +17,7 @@ function formatDate(data, redirect) {
 
     var date = new Date(data);
 
-    return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+    return date.getDate() + "." + BMonthNames[date.getMonth()] + "." + date.getFullYear();
 }
 
 function formatDate2(data) {

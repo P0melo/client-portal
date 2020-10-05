@@ -110,8 +110,14 @@ namespace SAMPortal.Models
         public int Outbound { get; set; }
         public DateTime? InboundDate { get; set; }
         public DateTime? OutboundDate { get; set; }
-        //public string FileType { get; set; }
-        //public byte[] Attachment { get; set; }
+        public string FileType { get; set; }
+        public byte[] Picture { get; set; }
+    }
+
+    public class Attachment
+    {
+        public string FileType { get; set; }
+        public byte[] Picture { get; set; }
     }
 
     public class DailyTransportationModel
@@ -210,11 +216,5 @@ namespace SAMPortal.Models
     {
         public int Id { get; set; }
         public float? Price { get; set; }
-    }
-
-    public class Attachment
-    {
-        public string FileType { get; set; }
-        public byte[] Picture { get; set; }
     }
 }

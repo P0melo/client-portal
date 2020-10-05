@@ -552,7 +552,7 @@ input[type="password"]:-moz-placeholder {
 }*/
 
 #course_list_tbl_tbody tr td:last-child, #o_course_list_tbl_tbody tr td:last-child, #enroll_crew_tbl_body tr td:last-child, #crew_list_tbl_tbody tr td:last-child,
-#review_transportation_tbl_body tr td:last-child, #swap_enrollees_tbl_body tr td:last-child, #review_tbl_tbody tr td:last-child, #crew_list_tbl_search tr td:last-child,
+#review_tbl_tbody tr td:last-child, #crew_list_tbl_search tr td:last-child,
 #enrolled_crews_tbl tr td:last-child {
     text-align: center;
     font-size: 15px;

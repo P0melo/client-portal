@@ -904,7 +904,7 @@ namespace SAMPortal.Controllers
 
             if (parameters[8] != "")
             {
-                inboundDate = DateTime.ParseExact(parameters[8], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+                inboundDate = DateTime.ParseExact(parameters[8], "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-PH"));
             }
 
             if (parameters[9] != "")
@@ -1460,7 +1460,7 @@ namespace SAMPortal.Controllers
             }
             else if (typeAndNotes.Type.Equals("Airport Transfer"))
             {
-                var data = _context.Database.SqlQuery<AirportTransportationModel>("SELECT Inbound, Outbound, InboundDate, OutboundDate " +
+                var data = _context.Database.SqlQuery<AirportTransportationModel>("SELECT Inbound, Outbound, InboundDate, OutboundDate, FileType, Attachment as Picture " +
                                                                        "FROM tblairport_transfer_details " +
                                                                        "WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).FirstOrDefault();
 
