@@ -200,12 +200,13 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
-        public IHttpActionResult GetRanks()
-        {
-            var data = _context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+        //public IHttpActionResult GetRanks()
+        //{
+        //    var data = _context.Database.SqlQuery<Rank>("SELECT rank AS CrewRank, description AS Description, string.Concat(rank, ' - ', description) AS RankDesc WHERE main_rank = 1").ToList();
+        //    // Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
 
-            return Ok(data);
-        }
+        //    return Ok(data);
+        //}
 
         //public IHttpActionResult 
     }

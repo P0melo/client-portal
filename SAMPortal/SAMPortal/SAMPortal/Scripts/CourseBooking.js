@@ -236,8 +236,8 @@
     var rowForSwap = "";
     $(document).on('click', '#swap_crew', function () {
         rowForSwap = $(this);
-        mnnoForSwap = $(this).parent().prev().prev().prev().prev().html();
-        rankForSwap = $(this).parent().prev().prev().prev().html();
+        mnnoForSwap = $(this).parent().prev().prev().prev().html();
+        rankForSwap = $(this).parent().prev().prev().html();
         var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
 
         $.ajax({
@@ -282,7 +282,7 @@
                         swapEnrollmentTable = $('#swap_enrollees_tbl').DataTable({
                             pageLength: 5, lengthChange: false,
                             "columnDefs": [{
-                                "targets": [4],
+                                "targets": [3],
                                 "orderable": false
                             }]
                         });
@@ -304,9 +304,8 @@
         let title = $('#enroll_modal .modal-title').html();
         let schedId = title.split('-')[0].split(' ')[2];
         let mnno = $(this).parent().parent().attr('id');
-        let rank = $(this).parent().prev().prev().prev().html();
-        crewNameToBeEnrolled = $(this).parent().prev().prev().html();
-        crewNameToBeEnrolledContact = $(this).parent().prev().html();
+        let rank = $(this).parent().prev().prev().html();
+        crewNameToBeEnrolled = $(this).parent().prev().html();
 
         $.ajax({
             url: '/SAMPortal/api/CourseBooking/GetNumberOfAllEnrollees',
@@ -376,8 +375,8 @@
         var schedId = $('#enroll_modal .modal-title').html().split(' - ')[0].split('. ')[1];
         var mnno = $(this).parent().parent().attr('id');
         crewNameToBeSwappedContact = $(this).parent().prev().html();
-        var rank = $(this).parent().prev().prev().prev().html();
-        crewNameToBeSwapped = $(this).parent().prev().prev().html();
+        var rank = $(this).parent().prev().prev().html();
+        crewNameToBeSwapped = $(this).parent().prev().html();
 
         var parameters = [];
         parameters[0] = schedId;
@@ -494,7 +493,6 @@
                         parameters[1],
                         parameters[2],
                         crewNameToBeSwapped,
-                        crewNameToBeSwappedContact,
                         "<button id='swap_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-exchange'></i></button><button id='remove_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-times'></i></button>",
                         myEnrolledCrewTable.rows().count() + 1
                     ]).draw(false);

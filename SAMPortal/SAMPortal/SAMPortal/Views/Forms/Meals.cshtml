@@ -82,7 +82,7 @@
         </div>
         <div class="form-group col-xs-12 pull-right" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12 col-lg-6">
-                <label for="remarks" class="control-label">Dietary Requirement</label>
+                <label for="dietaryReqiuirement" class="control-label">Dietary Requirement<span class="mandatory">*</span></label>
                 <input id="dietaryRequirement_input" class="form-control"  />
                 @*<input id="reason_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Required" />*@
             </div>
@@ -99,7 +99,9 @@
         <div class="form-group col-sm-12">
             <div class="form-group col-sm-12">
                 @*<span id="meal_err_msg" style="color: red; display: none">**Fields must not be left blank</span>*@
-                <button type="button" id="save_meal_btn" class="btn btn-default pull-right">Submit</button>
+                <button type="button" id="save_meal_btn" class="btn btn-default pull-right" style="margin-left: 10px;">Submit</button>
+                <button type="button" id="clear_meal_btn" class="btn btn-default pull-right">Clear</button>
+
             </div>
         </div>
 

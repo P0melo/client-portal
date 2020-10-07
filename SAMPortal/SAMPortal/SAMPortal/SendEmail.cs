@@ -251,22 +251,8 @@ namespace SAMPortal
                 string lastName = parameters[3];
                 string type = parameters[4];
                 string vehicle = parameters[5];
-                string date = parameters[6];
-                string inbound = parameters[7].Equals("True") ? "YES" : "NO";
-                string outbound = parameters[8].Equals("True") ? "YES" : "NO";
-                string oneTrip = parameters[9].Equals("True") ? "YES" : "NO";
-                string twoTrips = parameters[10].Equals("True") ? "YES" : "NO";
-                string status = parameters[11];
-                string pickUp = parameters[12];
-                string dateTimeOfPickUp = parameters[13];
-                string dropOff = parameters[14];
-                string secondPickUp = parameters[15];
-                string secondDateTimeOfPickUp = parameters[16];
-                string secondDropOff = parameters[17];
-                string notes = parameters[18];
-                string referenceId = parameters[19];
-                string dateBooked = parameters[20];
-                string requestedBy = parameters[21];
+                string dateRequested = parameters[6];
+                string Notes = parameters[7];
 
                 WebMail.Send(to: clientReceipient, subject: "[NOTIFICATION] UPDATE FROM YOUR REQUEST!", body:
                   "Your request for a transportation has been tagged as COMPLETE. Please see details below: <br /><br /> " +
@@ -276,22 +262,22 @@ namespace SAMPortal
                   "Lastname: " + lastName + "<br />" +
                   "Type: " + type + "<br />" +
                   "Vehicle: " + vehicle + "<br />" +
-                  "Date: " + date + "<br />" +
-                  "Inbound: " + inbound + "<br />" +
-                  "Outbound: " + outbound + "<br />" +
-                  "One Trip: " + oneTrip + "<br />" +
-                  "Two Trips: " + twoTrips + "<br />" +
-                  "Status: " + status + "<br />" +
-                  "Pick Up: " + pickUp + "<br /><br />" +
-                  "Date and Time of Pick Up: " + dateTimeOfPickUp + "<br />" +
-                  "Drop Off: " + dropOff + "<br />" +
-                  "Second Pick Up: " + secondPickUp + "<br />" +
-                  "Second Date and Time of Pick Up: " + secondDateTimeOfPickUp + "<br />" +
-                  "Second Drop Off: " + secondDropOff + "<br />" +
-                  "Remarks: " + notes + "<br />" +
-                  "Reference ID: " + referenceId + "<br />" +
-                  "Date Booked: " + dateBooked + "<br />" +
-                  "Requested By: " + requestedBy + "<br /><br />" + 
+                  "Date Requested: " + dateRequested + "<br />" +
+                  "Notes: " + Notes + "<br />" +
+                  //"Outbound: " + outbound + "<br />" +
+                  //"One Trip: " + oneTrip + "<br />" +
+                  //"Two Trips: " + twoTrips + "<br />" +
+                  //"Status: " + status + "<br />" +
+                  //"Pick Up: " + pickUp + "<br /><br />" +
+                  //"Date and Time of Pick Up: " + dateTimeOfPickUp + "<br />" +
+                  //"Drop Off: " + dropOff + "<br />" +
+                  //"Second Pick Up: " + secondPickUp + "<br />" +
+                  //"Second Date and Time of Pick Up: " + secondDateTimeOfPickUp + "<br />" +
+                  //"Second Drop Off: " + secondDropOff + "<br />" +
+                  //"Remarks: " + notes + "<br />" +
+                  //"Reference ID: " + referenceId + "<br />" +
+                  //"Date Booked: " + dateBooked + "<br />" +
+                  //"Requested By: " + requestedBy + "<br /><br />" + 
                   "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
                   "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged." +
                   "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>", cc: "", bcc: "", isBodyHtml: true);

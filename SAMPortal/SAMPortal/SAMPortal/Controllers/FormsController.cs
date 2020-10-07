@@ -42,7 +42,8 @@ namespace SAMPortal.Controllers
         {
             var nations = _context.tblcountries.Select(m => new Nation { Name = m.name, Iso3 = m.iso3 }).ToList();
 
-            var ranks = _context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+            var ranks = _context.Database.SqlQuery<Rank>("SELECT rank AS CrewRank, description AS Description, CONCAT(rank, ' - ', description) AS RankDesc FROM tblrank WHERE main_rank = 1").ToList();
+            //_context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
 
             IEnumerable<Nation> nationList = nations;
             IEnumerable<Rank> ranksList = ranks;
@@ -570,14 +571,15 @@ namespace SAMPortal.Controllers
             var remarks = parameters[9];
 
 
-            DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-            DateTime checkOutDate = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime checkOutDate = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
             var classification = "CREW";
 
-            //Status = Request/Confirmed/Billed/Paid/ClientArrangedPayment
-            var status = 1;
+            //Status = Request/Confirmed/Billed/Paid/ClientArrangedPayment -- this is old
+            //Status 7 is In Process
+            var status = 7;
 
             var crewBatch = 141;
 
@@ -657,9 +659,9 @@ namespace SAMPortal.Controllers
             var remarks = parameters[9];
             var room_type = Convert.ToInt32(parameters[5]);
 
-            DateTime checkInDateTimeFrom = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime checkInDateTimeFrom = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-            DateTime checkInDateTimeTo = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime checkInDateTimeTo = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
             var classification = "CREW";
             var status = "Reserved";
@@ -1426,7 +1428,8 @@ namespace SAMPortal.Controllers
         {
             //var nations = _context.tblcountries.Select(m => new Nation { Name = m.name, Iso3 = m.iso3 }).ToList();
 
-            var ranks = _context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+            //var ranks = _context.tblranks.Select(m => new Rank { CrewRank = m.rank, Description = m.description, RankDesc = string.Concat(m.rank, " - ", m.description) }).ToList();
+            var ranks = _context.Database.SqlQuery<Rank>("SELECT rank AS CrewRank, description AS Description, CONCAT(rank, ' - ', description) AS RankDesc FROM tblrank WHERE main_rank = 1").ToList();
 
             //IEnumerable<Nation> nationList = nations;
             IEnumerable<Rank> ranksList = ranks;

@@ -525,7 +525,6 @@ function enrollThisCrew(parameters) {
                         enrollThisCrewParameters[1],
                         enrollThisCrewParameters[2],
                         crewNameToBeEnrolled,
-                        crewNameToBeEnrolledContact,
                         "<button id='swap_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-exchange'></i></button><button id='remove_crew' class='btn btn-default' style='width: 50%'><i class='fa fa-times'></i></button>",
                         myEnrolledCrewTable.rows().count() + 1
                     ]).draw(false);

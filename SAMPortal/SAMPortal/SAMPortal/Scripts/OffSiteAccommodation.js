@@ -9,7 +9,10 @@
         $('#course_reservation_lnk').next().show();
     }
 
-    $('#off_site_date').daterangepicker();
+    $('#off_site_date').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }});
 
     $('#off_site_date').prev().click(function () {
         $(this).next().focus();

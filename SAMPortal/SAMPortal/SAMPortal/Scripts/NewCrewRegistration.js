@@ -49,16 +49,16 @@
     var dailyTransferDateMonth = date.getMonth() + 1;
     var dailyTransferDateDay = date.getDate();
 
-    var dailyTransferDateOutput = (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' +
-        (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + date.getFullYear();
+    var dailyTransferDateOutput = (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' +
+         + date.getFullYear();
 
-    $('#pick_up_date').datepicker().val(dailyTransferDateOutput);
+    $('#pick_up_date').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
 
     $('#pick_up_date').prev().click(function () {
         $(this).next().focus();
     });
 
-    $('#pick_up_date_2').datepicker().val(dailyTransferDateOutput);
+    $('#pick_up_date_2').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
 
     $('#pick_up_date_2').prev().click(function () {
         $(this).next().focus();
@@ -496,6 +496,7 @@
     function clearMeals() {
         $('#meal_reservation').val('');
         $('#reason_input').val('');
+        $('#dietaryRequirement_input').val('');
         $('#breakfast_cb').prop('checked', false);
         $('#am_snack_cb').prop('checked', false);
         $('#lunch_cb').prop('checked', false);
@@ -565,6 +566,7 @@
     var m_lunch_cb;
     var m_pm_snack_cb;
     var m_dinner_cb;
+    var m_dietary_requirement;
 
     var o_off_site_hotel_name;
     var o_off_site_room_type;
@@ -1298,21 +1300,23 @@
 
     //=====================================================On-Site Booking===========================================================
 
-    function getInHouseBookingFieldsValues() {
+    //function getInHouseBookingFieldsValues() {
 
-        if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '') {
-            inHouseBooking = 1;
-            return true;
-        } else {
-            if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '') {
-                alert("Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
-                return false;
-            } else {
-                inHouseBooking = 0;
-                return true;
-            }
-        }
-    }
+    //    if (i_reservation_type == '' && i_room_type == '' && i_accommodation == '' && i_mode_of_payment == '' && i_accommodation_reason == '') {
+    //        inHouseBooking = 1;
+    //        return true;
+    //    } else {
+    //        if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '') {
+    //            alert("Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
+    //            return false;
+    //        } else {
+    //            inHouseBooking = 0;
+    //            return true;
+    //        }
+    //    }
+    //}
+
+    var onSiteBookingParameters = [];
 
     $(document).on('click', '#submit_in_house_booking', function () {
         let mnno = mnnoAfterRegistration;
@@ -1327,23 +1331,26 @@
         i_accommodation_remarks_input = $('#accomodation_remarks_input').val();
 
         if (i_reservation_type == '' || i_room_type == '' || i_accommodation == '' || i_mode_of_payment == '' || i_accommodation_reason == '') {
-            generateWarningModal("on_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to book for On Site Accommodation...");
+            generateWarningModal("on_site_accommodation_warning", 2, "", "Please make sure that required fields are not left blank before clicking submit");
             return false;
         }
+        onSiteBookingParameters = [mnno, rank, lastName, firstName, i_reservation_type, i_room_type, i_accommodation, i_mode_of_payment, i_accommodation_reason, i_accommodation_remarks_input];
 
-        let parameters = [mnno, rank, lastName, firstName, i_reservation_type, i_room_type, i_accommodation, i_mode_of_payment, i_accommodation_reason, i_accommodation_remarks_input];
+        generateWarningModal("submit_on_site_booking_modal", 1, "submit_on_site_booking_modal_yes", "Are you sure you want to submit?");
 
-        saveAccomodation(parameters);
 
+
+    });
+
+    $(document).on('click', '#submit_on_site_booking_modal_yes', function () {
+        saveAccomodation(onSiteBookingParameters);
     });
 
     //====================================================Off-Site Booking========================================================================
+    var offSiteBookingParameters = [];
 
     $(document).on('click', '#submit_out_house_booking', function () {
-        generateWarningModal("submit_out_house_booking_modal", 1, "submit_out_house_booking_modal_yes", "Are you sure you want to submit?");
-    });
 
-    $(document).on('click', '#submit_out_house_booking_modal_yes', function () {
         let mnno = mnnoAfterRegistration;
         let rank = position;
         let lastName = $('#LastName').val();
@@ -1357,12 +1364,22 @@
 
         if (o_off_site_hotel_name == '' || o_off_site_room_type == '' || o_off_site_date == '' || o_off_site_mode_of_payment == '' || o_off_site_reason == '') {
             //alert("Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
-            generateWarningModal("off_site_accommodation_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want book for a Hotel Accommodation...");
+            generateWarningModal("off_site_accommodation_warning", 2, "", "Please make sure that required fields are not left blank before clicking submit");
             return false;
         }
 
-        let parameters = [mnno, rank, lastName, firstName, o_off_site_date, o_off_site_hotel_name, o_off_site_room_type, o_off_site_mode_of_payment, o_off_site_reason, o_off_site_remarks_input];
+        offSiteBookingParameters = [mnno, rank, lastName, firstName, o_off_site_date, o_off_site_hotel_name, o_off_site_room_type, o_off_site_mode_of_payment, o_off_site_reason, o_off_site_remarks_input];
 
+        generateWarningModal("submit_off_site_booking_modal", 1, "submit_off_site_booking_modal_yes", "Are you sure you want to submit?");
+    });
+
+    $(document).on('click', '#submit_off_site_booking_modal_yes', function () {
+        
+        saveOffSiteAccommodation(offSiteBookingParameters);
+
+    });
+
+    function saveOffSiteAccommodation(parameters) {
         $.ajax({
             url: '/SAMPortal/Forms/SaveOffSiteAccomodation',
             type: 'post',
@@ -1387,9 +1404,7 @@
             }
         });
         //SaveOffSiteAccomodation
-
-
-    });
+    }
 
     //====================================================Transportation========================================================================
     var saveTransportationParameter = [];
@@ -1409,6 +1424,11 @@
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
 
+        if (type === "" || vehicle === "") {
+            generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking submit");
+            return false;
+        }
+
         if ($('#transportation_type').val() == "Airport Transfer") {
 
             let inboundDate = $('#transportation_date').val();
@@ -1424,25 +1444,25 @@
             saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
 
             if (file === "") {
-                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking submit");
                 return false;
             }
 
             if (inbound == false && outbound == false) {
-                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking submit");
                 return false;
             }
 
             if (inbound == true) {
                 if ($('#transportation_date').val().trim() == "") {
-                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking submit");
                     return false;
                 }
             }
 
             if (outbound == true) {
                 if ($('#transportation_date_outbound').val().trim() == "") {
-                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking Submit");
+                    generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking Submit");
                     return false;
                 }
             }
@@ -1451,7 +1471,7 @@
 
         } else if ($('#transportation_type').val() == "Daily Transfer") {
             if (dailyTransferDetails.length == 0) {
-                generateWarningModal("save_transportation_warning", 2, "", "Please make sure to add details before clicking submit...");
+                generateWarningModal("save_transportation_warning", 2, "", "Please make sure to add details before clicking submit");
                 return false;
             }
 
@@ -1460,7 +1480,7 @@
             generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
 
         } else if ($('#transportation_type').val() == "Daily Transfer" || $('#transportation_vehicle').val() == "") {
-            generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking Submit");
+            generateWarningModal("save_transportation_warning", 2, "", "Please make sure that required fields are left blank before clicking Submit");
         }
 
     });
@@ -1593,17 +1613,13 @@
     //});
 
     //====================================================Meal Arrangement=======================================================================
-
+    var mealsArrangementParameters = [];
     $(document).on('click', '#submit_meals_arrangement', function () {
-        generateWarningModal("submit_meals_arrangement_modal", 1, "submit_meals_arrangement_modal_yes", "Are you sure you want to submit?");
-    });
-
-    $(document).on('click', '#submit_meals_arrangement_modal_yes', function () {
         let mnno = mnnoAfterRegistration;
         let rank = position;
         let lastName = $('#LastName').val();
         let firstName = $('#FirstName').val();
-        
+
         m_meal_reservation = $('#meal_reservation').val();
         m_reason_input = $('#reason_input').val();
         m_breakfast_cb = $('#breakfast_cb').is(':checked');
@@ -1611,14 +1627,27 @@
         m_lunch_cb = $('#lunch_cb').is(':checked');
         m_pm_snack_cb = $('#pm_snack_cb').is(':checked');
         m_dinner_cb = $('#dinner_cb').is(':checked');
+        m_dietary_requirement = $('#dietaryRequirement_input').val();
 
-        let parameters = [mnno, rank, "", m_meal_reservation, m_reason_input, m_breakfast_cb, m_am_snack_cb, m_lunch_cb, m_pm_snack_cb, m_dinner_cb];
 
-        if (m_meal_reservation == '' || m_reason_input == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
-            generateWarningModal("meals_arrangement_warning", 2, "", "Please make sure that no field is left blank or press the Clear button if you do not want to arrange a meal...");
+        if (m_meal_reservation == '' || m_dietary_requirement == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
+            generateWarningModal("meals_arrangement_warning", 2, "", "Please make sure that required fields are not left blank before clicking submit");
             return false;
         }
 
+        mealsArrangementParameters = [mnno, rank, "", m_meal_reservation, m_reason_input, m_dietary_requirement, m_breakfast_cb, m_am_snack_cb, m_lunch_cb, m_pm_snack_cb, m_dinner_cb];
+
+
+        generateWarningModal("submit_meals_arrangement_modal", 1, "submit_meals_arrangement_modal_yes", "Are you sure you want to submit?");
+
+    });
+
+    $(document).on('click', '#submit_meals_arrangement_modal_yes', function () {
+        saveMealsArrangement(mealsArrangementParameters);
+        
+    })
+
+    function saveMealsArrangement(parameters) {
         $.ajax({
             url: '/SAMPortal/Forms/SaveMealProvision',
             type: 'post',
@@ -1640,5 +1669,5 @@
                 }
             }
         });
-    })
+    }
 });

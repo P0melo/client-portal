@@ -61,7 +61,8 @@ namespace SAMPortal.Enum
         Billed = 5,
         Paid = 6,
         PersonalAccount = 7,
-        Cancelled = 8
+        Cancelled = 8,
+        Booked = 9
     }
 
 }

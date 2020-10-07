@@ -341,7 +341,7 @@ select.form-control + .chosen-container-multi .chosen-results li.result-selected
     display: none;
 }
 
-#save_meal_btn {
+#save_meal_btn, #clear_meal_btn {
     margin-top: 5px;
 }
 

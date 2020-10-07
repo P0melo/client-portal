@@ -567,7 +567,7 @@
 
     $(document).on('click', '#modal_update_new_crew_request_save', function () {
         let datepickerSplit = $('#datepicker').val().split('/');
-        let birthDate = datepickerSplit[2] + "-" + datepickerSplit[0] + "-" + datepickerSplit[1];
+        let birthDate = datepickerSplit[2] + "-" + datepickerSplit[1] + "-" + datepickerSplit[0];
         let firstname = $('#FirstName').val();
         let lastname = $('#LastName').val();
         let tempNo = $('#modal_update_new_crew_request .modal-title').html().split(' - ')[0];

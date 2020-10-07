@@ -92,15 +92,22 @@
             type: 'get',
             success: function (result) {
                 var content = "";
-
+                
                 if (result.length > 0) {
                     for (var i = 0; i < result.length; i++) {
                         var modeOfPayment = result[i].ModeOfPayment === 0 ? "Company Sponsored" : "Personal Account";
                         var name = result[i].LastName + ", " + result[i].FirstName;
                         var room = result[i].RoomType === 1 ? "Single (Deluxe Room)" : "Double (Deluxe Room)";
+                        let status = "";
+
+                        if (result[i].Status == 7) {
+                            status = "In Process";
+                        } else if (result[i].Status == 8) {
+                            status = "Booked"
+                        }
 
                         content += "<tr><td><a id='" + result[i].Id + "'>" + result[i].MNNO + "</a></td><td>" + result[i].Rank + "</td><td>" + name + "</td><td>" + result[i].HotelName + "</td><td>" + room + "</td>" +
-                            "<td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
+                            "<td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td><td>" + result[i].CompanyName + "</td><td>" + modeOfPayment + "</td><td>" + result[i].BookerRemarks + "</td><td>" + status + "</td></tr>";
                     }
                 } else {
                     if (offSiteAccommodationTable !== "") {
@@ -380,6 +387,7 @@
 
                 $('#reason_of_stay_input').val(result[0].ReasonOfStay);
                 $('#reason_of_stay_input').attr('disabled', true);
+                $('#off_site_accommodation_save_btn').attr('recordId', Id);
                 $('#admin_remarks').val(result[0].Remarks);
             }
         });
@@ -395,27 +403,37 @@
     $(document).on('click', '#off_site_accommodation_save_btn', function () {
 
         adminRemarks = $('#admin_remarks').val();
+        gOffSiteRecordId = $(this).attr('recordId')
+        //$('#modal_warning_review_offsite_accommodation .modal-body p').html("Are you sure you want to update this record?");
+        //$('#modal_warning_review_offsite_accommodation').modal();
 
-        $('#modal_warning_review_offsite_accommodation .modal-body p').html("Are you sure you want to update this record?");
-        $('#modal_warning_review_offsite_accommodation').modal();
+        generateWarningModal('modal_warning_review_offsite_accommodation', 1, 'modal_warning_review_offsite_accommodation_yes', 'Are you sure you want to mark this item as Booked?');
+
+
     });
 
     $(document).on('click', '#modal_warning_review_offsite_accommodation_yes', function () {
-
+        let statusId = 8 //Booked
         $.ajax({
             url: '/SAMPortal/Administration/UpdateOffSiteStatusId',
             type: 'get',
-            data: { statusId: gOffSiteStatusId, recordId: gOffSiteRecordId, adminRemarks: adminRemarks },
+            data: { statusId: statusId, recordId: gOffSiteRecordId, adminRemarks: adminRemarks },
             success: function (result) {
                 $('#review_off_site_accommodation_modal').modal('hide');
                 if (result.data === 1) {
-                    $('#modal_success .modal-body p').html("Update record successfully!");
-                    $('#modal_success').modal();
+                    //$('#modal_success .modal-body p').html("Successfully marked as Booked...!");
+                    //$('#modal_success').modal();
+
+                    generateSuccessModal("review_off_site_accommodation_modal_success", 2, "", "Successfully marked as BOOKED!");
+
 
                     getOffSiteAccommodationRequest();
                 } else {
-                    $('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
-                    $('.modal-danger').modal();
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
+                    //$('.modal-danger').modal();
+
+                    generateDangerModal("review_off_site_transportation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
+
                 }
             }
         });
@@ -425,11 +443,15 @@
 
     $(document).on('click', '#transportation_confirm_btn', function () {
 
-        $('#modal_complete_transportation_modal .modal-body p').html('Are you sure you want to mark this item as Complete?');
-        $('#modal_complete_transportation_modal').modal();
+        //$('#modal_complete_transportation_modal .modal-body p').html('Are you sure you want to mark this item as Booked?');
+        generateWarningModal('transportation_book', 1, 'modal_complete_transportation_modal_yes', 'Are you sure you want to mark this item as Booked?');
+
+        //$('#modal_complete_transportation_modal').modal();
     });
 
     $(document).on('click', '#modal_complete_transportation_modal_yes', function () {
+        $('.modal_daily_transportation').modal('hide');
+        $('.modal_airport_transportation').modal('hide');
 
         $.ajax({
             url: '/SAMPortal/Administration/CompleteTransportationRequest',
@@ -438,6 +460,8 @@
             success: function (result) {
                 if (result.data == 1) {
                     $('#modal_transpo_completed_modal').modal();
+
+                    
                 } else {
                     $('#modal_complete_transportation_modal  .modal-body p').html('Something went wrong, please try again and if the problem persists please contact the Sales and Marketing Team.');
                     $('#modal_complete_transportation_modal ').modal();
@@ -465,14 +489,14 @@
                 var style = "";
 
                 for (var i = 0; i < data.length; i++) {
-                    if (data[i].Status == "Requested") {
+                    if (data[i].Status == "In Process") {
                         style = "color: red";
                     } else {
                         style = "color: green";
                     }
 
                     content += '<tr style="' + style + '"><td><a id="detailed_view" name="' + data[i].Id + '">' + data[i].Mnno + '</a></td><td>' + data[i].Rank + '</td><td>' + data[i].LastName + ', ' + data[i].FirstName + '</td><td>' + data[i].Type + '</td>' +
-                        '<td>' + data[i].Vehicle + '</td><td>' + (fixDateFormat(data[i].DateBooked.split('T')[0]) + " " + data[i].DateBooked.split('T')[1]) + '</td></tr>';
+                        '<td>' + data[i].Vehicle + '</td><td>' + (fixDateFormat(data[i].DateBooked.split('T')[0]) + " " + data[i].DateBooked.split('T')[1]) + '</td><td>' + data[i].Status + '</td></tr>';
                 }
 
                 $('#review_transportation_tbl_body').html(content);

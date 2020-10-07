@@ -400,9 +400,9 @@ namespace SAMPortal.Controllers
 
                     var requestor = _cadetContext.Database.SqlQuery<string>("SELECT ReservationBy FROM tbloff_site_reservation WHERE Id = " + recordId).FirstOrDefault();
 
-                    var newCrewRequestDetails = _cadetContext.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT Position, LastName, FirstName, MiddleName, Birthday, Birthplace FROM tblnewcrewrequest WHERE Id = " + recordId).FirstOrDefault();
-                    string[] parameters = newCrewRequestDetails.ToArray();
-                    mail.SendNotificationToClient(requestor, (int)Requests.NewCrewRequest, parameters, status);
+                    var offSiteAccommodationRequestParameters = _cadetContext.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT * FROM tblnewcrewrequest WHERE Id = " + recordId).FirstOrDefault();
+                    string[] parameters = offSiteAccommodationRequestParameters.ToArray();
+                    mail.SendNotificationToClient(requestor, (int)Requests.OffSiteAccommodationRequest, parameters, status);
 
 
                     jsonStatus = (int)Status.Success;
@@ -428,21 +428,20 @@ namespace SAMPortal.Controllers
             {
                 try
                 {
-                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Status = 'Completed' WHERE Id = '" + recordId + "'");
+                    _cadetContext.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Status = 'Booked' WHERE Id = '" + recordId + "'");
 
                     //For Logging
-                    string[] logparameters = { "recordId:" + recordId, "status:Completed" };
+                    string[] logparameters = { "recordId:" + recordId, "status:Booked" };
                     string data = logging.ConvertToLoggingParameter(logparameters);
                     logging.Log(user, "CompleteTransportationRequest", data);
 
                     //send email notification to client
-                    var requestDetail = _cadetContext.Database.SqlQuery<TransportationRequestModel>("SELECT MNNO, Rank, FirstName, LastName, Type, Vehicle, Date," +
-                        " Inbound, Outbound, OneTrip, TwoTrips, Status, PickUp, DateTimeOfPickUp, DropOff, SecondPickUp, SecondDateTimeOfPickUp, SecondDropOff," +
-                        " Notes, ReferenceId, DateBooked, RequestedBy FROM tbltransportation WHERE Id = " + recordId).FirstOrDefault();
+                    var requestDetail = _cadetContext.Database.SqlQuery<TransportationRequestModel>("SELECT MNNO, Rank, FirstName, LastName, Type, Vehicle, DateBooked, Notes, RequestedBy " +
+                        "FROM tbltransportation WHERE Id = " + recordId).FirstOrDefault();
 
                     string[] parameters = requestDetail.ToArray();
 
-                    mail.SendNotificationToClient(requestDetail.RequestedBy, (int)Requests.TransportationRequest, parameters, (int)ApprovalStatus.Completed);
+                    mail.SendNotificationToClient(requestDetail.RequestedBy, (int)Requests.TransportationRequest, parameters, (int)ApprovalStatus.Booked);
 
                     jsonStatus = (int)Status.Success;
                 }

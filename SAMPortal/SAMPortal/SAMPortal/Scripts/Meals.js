@@ -162,7 +162,6 @@
         var dinner_cb = $('#dinner_cb').prop('checked');
         var reason = $('#reason_input').val();
         var dietaryRequirement = $('#dietaryRequirement_input').val();
-        alert(dietaryRequirement);
 
         var dateDiff = getDateDiff(date);
 
@@ -342,5 +341,9 @@
             }
         });
     }
+
+    $(document).on('click', '#clear_meal_btn', function () {
+        window.location.reload();
+    });
 
 });

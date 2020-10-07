@@ -44,8 +44,8 @@ namespace SAMPortal.Controllers.Api
         public IHttpActionResult GetOffSiteAccommodationRequest()
         {
             var data = _context.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT Id, MNNO, `Rank`, LastName, FirstName, HotelName, RoomType, Status, CheckInDate, CheckOutDate, c.CompanyName, ModeOfPayment, h.h_rmrk AS ReasonOfStay, BookerRemarks " +
-                                                                                "FROM tbloff_site_reservation o JOIN tbltpcompany c on o.CompanyId = c.CompanyID JOIN tblhotel_guest_remark_type h on h.id_h_rmrk = ReasonOfStay WHERE o.Status = 1 " +
-                                                                                "OR o.Status = 2 OR o.Status = 3 ORDER BY MNNO ASC").ToList();
+                                                                                "FROM tbloff_site_reservation o JOIN tbltpcompany c on o.CompanyId = c.CompanyID JOIN tblhotel_guest_remark_type h on h.id_h_rmrk = ReasonOfStay " +
+                                                                                "ORDER BY MNNO ASC").ToList();
             return Ok(data);
         }
 

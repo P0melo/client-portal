@@ -48,7 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
     <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
     <IncludeIisSettings>true</IncludeIisSettings>
     <IncludeAppPool>false</IncludeAppPool>
@@ -8543,6 +8543,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.zoom.min.js" />
     <Content Include="Scripts\Manage.js" />
     <Content Include="Scripts\Meals.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
