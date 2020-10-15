@@ -212,6 +212,16 @@ namespace SAMPortal.Models
         public string RequestedBy { get; set; }
     }
 
+    public class GetTransportationHistory
+    {
+        public string Type { get; set; }
+        public string Vehicle { get; set; }
+        public string Status { get; set; }
+        public string Notes { get; set; }
+        public string ReferenceId { get; set; }
+        public DateTime DateBooked { get; set; }
+    }
+
     public class DormFees
     {
         public int Id { get; set; }

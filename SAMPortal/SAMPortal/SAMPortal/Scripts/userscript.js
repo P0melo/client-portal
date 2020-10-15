@@ -1,4 +1,62 @@
-﻿
+﻿//for the redirection found in CourseBooking page
+var myHref = window.location.href;
+var hrefSplit = myHref.split('?')[1];
+
+if (typeof (hrefSplit) !== 'undefined') {
+    let traineeNo = hrefSplit.split('+')[0];
+    let rank = hrefSplit.split('+')[1];
+    let name = hrefSplit.split('+')[2].replaceAll('%20', ' ');
+
+    //trying vanilla javascript
+    document.getElementById('mnno_input').value = traineeNo;
+    document.getElementById('rank_input').value = rank;
+    document.getElementById('name_input').value = name;
+
+}
+
+var protocol = window.location.protocol;
+var hostName = window.location.hostname;
+
+function openToNewTab(actionName, traineeNo, rank, name) {
+    window.open(protocol + "//" + hostName + "/SAMPortal/Forms/" + actionName + "?" + traineeNo + "+" + rank + "+" + name);
+}
+
+$(document).on('click', '#onSite_lnkbtn', function () {
+    let traineeNo = $(this).parent().prev().prev().prev().html();
+    let rank = $(this).parent().prev().prev().html();
+    let name = $(this).parent().prev().html();
+    let actionName = "OnSiteAccommodation";
+
+    openToNewTab(actionName, traineeNo, rank, name)
+});
+
+$(document).on('click', '#offSite_lnkbtn', function () {
+    let traineeNo = $(this).parent().prev().prev().prev().html();
+    let rank = $(this).parent().prev().prev().html();
+    let name = $(this).parent().prev().html();
+    let actionName = "OffSiteAccommodation";
+
+    openToNewTab(actionName, traineeNo, rank, name)
+});
+
+$(document).on('click', '#meals_lnkbtn', function () {
+    let traineeNo = $(this).parent().prev().prev().prev().html();
+    let rank = $(this).parent().prev().prev().html();
+    let name = $(this).parent().prev().html();
+    let actionName = "Meals";
+
+    openToNewTab(actionName, traineeNo, rank, name)
+});
+
+$(document).on('click', '#transportation_lnkbtn', function () {
+    let traineeNo = $(this).parent().prev().prev().prev().html();
+    let rank = $(this).parent().prev().prev().html();
+    let name = $(this).parent().prev().html();
+    let actionName = "Transportation";
+
+    openToNewTab(actionName, traineeNo, rank, name)
+});
+
 //footerType: 1 = Yes and No, 2 = Ok
 function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) {
     $('.modal_warning_template').attr('id', modalId);
@@ -240,7 +298,7 @@ function renderButtonFontAwesome(data, serverDate) {
     let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
 
     if (!(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity)) {
-        if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)){
+        if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)) {
             return "-";
         }
 
@@ -250,7 +308,7 @@ function renderButtonFontAwesome(data, serverDate) {
         } else {
             return "<button id='enroll_crew' class='btn btn-default' style='width: 100%'><i class='fa fa-plus'></i></button>"
         }
-    } 
+    }
 
     return "-";
 
@@ -428,29 +486,34 @@ $(document).on('click', '#course_list_tbl tr td a', function () {
             $('.modal-body #message').html('Number of enrollees from other company: ' + numberOfEnrollees);
             //}
 
-            $.ajax({
-                url: '/SAMPortal/api/CourseBooking/GetEnrollees',
-                type: 'get',
-                dataType: 'json',
-                data: { schedId: schedId },
-                success: function (result) {
-                    var content = "";
+            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
+                '<button class="btn btn-default" id="offSite_lnkbtn" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
+                '<button class="btn btn-default" id="meals_lnkbtn" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
+                '<button class="btn btn-default" id="transportation_lnkbtn" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
 
-                    if (course_enrollee_tbl != "") {
-                        course_enrollee_tbl.destroy();
+                $.ajax({
+                    url: '/SAMPortal/api/CourseBooking/GetEnrollees',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { schedId: schedId },
+                    success: function (result) {
+                        var content = "";
+
+                        if (course_enrollee_tbl != "") {
+                            course_enrollee_tbl.destroy();
+                        }
+
+                        for (var i = 0; i < result.length; i++) {
+                            content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
+                                (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 0px;'>" + linkButtons + "</td></tr>";
+                        }
+
+                        $('#course_enrollee_tbl_body').html(content);
+                        $('#enrollees_modal').modal();
+
+                        course_enrollee_tbl = $('#course_enrollee_tbl').DataTable({ "bProcessing": true });
                     }
-
-                    for (var i = 0; i < result.length; i++) {
-                        content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                            (result[i].MName === null ? "" : result[i].MName) + "</td></tr>";
-                    }
-
-                    $('#course_enrollee_tbl_body').html(content);
-                    $('#enrollees_modal').modal();
-
-                    course_enrollee_tbl = $('#course_enrollee_tbl').DataTable({ "bProcessing": true });
-                }
-            });
+                });
         }
     });
 });
@@ -469,6 +532,11 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
             $('.modal-body #message').html('Number of enrollees from other company: ' + o_numberOfEnrollees);
 
+            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
+                '<button class="btn btn-default" id="offSite_lnkbtn" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
+                '<button class="btn btn-default" id="meals_lnkbtn" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
+                '<button class="btn btn-default" id="transportation_lnkbtn" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
+
             $.ajax({
                 url: '/SAMPortal/api/CourseBooking/GetEnrollees',
                 type: 'get',
@@ -483,7 +551,7 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
                     for (var i = 0; i < result.length; i++) {
                         content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                            (result[i].MName === null ? "" : result[i].MName) + "</td></tr>";
+                            (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + linkButtons + "</td></tr>";
                     }
 
                     $('#course_enrollee_tbl_body').html(content);

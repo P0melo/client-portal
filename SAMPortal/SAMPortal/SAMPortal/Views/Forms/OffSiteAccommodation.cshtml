@@ -9,7 +9,7 @@
 <div class="box box-solid">
 
     <div id="off_site_accomodation" class="box-body">
-        <button type="button" id="off_site_rates_and_inclusions_btn" class="btn btn-primary pull-right"  style="margin-right: 15px">Rates and Inclusions</button>
+        <button type="button" id="off_site_rates_and_inclusions_btn" class="btn btn-primary pull-right" style="margin-right: 15px">Rates and Inclusions</button>
         <br />
         <div class="col-md-12 col-lg-6 form-group" id="crew_picture" style="text-align: center">
             <img style="display: inline-block" class="img img-responsive" src="~/Content/images/default.jpg" />
@@ -122,6 +122,28 @@
             <div class="form-group col-sm-12">
                 <button type="button" id="save_off_site_btn" class="btn btn-default pull-right" style="margin-top: 15px;">Submit</button>
             </div>
+        </div>
+
+        <div id="offSiteAccommodationHistory_tbl_div" hidden>
+
+            <table id="offSiteAccommodationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+                <thead>
+                    <tr>
+                        <td colspan="8" style="font-size: large">Off-Site Accommodation History</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Hotel Name</td>
+                        <td style="font-weight: bold">Room Type</td>
+                        <td style="font-weight: bold">Check-In</td>
+                        <td style="font-weight: bold">Check-Out</td>
+                        <td style="font-weight: bold">Payment</td>
+                        <td style="font-weight: bold">Reservation By</td>
+                        <td style="font-weight: bold">Status</td>
+                        <td style="font-weight: bold">Booker Remarks</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>

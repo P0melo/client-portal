@@ -1,4 +1,45 @@
 ﻿$(document).ready(function () {
+
+    if (document.getElementById('mnno_input').value !== "") {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    }
+
+
+    $(document).on('change', '#mnno_input', function () {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    });
+
+    function getHirstory(traineeNo) {
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetOffSiteAccommodationHistory',
+            type: 'GET',
+            dataType: 'JSON',
+            data: { mnno: traineeNo },
+            success: function (result) {
+
+                let content = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    let checkInDate = result[i].CheckInDate.split('T');
+                    let checkOutDate = result[i].CheckOutDate.split('T');
+                    for (var i = 0; i < result.length; i++) {
+                        content += "<tr><td>" + result[i].HotelName + "</td>" +
+                            "<td>" + (result[i].RoomType == 1 ? "Single (deluxe room)" : "Double (deluxe room)") + "</td><td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td>" +
+                            "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].ReservationBy + "</td><td>" + result[i].Status + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
+                    }
+                }
+
+                $('#offSiteAccommodationHistory_tbl tbody').html(content);
+                $('#offSiteAccommodationHistory_tbl').dataTable();
+                $('#offSiteAccommodationHistory_tbl_div').css('display', 'block');
+                $("#offSiteAccommodationHistory_tbl").css('width', 'inherit');
+
+            }
+        });
+    }
+
     var date = new Date();
 
     $('.custom_treeview-menu').find('span').css('color', '#b8c7ce');
@@ -33,9 +74,12 @@
         var mnno = $('#mnno_input').val();
         var rank = $('#rank_input').val();
 
-        var name = $('#name_input').val().split(' ');
-        var lastName = name[0].substring(0, name[0].length - 1);
-        var firstName = name[1];
+        var name = $('#name_input').val().split(',');
+
+        let firstName = name[1].split(' ')[1].substring(0, name[1].split(' ')[1].length);
+        //let lastName = name[0].substring(0, name[0].length - 1);
+        let lastName = name[0];
+
         var name = $('#name_input').val();
         var date = $('#off_site_date').val();
         var hotel = $('#off_site_hotel_name option:selected').val();

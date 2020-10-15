@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     //var date = new Date();
     var inputFile = document.getElementById('InputFile');
     var imageSizeLimit = 5000000;//5245329;

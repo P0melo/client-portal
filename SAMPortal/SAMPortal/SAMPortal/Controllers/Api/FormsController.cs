@@ -125,6 +125,18 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
+        public IHttpActionResult GetOffSiteAccommodationHistory(string mnno)
+        {
+            var company = GetCompany();
+
+            var data = _context.Database.SqlQuery<GetOffSiteAccommodationHistory>("SELECT HotelName, RoomType, CheckInDate" +
+                                                                            ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status, BookerRemarks FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company AND MNNO = @mnno",
+                                                                            new MySqlParameter("@company", company),
+                                                                            new MySqlParameter("@mnno", mnno)).ToList();
+
+            return Ok(data);
+        }
+
         public IHttpActionResult GetTransportationRequests()
         {
             var company = GetCompany();
@@ -136,6 +148,19 @@ namespace SAMPortal.Controllers.Api
             return Ok(data);
         }
 
+        public IHttpActionResult GetTransportationHistory(string mnno)
+        {
+            var company = GetCompany();
+
+            //var data = _context.tbltransportations.Where(m => m.Company == company).OrderBy(m => m.Status).OrderByDescending(m => m.DateBooked).ToList();
+
+            var data = _context.Database.SqlQuery<GetTransportationHistory>("SELECT Type, Vehicle, Status, Notes, ReferenceId, DateBooked FROM tbltransportation ORDER BY status ASC, datebooked DESC WHERE Company = @company AND Mnno = @mnno",
+                                                                          new MySqlParameter("@company", company),
+                                                                          new MySqlParameter("@mnno", mnno)).ToList();
+
+            return Ok(data);
+        }
+
         public IHttpActionResult GetOnSiteAccommodationRequests()
         {
             var company = GetCompany();
@@ -143,6 +168,18 @@ namespace SAMPortal.Controllers.Api
             var data = _context.Database.SqlQuery<OnSiteAccommodationRequests>("SELECT rsrvtn_id AS Id, MNNO, `Rank`, FirstName, LastName, type_of_reservation AS ReservationType, room_type AS RoomType, expctd_checkInDate AS CheckInDate, " +
                                                                             "expctd_checkOutDate AS CheckOutDate, mode_of_pymnt as Payment, stats AS Status FROM tbldorm_reservation_bank WHERE company_name = @company AND stats = 'Reserved'",
                                                                             new MySqlParameter("@company", company)).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetOnSiteAccommodationHistory(string mnno)
+        {
+            var company = GetCompany();
+
+            var data = _context.Database.SqlQuery<GetOnSiteAccommodationHistory>("SELECT rsrvtn_id AS Id, MNNO, `Rank`, FirstName, LastName, type_of_reservation AS ReservationType, room_type AS RoomType, expctd_checkInDate AS CheckInDate, " +
+                                                                            "expctd_checkOutDate AS CheckOutDate, mode_of_pymnt as Payment, stats AS Status FROM tbldorm_reservation_bank WHERE company_name = @company AND MNNO = @mnno",
+                                                                            new MySqlParameter("@company", company),
+                                                                            new MySqlParameter("@mnno", mnno)).ToList();
 
             return Ok(data);
         }

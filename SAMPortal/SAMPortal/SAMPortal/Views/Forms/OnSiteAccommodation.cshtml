@@ -70,8 +70,8 @@
                         Hotel - Double
                     </option>
                     @*<option value="5">
-                            Executive Room
-                        </option>*@
+                        Executive Room
+                    </option>*@
                 </select>
             </div>
         </div>
@@ -87,7 +87,7 @@
 
             </div>
             &nbsp;
-            <p style="padding-top: 5px;font-size: medium" class="col-xs-12 col-md-12 col-lg-6 control-label" >Check in time is 13:00; Check out time is 12:00</p>
+            <p style="padding-top: 5px;font-size: medium" class="col-xs-12 col-md-12 col-lg-6 control-label">Check in time is 13:00; Check out time is 12:00</p>
             <!-- /.input group -->
         </div>
 
@@ -129,10 +129,30 @@
 
         <div class="form-group col-sm-12" style="padding-left: 0px; padding-right: 0px;">
             <div class="form-group col-sm-12">
-                <span id="accomodation_err_msg" style="color: red; display: none">**Fields must not be left blank</span>
+                @*<span id="accomodation_err_msg" style="color: red; display: none">**Fields must not be left blank</span>*@
                 <button type="button" id="save_accomodation_btn" class="btn btn-default pull-right">Submit</button>
                 @*<button type="button" id="view_accomodation_btn" class="btn btn-default pull-right">View Rooms</button>*@
             </div>
+        </div>
+
+        <div id="onSiteAccommodationHistory_tbl_div" hidden>
+
+            <table id="onSiteAccommodationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+                <thead>
+                    <tr>
+                        <td colspan="6" style="font-size: large">On-Site Accommodation History</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Reservation Type</td>
+                        <td style="font-weight: bold">Room Type</td>
+                        <td style="font-weight: bold">Check-In</td>
+                        <td style="font-weight: bold">Check-Out</td>
+                        <td style="font-weight: bold">Payment</td>
+                        <td style="font-weight: bold">Status</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -1,5 +1,57 @@
 ﻿$(document).ready(function () {
 
+    //var myHref = window.location.href;
+    //var hrefSplit = myHref.split('?')[1];
+
+    //if (typeof (hrefSplit) !== 'undefined') {
+    //    let traineeNo = hrefSplit.split('+')[0];
+    //    let rank = hrefSplit.split('+')[1];
+    //    let name = hrefSplit.split('+')[2].replaceAll('%20', ' ');
+
+    //    //trying vanilla javascript
+    //    document.getElementById('mnno_input').value = traineeNo;
+    //    document.getElementById('rank_input').value = rank;
+    //    document.getElementById('name_input').value = name;
+
+    //}
+
+
+    if (document.getElementById('mnno_input').value !== "") {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    }
+
+
+    $(document).on('change', '#mnno_input', function () {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    });
+
+    function getHirstory(traineeNo) {
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetOnSiteAccommodationHistory',
+            type: 'GET',
+            dataType: 'JSON',
+            data: { mnno: traineeNo },
+            success: function (result) {
+
+                let content = "";
+
+                for (var i = 0; i < result.length; i++) {
+                    let checkInDate = result[i].CheckInDate.split('T');
+                    let checkOutDate = result[i].CheckOutDate.split('T');
+                    content += "<tr><td>" + (result[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td><td>" + (result[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] + "</td><td>" + (result[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].Status + "</td></tr>"
+                }
+
+                $('#onSiteAccommodationHistory_tbl tbody').html(content);
+                $('#onSiteAccommodationHistory_tbl').dataTable();
+                $('#onSiteAccommodationHistory_tbl_div').css('display', 'block');
+                $("#onSiteAccommodationHistory_tbl").css('width', 'inherit');
+
+            }
+        });
+    }
+
     var date = new Date();
     $('.custom_treeview-menu').find('span').css('color', '#b8c7ce');
     $('#accommodation_lnk').find('span').css('color', 'white');
@@ -75,10 +127,11 @@
     $(document).on('click', '#save_accomodation_btn', function () {
         var mnno = $('#mnno_input').val();
         var rank = $('#rank_input').val();
-        var name = $('#name_input').val().split(' ');
+        var name = $('#name_input').val().split(',');
 
-        let firstName = name[1];
-        let lastName = name[0].substring(0, name[0].length - 1);
+        let firstName = name[1].split(' ')[1].substring(1, name[1].split(' ')[1].length);
+        //let lastName = name[0].substring(0, name[0].length - 1);
+        let lastName = name[0];
 
         var date = $('#accomodation_date').val();
         var reservation_type = $('#reservation_type option:selected').val();
@@ -159,4 +212,6 @@
 
         return monthNames[fdate.getMonth()]  + "/" + fdate.getDate() + "/" + fdate.getFullYear();
     }
+
+
 });

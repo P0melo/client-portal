@@ -169,7 +169,7 @@
             $('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
             $('.modal-warning').modal();
         } else {
-            if (mnno === "" || rank === "" || name === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
+            if (mnno === "" || rank === "" || name === "" || reason === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
                 //$('#meal_err_msg').css('display', 'block');
                 generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
             } else {
