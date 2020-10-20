@@ -101,6 +101,7 @@ namespace SAMPortal.Models
         public int? Dinner { get; set; }
         public int? MorningSnack { get; set; }
         public int? AfternoonSnack { get; set; }
+        public string DietaryRequirement { get; set; }
         public string Reason { get; set; }
         public string ReferenceId { get; set; }
     }

@@ -1,4 +1,16 @@
 ﻿$(document).ready(function () {
+
+    if (document.getElementById('mnno_input').value !== "") {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getMealProvisionLog(traineeNo);
+    }
+
+
+    $(document).on('change', '#mnno_input', function () {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getMealProvisionLog(traineeNo);
+    });
+
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -330,7 +342,7 @@
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].ReferenceId != null) {
                         content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + formatDate(result[i].FromDate) + "</td><td id='toDate'>" + formatDate(result[i].ToDate) +
-                            "<td id='reason'>" + result[i].Reason + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
+                            "<td id='reason'>" + result[i].Reason + "</td><td>" + result[i].DietaryRequirement + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
                     }
                 }
 

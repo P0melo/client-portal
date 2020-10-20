@@ -1,5 +1,98 @@
 ﻿$(document).ready(function () {
 
+
+    if (document.getElementById('mnno_input').value !== "") {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    }
+
+
+    $(document).on('change', '#mnno_input', function () {
+        let traineeNo = document.getElementById('mnno_input').value;
+        getHirstory(traineeNo);
+    });
+
+    function getHirstory(traineeNo) {
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetTransportationHistory',
+            type: 'GET',
+            dataType: 'JSON',
+            data: { mnno: traineeNo },
+            success: function (result) {
+
+                let content = "";
+
+                for (var i = 0; i < result.length; i++) {
+
+                    for (var i = 0; i < result.length; i++) {
+
+                        content += "<tr><td><a id='detailed_view'>" + result[i].ReferenceId + "</a></td><td>" + result[i].Type + "</td>" +
+                            "<td>" + result[i].Vehicle + "</td><td>" + result[i].Status + "</td><td>" + result[i].Notes + "</td>" +
+                            "<td>" + fixDateFormat(result[i].DateBooked.split('T')[0]) + "</td></tr>";
+                    }
+                }
+
+                $('#transportationHistory_tbl tbody').html(content);
+                $('#transportationHistory_tbl').dataTable();
+                $('#transportationHistory_tbl_div').css('display', 'block');
+                $("#transportationHistory_tbl").css('width', 'inherit');
+
+            }
+        });
+    }
+
+    $(document).on('click', '#transportationHistory_tbl tbody tr td #detailed_view', function () {
+        var referenceId = $(this).html();
+        var type = $(this).parent().next().html();
+
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetTransportationHistoryDetails',
+            type: 'GET',
+            dataType: 'json',
+            data: { referenceId: referenceId, type: type },
+            success: function (result) {
+                if (type == "Daily Transfer") {
+                    let content = "";
+
+                    for (let i = 0; i < result.length; i++) {
+                        let type = result[i].IsRoundTrip == 1 ? "Round-trip" : "One-way";
+                        let pickUp = result[i].PickUpPlace;
+                        let dropOff = result[i].DropOffPlace;
+                        let dateTimePickUp = result[i].DateTimeOfPickUp;
+
+                        let pickUp2 = result[i].SecondPickUpPlace;
+                        let dropOff2 = result[i].SecondDropOffPlace;
+                        let dateTimePickUp2 = result[i].SecondDateTimeOfPickUp;
+
+                        content += "<tr><td>" + type + "</td><td>" + pickUp + "</td><td>" + dropOff + "</td><td>" + dateTimePickUp + "</td>" +
+                            "<td>" + pickUp2 + "</td><td>" + dropOff2 + "</td><td>" + dateTimePickUp2 + "</td></tr>"
+                    }
+                    $('.modal_daily_transportation table tbody').html("");//clear before append
+                    $('.modal_daily_transportation table tbody').append(content);
+                    $('.modal_daily_transportation .modal-title').html("Transportaion Arrangement History");
+                    $('.modal_daily_transportation .modal-body #notes').val(result.Notes);
+                    $('.modal_daily_transportation').modal();
+
+                } else if (type == "Airport Transfer") {
+                    let inbound = result.Inbound == 1 ? "Yes" : " No";
+                    let outbound = result.Outbound == 1 ? "Yes" : " No";
+                    let inboundDate = result.InboundDate === null ? "-----------------" : formatDate(result.InboundDate);
+                    let outboundDate = result.OutboundDate === null ? "-----------------" : formatDate(result.OutboundDate);
+
+                    $('.modal_airport_transportation .modal-body #inboundDate').html(inboundDate);
+                    $('.modal_airport_transportation .modal-body #outboundDate').html(outboundDate);
+                    $('.modal_airport_transportation .modal-body #notes').val(result.Notes);
+                    //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
+                    $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
+                    //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
+                    renderImageForZoom(result.Id);
+
+                    $('.modal_airport_transportation .modal-title').html("Transportaion Arrangement History");
+                }
+            }
+        });
+    });
+
     //var date = new Date();
     var inputFile = document.getElementById('InputFile');
     var imageSizeLimit = 5000000;//5245329;

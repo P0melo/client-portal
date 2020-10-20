@@ -619,11 +619,18 @@ function formatDate(data) {
         return "";
     }
 
-    var result = data.replace(/[^0-9 +]/g, '');
+    if (data.includes("Date")) {
+        let result = data.replace(/[^0-9 +]/g, '');
 
-    var fdate = new Date(parseInt(result));
+        let fdate = new Date(parseInt(result));
 
-    return fdate.getDate() + " " + monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
+        return fdate.getDate() + " " + monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
+    } else {
+        let fdate = new Date(data.split('T')[0]);
+
+        return fdate.getDate() + " " + monthNames[fdate.getMonth()] + " " + fdate.getFullYear();
+    }
+
 }
 
 function saveAccomodation(parameters) {

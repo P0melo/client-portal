@@ -63,29 +63,29 @@
 
 
         @*<div class="col-lg-12 form-group">
-            <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
-            <div class="col-xs-12 col-md-12 col-lg-10">
-                <select id="transportation_destination" class="form-control">
-                    @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfDestinations"]); i++)
-                    {
-                        <option value="@System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]">
-                            @System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]
-                        </option>
-                    }
-                </select>
+                <label for="transportation_destination" class="col-md-2 control-label">Destination</label>
+                <div class="col-xs-12 col-md-12 col-lg-10">
+                    <select id="transportation_destination" class="form-control">
+                        @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfDestinations"]); i++)
+                        {
+                            <option value="@System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]">
+                                @System.Configuration.ConfigurationManager.AppSettings["destination" + (i + 1)]
+                            </option>
+                        }
+                    </select>
 
-            </div>
-        </div>*@
+                </div>
+            </div>*@
 
         @*<div class="col-lg-12 form-group">
-            <label for="transportation_destination" class="col-md-2 control-label">Daily Transfer</label>
-            <div class="col-xs-12 col-md-12 col-lg-10">
-                <select id="transportation_destination" class="form-control">
-                    <option value="1">One Trip</option>
-                    <option value="2">Two Trips</option>
-                </select>
-            </div>
-        </div>*@
+                <label for="transportation_destination" class="col-md-2 control-label">Daily Transfer</label>
+                <div class="col-xs-12 col-md-12 col-lg-10">
+                    <select id="transportation_destination" class="form-control">
+                        <option value="1">One Trip</option>
+                        <option value="2">Two Trips</option>
+                    </select>
+                </div>
+            </div>*@
 
         <div class="daily_transfer col-xs-12 form-group" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
@@ -100,11 +100,11 @@
 
         </div>
         @*<div class="col-md-12 col-lg-12 form-group">
-            <label for="transportation_details" class="col-md-2 control-label">Details</label>
-            <div class="col-xs-12 col-md-12 col-lg-10">
-                <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
-            </div>
-        </div>*@
+                <label for="transportation_details" class="col-md-2 control-label">Details</label>
+                <div class="col-xs-12 col-md-12 col-lg-10">
+                    <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
+                </div>
+            </div>*@
 
         <div class="airport_transfer col-xs-12 col-lg-12 form-group" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-12">
@@ -189,13 +189,13 @@
         </div>
 
         @*<div class="col-lg-6 form-group two_trip_details">
-            <label for="transportation_name" class="col-md-4 control-label">Details</label>
-            <div class="col-xs-12 col-md-12 col-lg-8 ">
-                <input id="twotrips_1stpickup_input" type="text" class="form-group form-control" placeholder="1st Pick Up Point" style="border-radius: 3px;" />
-                <input id="twotrips_1stdatetime_input" type="text" class="form-group form-control" placeholder="1st Pick Up Date and Time" style="border-radius: 3px;" />
-                <input id="twotrips_1stdropoff_input" type="text" class="form-group form-control" placeholder="1st Drop Off Point" style="border-radius: 3px;" />
-            </div>
-        </div>*@
+                <label for="transportation_name" class="col-md-4 control-label">Details</label>
+                <div class="col-xs-12 col-md-12 col-lg-8 ">
+                    <input id="twotrips_1stpickup_input" type="text" class="form-group form-control" placeholder="1st Pick Up Point" style="border-radius: 3px;" />
+                    <input id="twotrips_1stdatetime_input" type="text" class="form-group form-control" placeholder="1st Pick Up Date and Time" style="border-radius: 3px;" />
+                    <input id="twotrips_1stdropoff_input" type="text" class="form-group form-control" placeholder="1st Drop Off Point" style="border-radius: 3px;" />
+                </div>
+            </div>*@
 
         <div class="col-xs-12 col-lg-6 form-group two_trip_details" style="padding-left: 0px; padding-right: 0px;">
             <label for="transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
@@ -250,8 +250,8 @@
         <div class="col-xs-12 form-group" style="display:inline-block; padding-left: 0px; padding-right: 0px;">
             <label for="transportation_details" class="col-md-2 control-label">Remarks</label>
             @*<div class="col-xs-12 col-md-12 col-lg-10">
-                <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
-            </div>*@
+                    <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
+                </div>*@
             <textarea class="form-control" rows="5" id="transportation_details"></textarea>
         </div>
 
@@ -260,17 +260,20 @@
             <button type="button" id="save_transportation_btn" class="btn btn-default pull-right">Submit</button>
         </div>
 
-        <div id="transportation_tbl_div" hidden>
-            <table id="offSiteAccommodationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+        <div id="transportationHistory_tbl_div" hidden>
+            <table id="transportationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
                 <thead>
                     <tr>
-                        <td colspan="8" style="font-size: large">Off-Site Accommodation History</td>
+                        <td colspan="8" style="font-size: large">Transportation Arrangement History</td>
                     </tr>
                     <tr>
+                        <td style="font-weight: bold">Reference ID</td>
                         <td style="font-weight: bold">Type</td>
                         <td style="font-weight: bold">Vehicle</td>
-                        <td style="font-weight: bold">Date Booked</td>
                         <td style="font-weight: bold">Status</td>
+                        <td style="font-weight: bold">Notes</td>
+                        <td style="font-weight: bold">Date Booked</td>
+
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -433,6 +436,100 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade modal_daily_transportation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12">
+                    <table class="table table-bordered" style="table-layout: fixed; word-break:break-word">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">Type</th>
+                                <th style="width: 17.5%">Pick-up</th>
+                                <th style="width: 17.5%">Drop-off</th>
+                                <th style="width: 10%">Date and Time</th>
+                                <th style="width: 17.5%">2nd Pick-up</th>
+                                <th style="width: 17.5%">2nd Drop-off</th>
+                                <th style="width: 10%">Date and Time</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="col-lg-12 form-group" id="notes_div">
+                        <label>Remarks: </label>
+                        <textarea class="form-control" rows="5" id="notes" disabled></textarea>
+                    </div>
+                </div>
+                &nbsp;
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default pull-right" id="transportation_confirm_btn" data-dismiss="modal">Complete</button>*@
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal_airport_transportation">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12">
+                    @*<div class="col-lg-12 form-group" id="inbound_div">
+                            <label>Inbound: </label>
+                            <span id="inbound"></span>
+                        </div>*@
+                    <div class="col-lg-12 form-group" id="inboundDate_div">
+                        <label class="col-xs-2" style="padding:0;">Inbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="inboundDate" style="padding:0;"></span>
+                    </div>
+                    @*<div class="col-lg-12 form-group" id="Outbound_div">
+                            <label>Outbound: </label>
+                            <span id="outbound"></span>
+                        </div>*@
+                    <div class="col-lg-12 form-group" id="OutboundDate_div">
+                        <label class="col-xs-2" style="padding:0;">Outbound Date</label>
+                        <span class="col-xs-1" style="font-weight: bold">:</span>
+                        <span class="col-xs-3" id="outboundDate" style="padding:0;"></span>
+                    </div>
+                    <div class="col-lg-12 form-group" id="label_attachment_div">
+                        <label>Attachment: </label>
+                    </div>
+                    <div class="col-lg-12 form-group" id="attachment_div" style="text-align:center">
+                        <span style="display: inline-block;" id="attachment"></span>
+                        @*<span style="display: block;" id="attachment"></span>*@
+
+                    </div>
+                    <div class="col-lg-12 form-group" id="notes_div">
+                        <label>Remarks: </label>
+                        <textarea class="form-control" rows="5" id="notes" disabled></textarea>
+                    </div>
+                </div>
+                &nbsp;
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default pull-right" id="transportation_confirm_btn" data-dismiss="modal">Complete</button>*@
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts{
     @Scripts.Render("~/bundles/transportation")

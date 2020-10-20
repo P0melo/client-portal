@@ -106,12 +106,15 @@ namespace SAMPortal.Models
 
     public class AirportTransportationModel
     {
+        public int Id { get; set; }
         public int Inbound { get; set; }
         public int Outbound { get; set; }
         public DateTime? InboundDate { get; set; }
         public DateTime? OutboundDate { get; set; }
         public string FileType { get; set; }
         public byte[] Picture { get; set; }
+        public string Notes { get; set; }
+
     }
 
     public class Attachment
@@ -129,6 +132,8 @@ namespace SAMPortal.Models
         public string SecondPickUpPlace { get; set; }
         public string SecondDateTimeOfPickUp { get; set; }
         public string SecondDropOffPlace { get; set; }
+        public string Notes { get; set; }
+
     }
 
     public class DailyTransportationTypeAndNotes

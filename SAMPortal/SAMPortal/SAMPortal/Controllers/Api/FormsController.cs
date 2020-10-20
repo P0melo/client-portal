@@ -71,7 +71,7 @@ namespace SAMPortal.Controllers.Api
         public IHttpActionResult GetMealProvisionLog(string mnno)
         {
 
-            var data = _context.Database.SqlQuery<MealProvisionLog>("SELECT meal_id as Id, MIN(meal_date_from) as FromDate, max(meal_date_from) as ToDate, meal_reason as Reason, " +
+            var data = _context.Database.SqlQuery<MealProvisionLog>("SELECT meal_id as Id, MIN(meal_date_from) as FromDate, max(meal_date_from) as ToDate, meal_reason as Reason, DietaryRequirement, " +
                                                              "reference_id as ReferenceId FROM tblmeal_provision WHERE Mnno = @mnno GROUP BY reference_id",
                                                              new MySqlParameter("@mnno", mnno)).ToList();
 
@@ -154,9 +154,34 @@ namespace SAMPortal.Controllers.Api
 
             //var data = _context.tbltransportations.Where(m => m.Company == company).OrderBy(m => m.Status).OrderByDescending(m => m.DateBooked).ToList();
 
-            var data = _context.Database.SqlQuery<GetTransportationHistory>("SELECT Type, Vehicle, Status, Notes, ReferenceId, DateBooked FROM tbltransportation ORDER BY status ASC, datebooked DESC WHERE Company = @company AND Mnno = @mnno",
+            var data = _context.Database.SqlQuery<GetTransportationHistory>("SELECT Type, Vehicle, Status, Notes, ReferenceId, DateBooked FROM tbltransportation WHERE Company = @company AND Mnno = @mnno ORDER BY status ASC, datebooked DESC",
                                                                           new MySqlParameter("@company", company),
                                                                           new MySqlParameter("@mnno", mnno)).ToList();
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetTransportationHistoryDetails(string referenceId, string type)
+        {
+            var data = "";
+
+            if (type == "Airport Transfer")
+            {
+                var details = _context.Database.SqlQuery<AirportTransportationModel>("SELECT t.Id, Inbound, Outbound, InboundDate, OutboundDate, FileType, Attachment as Picture, Notes " +
+                                                           "FROM tbltransportation t JOIN tblairport_transfer_details atd ON t.Id = atd.TransportationId " +
+                                                           "WHERE ReferenceId = @rid", new MySqlParameter("@rid", referenceId)).FirstOrDefault();
+
+                return Ok(details);
+            }else if (type == "Daily Transfer")
+            {
+
+                var details = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, Notes " +
+                                                                       "FROM tbltransportation t JOIN tbldaily_transfer_details dtd ON t.Id = dtd.TransportationId " +
+                                                                       "WHERE ReferenceId = @id", new MySqlParameter("@id", referenceId)).ToList();
+
+                return Ok(details);
+            }
+
 
             return Ok(data);
         }
