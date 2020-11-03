@@ -6,10 +6,10 @@
     }
 
 
-    $(document).on('change', '#mnno_input', function () {
-        let traineeNo = document.getElementById('mnno_input').value;
-        getMealProvisionLog(traineeNo);
-    });
+    //$(document).on('change', '#mnno_input', function () {
+    //    let traineeNo = document.getElementById('mnno_input').value;
+    //    getMealProvisionLog(traineeNo);
+    //});
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -177,13 +177,15 @@
 
         var dateDiff = getDateDiff(date);
 
+
         if (dateDiff > 30) {
-            $('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
-            $('.modal-warning').modal();
+            //$('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
+            //$('.modal-warning').modal();
+            generateWarningModal('meal_reservation_warning_modal', 2, '', "The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days")
         } else {
             if (mnno === "" || rank === "" || name === "" || reason === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
                 //$('#meal_err_msg').css('display', 'block');
-                generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
+                generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit");
             } else {
                 $('#meal_err_msg').css('display', 'none');
                 saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
@@ -211,11 +213,15 @@
             success: function (result) {
                 $.unblockUI();
                 if (result.data == 1) {
-                    $('#modal-success .modal-body p').html("Meal Request Successful!");
-                    $('#modal-success').modal();
+                    //$('#modal-success .modal-body p').html("Meal Request Successful!");
+                    //$('#modal-success').modal();
+                    generateSuccessModal("meal_provision_modal", 2, "", "Meal Request Successful!");
+
                 } else {
-                    $('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    $('.modal-danger').modal();
+                    generateWarningModal("meal_provision_warning", 2, "meal_provision_warning_yes", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //$('.modal-danger').modal();
                 }
 
                 getMealProvisionLog(saveMealProvistionParameter[0]/*mnno*/);
@@ -238,16 +244,16 @@
                 }
 
                 for (var i = 0; i < result.length; i++) {
-                    var id = result[i].Id;
-                    var fromDate = result[i].FromDate;
-                    var toDate = result[i].ToDate;
-                    var breakfast = result[i].Breakfast;
-                    var morningSnack = result[i].MorningSnack;
-                    var lunch = result[i].Lunch;
-                    var afternoonSnack = result[i].AfternoonSnack;
-                    var dinner = result[i].Dinner;
+                    let id = result[i].Id;
+                    let fromDate = result[i].FromDate;
+                    let toDate = result[i].ToDate;
+                    let breakfast = result[i].Breakfast;
+                    let morningSnack = result[i].MorningSnack;
+                    let lunch = result[i].Lunch;
+                    let afternoonSnack = result[i].AfternoonSnack;
+                    let dinner = result[i].Dinner;
 
-                    tableContent += "<tr><td id='" + id + "'>" + id + "</td><td>" + formatDate(fromDate) + "</td><td>" + formatDate(toDate) + "</td><td id='#breakfast'>" + RenderCheckBox(breakfast, fromDate) + "</td>" +
+                    tableContent += "<tr><td id='" + id + "'>" + id + "</td><td>" + fixDateFormat(fromDate.split('T')[0]) + "</td><td>" + fixDateFormat(toDate.split('T')[0]) + "</td><td id='#breakfast'>" + RenderCheckBox(breakfast, fromDate) + "</td>" +
                         "<td>" + RenderCheckBox(morningSnack, fromDate) + "</td><td>" + RenderCheckBox(lunch, fromDate) + "</td><td>" + RenderCheckBox(afternoonSnack, fromDate) + "</td><td>" +
                         RenderCheckBox(dinner, fromDate) + "</td><td>" + result[i].Reason + "</td><td style='padding: 1px'>" + renderEditButton(fromDate) +
                         "<button id='meal_log_save_btn' class='btn btn-default' style='width: 50%'><i class='fa fa-save'></i></button><button id='meal_log_cancel_btn' class='btn btn-default' style='width: 50%'><i class='fa fa-close'></i></button></td></tr>";
@@ -297,33 +303,52 @@
     }
 
     function getDateDiff(date) {
-        var splitDate = date.split(' - ');
+        let splitDate = date.split(' - ');
 
-        var newDateFrom = new Date(splitDate[0]);
-        var newDateTo = new Date(splitDate[1]);
+        let newDateFrom = new Date();
+        let df = splitDate[0];
+        let dfd = df.split('/')[0];
+        let dfm = df.split('/')[1] - 1;
+        let dfy = df.split('/')[2];
 
-        var dateDifference = new Date(newDateTo - newDateFrom);
-        var intDifference = Math.round((dateDifference / (1000 * 60 * 60 * 24)));
+        newDateFrom.setDate(dfd);
+        newDateFrom.setMonth(dfm);
+        newDateFrom.setFullYear(dfy);
+
+        let newDateTo = new Date();
+        let dt = splitDate[1];
+        let dtd = dt.split('/')[0];
+        let dtm = dt.split('/')[1] - 1;
+        let dty = dt.split('/')[2];
+
+        newDateTo.setDate(dtd);
+        newDateTo.setMonth(dtm);
+        newDateTo.setFullYear(dty);
+
+        let dateDifference = new Date(newDateTo - newDateFrom);
+
+        let intDifference = Math.round((dateDifference / (1000 * 3600 * 24)));
+
         return intDifference;
     }
 
 
-    function formatDate(data, redirect) {
+    //function formatDate(data, redirect) {
 
-        if (data == null) {
-            return "";
-        }
+    //    if (data == null) {
+    //        return "";
+    //    }
 
-        if (redirect) {
-            return data.replace(/\//g, "-");
-        }
+    //    if (redirect) {
+    //        return data.replace(/\//g, "-");
+    //    }
 
-        var result = data.replace(/[^0-9 +]/g, '');
+    //    var result = data.replace(/[^0-9 +]/g, '');
 
-        var date = new Date(data);
+    //    var date = new Date(data);
 
-        return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
-    }
+    //    return date.getDate() + "." + monthNames[date.getMonth()] + "." + date.getFullYear();
+    //}
 
     var mealTable = "";
     function getMealProvisionLog(mnno) {
@@ -341,7 +366,7 @@
 
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].ReferenceId != null) {
-                        content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + formatDate(result[i].FromDate) + "</td><td id='toDate'>" + formatDate(result[i].ToDate) +
+                        content += "<tr id='" + result[i].Id + "'><td>" + (i + 1) + "</td><td id='fromDate'>" + fixDateFormat(result[i].FromDate.split('T')[0]) + "</td><td id='toDate'>" + fixDateFormat(result[i].ToDate.split('T')[0]) +
                             "<td id='reason'>" + result[i].Reason + "</td><td>" + result[i].DietaryRequirement + "</td><td><a id='reference_id_btn'>" + result[i].ReferenceId + "</a></td></tr>";
                     }
                 }
@@ -356,6 +381,15 @@
 
     $(document).on('click', '#clear_meal_btn', function () {
         window.location.reload();
+    });
+
+    $('.modal-success').on('hidden.bs.modal', function () {
+        //hrefSplit can be seen in userscript.js
+        if (typeof (hrefSplit) !== 'undefined') {
+            window.close();
+        } else {
+            window.location.reload();
+        }
     });
 
 });

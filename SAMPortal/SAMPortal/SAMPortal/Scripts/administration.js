@@ -277,7 +277,7 @@
             success: function (result) {
 
                 if (result.data == 1) {
-                    $('#modal_success .modal-body p').html("Request successfully approved!");
+                    $('#modal_success .modal-body p').html("Request successfully APPROVED!");
                     $('#modal_success').modal();
                     getNewCrewRequest();
                 } else {
@@ -413,7 +413,7 @@
     });
 
     $(document).on('click', '#modal_warning_review_offsite_accommodation_yes', function () {
-        let statusId = 8 //Booked
+        let statusId = 9 //Booked
         $.ajax({
             url: '/SAMPortal/Administration/UpdateOffSiteStatusId',
             type: 'get',

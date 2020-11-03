@@ -2,16 +2,17 @@
 
     if (document.getElementById('mnno_input').value !== "") {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     }
 
 
     $(document).on('change', '#mnno_input', function () {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     });
 
-    function getHirstory(traineeNo) {
+    var historyTable = "";
+    function getHistory(traineeNo) {
         $.ajax({
             url: '/SAMPortal/Api/Forms/GetOffSiteAccommodationHistory',
             type: 'GET',
@@ -20,6 +21,10 @@
             success: function (result) {
 
                 let content = "";
+
+                if (historyTable != "") {
+                    historyTable.destroy();
+                }
 
                 for (var i = 0; i < result.length; i++) {
                     let checkInDate = result[i].CheckInDate.split('T');
@@ -32,7 +37,7 @@
                 }
 
                 $('#offSiteAccommodationHistory_tbl tbody').html(content);
-                $('#offSiteAccommodationHistory_tbl').dataTable();
+                historyTable = $('#offSiteAccommodationHistory_tbl').DataTable();
                 $('#offSiteAccommodationHistory_tbl_div').css('display', 'block');
                 $("#offSiteAccommodationHistory_tbl").css('width', 'inherit');
 
@@ -129,7 +134,12 @@
     }
 
     $('.modal-success').on('hidden.bs.modal', function () {
-        window.location.reload();
+        //hrefSplit can be seen in userscript.js
+        if (typeof (hrefSplit) !== 'undefined') {
+            window.close();
+        } else {
+            window.location.reload();
+        }
     });
 
 });

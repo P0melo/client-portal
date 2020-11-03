@@ -3,16 +3,17 @@
 
     if (document.getElementById('mnno_input').value !== "") {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     }
 
 
     $(document).on('change', '#mnno_input', function () {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     });
 
-    function getHirstory(traineeNo) {
+    var historyTable = "";
+    function getHistory(traineeNo) {
         $.ajax({
             url: '/SAMPortal/Api/Forms/GetTransportationHistory',
             type: 'GET',
@@ -21,6 +22,10 @@
             success: function (result) {
 
                 let content = "";
+
+                if (historyTable != "") {
+                    historyTable.destroy();
+                }
 
                 for (var i = 0; i < result.length; i++) {
 
@@ -33,7 +38,7 @@
                 }
 
                 $('#transportationHistory_tbl tbody').html(content);
-                $('#transportationHistory_tbl').dataTable();
+                $('#transportationHistory_tbl').DataTable();
                 $('#transportationHistory_tbl_div').css('display', 'block');
                 $("#transportationHistory_tbl").css('width', 'inherit');
 
@@ -301,7 +306,11 @@
             type: 'POST',
             dataType: 'JSON',
             data: { parameters: saveTransportationParameter },
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
             success: function (result) {
+                $.unblockUI();
                 if (result.data == 1) {
                     generateSuccessModal("save_airport_transfer_modal", 2, "", "Airport Transfer request successfully submitted...");
                 } else {
@@ -478,7 +487,12 @@
     });
 
     $('.modal-success').on('hidden.bs.modal', function () {
-        window.location.reload();
+        //hrefSplit can be seen in userscript.js
+        if (typeof (hrefSplit) !== 'undefined') {
+            window.close();
+        } else {
+            window.location.reload();
+        }
     });
 
 });

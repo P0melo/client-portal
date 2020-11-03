@@ -18,16 +18,17 @@
 
     if (document.getElementById('mnno_input').value !== "") {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     }
 
 
     $(document).on('change', '#mnno_input', function () {
         let traineeNo = document.getElementById('mnno_input').value;
-        getHirstory(traineeNo);
+        getHistory(traineeNo);
     });
 
-    function getHirstory(traineeNo) {
+    var historyTable = "";
+    function getHistory(traineeNo) {
         $.ajax({
             url: '/SAMPortal/Api/Forms/GetOnSiteAccommodationHistory',
             type: 'GET',
@@ -37,14 +38,21 @@
 
                 let content = "";
 
+                if (historyTable != "") {
+                    historyTable.destroy();
+                }
+
                 for (var i = 0; i < result.length; i++) {
                     let checkInDate = result[i].CheckInDate.split('T');
                     let checkOutDate = result[i].CheckOutDate.split('T');
-                    content += "<tr><td>" + (result[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td><td>" + (result[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] + "</td><td>" + (result[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].Status + "</td></tr>"
+                    content += "<tr><td>" + (result[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td><td>" + (result[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") +
+                        "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] +
+                        "</td><td>" + (result[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].Status +
+                        "</td><td></td></tr>"
                 }
 
                 $('#onSiteAccommodationHistory_tbl tbody').html(content);
-                $('#onSiteAccommodationHistory_tbl').dataTable();
+                historyTable = $('#onSiteAccommodationHistory_tbl').DataTable();
                 $('#onSiteAccommodationHistory_tbl_div').css('display', 'block');
                 $("#onSiteAccommodationHistory_tbl").css('width', 'inherit');
 
@@ -129,7 +137,8 @@
         var rank = $('#rank_input').val();
         var name = $('#name_input').val().split(',');
 
-        let firstName = name[1].split(' ')[1].substring(1, name[1].split(' ')[1].length);
+        //let firstName = name[1].split(' ')[1].substring(1, name[1].split(' ')[1].length);
+        let firstName = name[1].split(' ')[1].trim();
         //let lastName = name[0].substring(0, name[0].length - 1);
         let lastName = name[0];
 
@@ -165,7 +174,15 @@
     
 
     $('.modal-success').on('hidden.bs.modal', function () {
-        window.location.reload();
+        //let myHref = window.location.href;
+        //let hrefSplit = myHref.split('?')[1];
+
+        //hrefSplit can be seen in userscript.js
+        if (typeof (hrefSplit) !== 'undefined') {
+            window.close();
+        } else {
+            window.location.reload();
+        }
     });
 
     function getCrewDetails(mnno, htmlId) {

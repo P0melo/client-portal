@@ -73,6 +73,10 @@
         $('#modal_search_crew_warning').modal();
     });
 
+    $('#crew_picture img').bind("error", function () {
+        $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+    });
+
     $(document).on('click', '#modal_search_crew_warning_yes', function () {
         $('#mnno_input').val(chosenCrewMnno);
         $('#mnno_input').trigger('change');
@@ -81,9 +85,9 @@
 
         $('#crew_picture img').attr('src', 'http://pics.umtc.com.ph/CadetPictures/' + chosenCrewMnno + '.jpg?' + date.getMilliseconds());
 
-        $('#crew_picture img').on('error', function () {
-            $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
-        });
+        //$('#crew_picture img').on('error', function () {
+        //    $(this).attr('src', '/SAMPortal/Content/images/default.jpg');
+        //});
 
         $('#modal_search_crew').modal('hide');
     });

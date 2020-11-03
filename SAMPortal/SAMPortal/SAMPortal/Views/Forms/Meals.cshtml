@@ -110,18 +110,18 @@
             <table id="meal_tbl" class="table table-bordered table-striped table-hover col-sm-12">
                 <thead>
                     <tr>
-                        <td colspan="5" style="font-size: large">Meal Provision Log</td>
+                        <td colspan="6" style="font-size: large">Meal Provision Log</td>
                     </tr>
                     <tr>
-                        <td rowspan="2">No</td>
-                        <td colspan="2">Meal Date</td>
-                        <td rowspan="2">Reason</td>
-                        <td rowspan="2">Dietary Requirement</td>
-                        <td rowspan="2">Reference ID</td>
+                        <td rowspan="2" style="font-weight: bold">No</td>
+                        <td colspan="2" style="font-weight: bold">Meal Date</td>
+                        <td rowspan="2" style="font-weight: bold">Reason</td>
+                        <td rowspan="2" style="font-weight: bold">Dietary Requirement</td>
+                        <td rowspan="2" style="font-weight: bold">Reference ID</td>
                     </tr>
                     <tr>
-                        <td>From</td>
-                        <td style="border-right: 1px solid #ddd !important">To</td>
+                        <td style="font-weight: bold">From</td>
+                        <td style="border-right: 1px solid #ddd !important;font-weight: bold">To</td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -192,7 +192,7 @@
     </div>
 </div>
 
-<div class="modal modal-warning fade" id="modal_warning_meal">
+@*<div class="modal modal-warning fade" id="modal_warning_meal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -210,7 +210,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 @section Scripts{
     @Scripts.Render("~/bundles/meals")

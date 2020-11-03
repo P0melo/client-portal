@@ -395,12 +395,13 @@ namespace SAMPortal.Controllers
                         case 4: status = (int)ApprovalStatus.Paid; break;
                         case 5: status = (int)ApprovalStatus.PersonalAccount; break;
                         case 6: status = (int)ApprovalStatus.Cancelled; break;
+                        case 9: status = (int)ApprovalStatus.Booked; break;
                         default: break;
                     }
 
                     var requestor = _cadetContext.Database.SqlQuery<string>("SELECT ReservationBy FROM tbloff_site_reservation WHERE Id = " + recordId).FirstOrDefault();
 
-                    var offSiteAccommodationRequestParameters = _cadetContext.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT * FROM tblnewcrewrequest WHERE Id = " + recordId).FirstOrDefault();
+                    var offSiteAccommodationRequestParameters = _cadetContext.Database.SqlQuery<OffSiteAccommodationViewModel>("SELECT * FROM tbloff_site_reservation WHERE Id = " + recordId).FirstOrDefault();
                     string[] parameters = offSiteAccommodationRequestParameters.ToArray();
                     mail.SendNotificationToClient(requestor, (int)Requests.OffSiteAccommodationRequest, parameters, status);
 

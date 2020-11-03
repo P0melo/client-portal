@@ -226,7 +226,12 @@
                 $('#e_name_input').val(e_name);
                 $('#e_reservation_type').val(result.ReservationType);
                 $('#e_room_type').val(result.RoomType);
-                $('#e_accomodation_date').daterangepicker({ startDate: newCrewRequestsFormatDate(result.CheckInDate), endDate: newCrewRequestsFormatDate(result.CheckOutDate) });
+                $('#e_accomodation_date').daterangepicker({
+                    locale: {
+                        format: 'DD/MM/YYYY'
+                    },
+                    startDate: newCrewRequestsFormatDate(result.CheckInDate), endDate: newCrewRequestsFormatDate(result.CheckOutDate)
+                });
                 $('#e_mode_of_payment').val(result.Payment);
                 $('#e_accomodation_reason').val(result.Reason);
                 $('#e_accomodation_remarks_input').val(result.Remarks);

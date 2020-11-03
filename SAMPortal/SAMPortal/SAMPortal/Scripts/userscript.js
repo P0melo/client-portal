@@ -471,6 +471,7 @@ $(document).on('change', '#InputFile', function () {
 
 var course_enrollee_tbl = "";
 $(document).on('click', '#course_list_tbl tr td a', function () {
+
     var schedId = $(this).parent().parent().attr('id');
     var numberOfEnrollees = 0;
 

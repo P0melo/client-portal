@@ -1284,7 +1284,8 @@ namespace SAMPortal.Controllers
             var firstName = parameters[0];
             var lastName = parameters[1];
             //var middleInitial = parameters[3];
-            var birthdate = parameters[2];
+            var rawDate = parameters[2].Split('-');
+            var birthdate = rawDate[0] + "-" + rawDate[2] + "-" + rawDate[1];
             //var birthplace = parameters[5];
 
             if (ModelState.IsValid)

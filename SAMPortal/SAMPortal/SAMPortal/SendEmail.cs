@@ -251,11 +251,11 @@ namespace SAMPortal
                 string lastName = parameters[3];
                 string type = parameters[4];
                 string vehicle = parameters[5];
-                string dateRequested = parameters[6];
-                string Notes = parameters[7];
+                string dateRequested = parameters[20];
+                string Notes = parameters[18];
 
                 WebMail.Send(to: clientReceipient, subject: "[NOTIFICATION] UPDATE FROM YOUR REQUEST!", body:
-                  "Your request for a transportation has been tagged as COMPLETE. Please see details below: <br /><br /> " +
+                  "Your request for a transportation has been tagged as BOOKED. Please see details below: <br /><br /> " +
                   "Trainee No.: " + MNNO + "<br />" +
                   "Rank: " + rank + "<br />" +
                   "Firstname: " + firstName + "<br />" +
@@ -317,6 +317,9 @@ namespace SAMPortal
                     case (int)ApprovalStatus.Cancelled:
                         status = "CANCELLED";
                         break;
+                    case (int)ApprovalStatus.Booked:
+                        status = "BOOKED";
+                        break;
                     default:
                         status = null;
                         break;
@@ -329,11 +332,11 @@ namespace SAMPortal
                   "Lastname: " + LastName + "<br />" +
                   "Firstname: " + FirstName + "<br />" +
                   "Hotel Name: " + HotelName + "<br />" +
-                  "Room Type: " + RoomType + "<br />" +
+                  "Room Type: " + (RoomType == "1" ? "Single (deluxe room)" : "Double (deluxe room)") + "<br />" +
                   "Check-in Date: " + CheckInDate + "<br />" +
                   "Check-out Date: " + CheckOutDate + "<br />" +
-                  "Mode of Payment: " + ModeOfPayment + "<br />" +
-                  "Reason of Stay: " + ModeOfPayment + "<br />" +
+                  "Mode of Payment: " + (ModeOfPayment == "0" ? "Company Sponsored" : "Personal Account") + "<br />" +
+                  "Reason of Stay: " + (ReasonOfStay == "12" ? "Accommodation Only" : "Due tp In-house training") + "<br />" +
                   "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
                   "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged." +
                   "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>", cc: "", bcc: "", isBodyHtml: true);
