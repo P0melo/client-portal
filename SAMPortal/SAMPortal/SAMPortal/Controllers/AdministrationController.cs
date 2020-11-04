@@ -93,34 +93,8 @@ namespace SAMPortal.Controllers
                             new MySqlParameter("@userid", guid),
                             new MySqlParameter("@roleid", 1));
 
-                        //smtp server
-                        //WebMail.SmtpServer = "smtp.gmail.com";
-                        //WebMail.SmtpServer = "mail.umtc.com.ph";
-                        WebMail.SmtpServer = "172.16.16.11";
-                        // port to send emails
-                        WebMail.SmtpPort = 25;
-                        //WebMail.SmtpUseDefaultCredentials = true;
-                        //sending email with secure protocol
-                        WebMail.EnableSsl = false;
-                        // email id used to send emails from application
-                        WebMail.UserName = "no-reply@umtc.com.ph";
-                        WebMail.Password = "Norep6682";
-
-                        // sender email address
-                        WebMail.From = "no-reply@umtc.com.ph";
-
-                        // send email
-                        WebMail.Send(to: email, subject: "UMTC Client Portal Account Approved!", body:
-                            //"Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>", 
-                            "Dear " + firstName + ", <br /><br />" +
-                            "Your registration has been approved. <br /><br />" +
-                            "You may now try and log in by clicking the link below: <br/><br />" +
-                            "<a href='http://clientportal.umtc.com.ph/SAMPortal/Account/Login'>http://clientportal.umtc.com.ph/SAMPortal/Account/Login</a><br /><br />" +
-                            "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
-                            "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged. " +
-                            "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>"
-
-                            , cc: "", bcc: "", isBodyHtml: true);
+                        //send email
+                        mail.SendNotificationToClient(email, (int)Requests.ApproveNewAccount, null, (int)ApprovalStatus.Aprroved);
 
                         //For Logging
                         string[] logparameters = { "LockoutEnabled:" + action, "email:" + email, "INSERTED REGULAR USER:" + guid };

@@ -14,6 +14,7 @@ using SAMPortal.DTO;
 using static SAMPortal.Controllers.ManageController;
 using System.Text.RegularExpressions;
 using SAMPortal.Enum;
+using MySql.Data.MySqlClient;
 
 namespace SAMPortal.Controllers
 {
@@ -95,22 +96,27 @@ namespace SAMPortal.Controllers
                     var UserId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
                     var latestPassword = _context.useroldpasswords.Where(m => m.UserId == UserId).Select(m => new UserPassword { PasswordHash = m.Password, TimeStamp = m.Timestamp }).OrderByDescending(m => m.TimeStamp).FirstOrDefault();
 
-                    //get servertime
-                    var dt = DateTime.Now;
-
-                    //get the timestamp of the latest password
-                    var lastChangePasswordDate = latestPassword.TimeStamp;
-
-                    //get the time difference of server time and last change of password
-                    var differenceInDays = dt - lastChangePasswordDate;
-
-                    if (passwordDurationLimitInDays - differenceInDays.Value.Days <= 0)
+                    if (latestPassword != null)
                     {
-                        return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.PasswordIsExpired });
-                    }
-                    else if (passwordDurationLimitInDays - differenceInDays.Value.Days <= changePasswordNotifShowInDays)
-                    {
-                        return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.PasswordExpirationCountdown, days = (passwordDurationLimitInDays - differenceInDays.Value.Days) });
+                        //get servertime
+
+                        var dt = DateTime.Now;
+
+                        //get the timestamp of the latest password
+
+                        var lastChangePasswordDate = latestPassword.TimeStamp;
+
+                        //get the time difference of server time and last change of password
+                        var differenceInDays = dt - lastChangePasswordDate;
+
+                        if (passwordDurationLimitInDays - differenceInDays.Value.Days <= 0)
+                        {
+                            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.PasswordIsExpired });
+                        }
+                        else if (passwordDurationLimitInDays - differenceInDays.Value.Days <= changePasswordNotifShowInDays)
+                        {
+                            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.PasswordExpirationCountdown, days = (passwordDurationLimitInDays - differenceInDays.Value.Days) });
+                        }
                     }
 
                     return RedirectToLocal(returnUrl);

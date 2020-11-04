@@ -342,6 +342,34 @@ namespace SAMPortal
                   "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>", cc: "", bcc: "", isBodyHtml: true);
 
             }
+            else if (request == (int)Requests.ApproveNewAccount)
+            {
+                var status = "";
+
+                if (approvalStatus == (int)ApprovalStatus.Aprroved)
+                {
+                    status = "APPROVED";
+                }
+                else if (approvalStatus == (int)ApprovalStatus.Denied)
+                {
+                    status = "DENIED";
+                }
+
+                var approvedMessage = "You may now try and log in by clicking the link below: <br/><br />" +
+                    "<a href='http://clientportal.umtc.com.ph/SAMPortal/Account/Login'>http://clientportal.umtc.com.ph/SAMPortal/Account/Login</a><br /><br />";
+
+                // send email
+                WebMail.Send(to: clientReceipient, subject: "UMTC Client Portal Account " + status + "!", body:
+                    //"Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>", 
+                    "Dear " + clientReceipient + ", <br /><br />" +
+                    "Your registration has been " + status + ". <br /><br />" +
+                    ( status == "APPROVED" ? approvedMessage : "" ) +
+                    "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
+                    "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged. " +
+                    "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>"
+
+                    , cc: "", bcc: "", isBodyHtml: true);
+            }
 
         }
 

@@ -1,10 +1,125 @@
-﻿@{
-    ViewBag.Title = "Confirm Email";
-}
+﻿@{Layout = null; }
 
-<h2>@ViewBag.Title.</h2>
-<div>
-    <p>
-        Thank you for confirming your email. Your account is still locked. Please contact Sales and Marketing Team for approval.
-    </p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>UMTC Portal | Email Confirmed</title>
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+    <!-- Icon -->
+    <link rel="shortcut icon" type="image/ico" href="~/Content/images/umtc_logo_icon.ico" />
+    <link rel="icon" type="image/x-icon" href="~/Content/images/umtc_logo_icon.ico" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/admin-lte/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style rel="stylesheet">
+
+       @@media only screen and (max-width: 768px){
+            .box {
+                top: 10%;
+                width: 80%;
+                left: 10%;
+            }
+
+            .box .box-body p {
+                font-size: smaller;
+            }
+        }
+
+        @@media only screen and (min-width: 1024px) {
+            .box {
+                top: 10%;
+                width: 80%;
+                left: 10%;
+            }
+
+            .box .box-body p {
+                font-size: xx-large;
+            }
+        }
+
+        @@media only screen and (min-width: 1360px){
+            .box {
+                top: 15%;
+                width: 50%;
+                left: 25%;
+            }
+
+                .box .box-body p {
+                    font-size: large;
+                }
+        }
+
+    </style>
+</head>
+
+<body class="hold-transition login-page">
+    @*@Html.Partial("_Background")*@
+    <div class="fadein">
+        @{
+            try
+            {
+                <div class="bg1" style="background-image: url('../Content/images/05.jpg')"></div>
+                <div class="bg2" style="background-image: url('../Content/images/02.jpg'); display: none"></div>
+                <div class="bg3" style="background-image: url('../Content/images/03.jpg'); display: none"></div>
+                <div class="bg4" style="background-image: url('../Content/images/04.jpg'); display: none"></div>
+                <div class="bg5" style="background-image: url('../Content/images/01.jpg'); display: none"></div>
+
+            }
+            catch
+            {
+                <div class="bg1" style="background-image: url('Content/images/05.jpg')"></div>
+
+            }
+        }
+
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <img style="width:100%" src="@Url.Content("~/Content/images/umtc_logo_with_white_bg.png")" />
+            </h3>
+        </div>
+        <div class="box-body">
+            <p>
+                Thank you for confirming your email. Your account is still locked. Please contact Sales and Marketing Team for approval.<br /><br />
+                Email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141.
+            </p>
+        </div>
+    </div>
+
+    @*<div id="bg2"></div>
+        <div id="bg3"></div>
+        <div id="bg4"></div>
+        <div id="bg5"></div>*@
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/adminlte/js")*@
+</body>
+</html>
+
+
+@*@{
+        ViewBag.Title = "Confirm Email";
+    }
+
+    <h2>@ViewBag.Title.</h2>
+    <div>
+        <p>
+            Thank you for confirming your email. Your account is still locked. Please contact Sales and Marketing Team for approval.
+        </p>
+    </div>*@
