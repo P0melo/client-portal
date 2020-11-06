@@ -911,7 +911,7 @@ namespace SAMPortal.Controllers
 
             if (parameters[9] != "")
             {
-                outboundDate = DateTime.ParseExact(parameters[9], "M/dd/yyyy", CultureInfo.GetCultureInfo("en-PH"));
+                outboundDate = DateTime.ParseExact(parameters[9], "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-PH"));
             }
 
             var file = byteArr;
@@ -1087,15 +1087,15 @@ namespace SAMPortal.Controllers
             //onSiteAccommodationRecordId, pReservationType, pRoomType, pCheckInDate, pCheckOutDate, pPayment, pReason, pRemarks
             var id = parameters[0];
             var reservationType = parameters[1];
+            var date = parameters[3].Split('-');
             var roomType = parameters[2];
-            var payment = parameters[5];
-            var reason = parameters[6];
-            var remarks = parameters[7];
+            var payment = parameters[4];
+            var reason = parameters[5];
+            var remarks = parameters[6];
 
+            DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-            DateTime checkInDate = DateTime.ParseExact(parameters[3].Trim() + " 13:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-
-            DateTime checkOutDate = DateTime.ParseExact(parameters[4] + " 12:00:00", "MM/dd/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime checkOutDate = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
             var roomsFullDates = _context.Database.SqlQuery<RoomsFull>("CALL UpdateAccommodationReservationCheck(@reservationId, @roomType, @cid, @cod);",
             new MySqlParameter("@reservationId", id),

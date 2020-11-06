@@ -81,8 +81,8 @@ namespace SAMPortal
                 var remarks = data[7].Split(':')[1];
 
                 WebMail.Send(to: email, subject: "[NOTIFICATION] ON SITE ACCOMMODATION UPDATE!", body:
-                user.Name + " has UPDATED his/her On Site Accommodation Request.<br />Reservation ID: " + reservationId + "<br />Reservation Type: " + reservationType + "<br />Room Type: " + roomType +
-                "<br />Check In date(dd/MM/yyyy): " + checkindate + "<br/>Check Out Date: " + checkoutdate + "<br />Payment: " + payment + "<br />Reason: " + reason + "<br />Remarks: " + remarks, cc: "", bcc: "", isBodyHtml: true);
+                user.Name + " has UPDATED his/her On Site Accommodation Request.<br />Reservation ID: " + reservationId + "<br />Reservation Type: " + (reservationType == "1" ? "New Booking" : "Extension") + "<br />Room Type: " + (roomType == "1" ? "Dorm - Standard": "Dorm - Superior") +
+                "<br />Check In date(dd/MM/yyyy): " + checkindate + "<br/>Check Out Date: " + checkoutdate + "<br />Payment: " + (payment == "0" ? "Company Sponsored" : "Personal Account") + "<br />Reason: " + (reason == "12" ? "Accommodation Only" : "Due to In-house Training") + "<br />Remarks: " + remarks, cc: "", bcc: "", isBodyHtml: true);
 
             }
             else if (request == (int)Requests.CancelAccommodationReservation)

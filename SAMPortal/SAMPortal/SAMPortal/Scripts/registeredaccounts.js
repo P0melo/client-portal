@@ -18,14 +18,20 @@
             url: '/SAMPortal/Administration/ReviewAction',
             type: 'post',
             data: { email: email, action: action },
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
             success: function (result) {
                 if (result.jsonStatus === 1) {
-                    $('#modal_success .modal-body p').html('Request successfully approved!');
-                    $('#modal_success').modal();
+                    $.unblockUI();
+                    //$('#modal_success .modal-body p').html('Request successfully approved!');
+                    //$('#modal_success').modal();
+                    generateSuccessModal("approve_account_modal", 2, "", "The REQUEST has been successfully APPROVED!");
                     GetRegisteredAccountsForReview();
                 } else {
-                    $('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    $('.modal-danger').modal();
+                    generateDangerModal("review_action_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //$('.modal-danger').modal();
                 }
             }
         });
@@ -46,12 +52,23 @@
             url: '/SAMPortal/Administration/ReviewAction',
             type: 'post',
             data: { email: email, action: action },
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
             success: function (result) {
                 if (result.jsonStatus === 1) {
-                    $('.modal-success .modal-body p').html('Request successfully denied!');
-                    $('.modal-success').modal();
-                    GetRegisteredAccountsForReview();
+                    //$('.modal-success .modal-body p').html('Request successfully denied!');
+                    //$('.modal-success').modal();
+                    $.unblockUI();
+                    generateSuccessModal("deny_account_modal", 2, "", "The REQUEST has been successfully DENIED!");
+
+                } else {
+                    generateDangerModal("review_action_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph")
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //$('.modal-danger').modal();
                 }
+            }, complete: function () {
+                GetRegisteredAccountsForReview();
             }
         });
     });

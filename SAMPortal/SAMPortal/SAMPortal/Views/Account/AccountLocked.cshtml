@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>UMTC Portal | Email Confirmed</title>
+    <title>UMTC Portal | Account Locked</title>
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -26,16 +26,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <style rel="stylesheet">
 
-       @@media only screen and (max-width: 768px){
+        @@media only screen and (max-width: 768px) {
             .box {
                 top: 10%;
                 width: 80%;
                 left: 10%;
             }
 
-            .box .box-body p {
-                font-size: smaller;
-            }
+                .box .box-body p {
+                    font-size: smaller;
+                }
         }
 
         @@media only screen and (min-width: 1024px) {
@@ -45,12 +45,12 @@
                 left: 10%;
             }
 
-            .box .box-body p {
-                font-size: xx-large;
-            }
+                .box .box-body p {
+                    font-size: xx-large;
+                }
         }
 
-        @@media only screen and (min-width: 1360px){
+        @@media only screen and (min-width: 1360px) {
             .box {
                 top: 15%;
                 width: 50%;
@@ -61,7 +61,6 @@
                     font-size: large;
                 }
         }
-
     </style>
 </head>
 
@@ -95,8 +94,8 @@
         </div>
         <div class="box-body">
             <p>
-                Thank you for confirming your email. Your account is still locked. Please contact Sales and Marketing Team for approval.<br /><br />
-                Email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141.<br /><br />
+                Your account is still locked. Please contact Sales and Marketing Team for approval.<br /><br />
+                Email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141.<br /><br /><br />
                 @Html.ActionLink("Back to Login", "Login")
             </p>
         </div>
@@ -112,15 +111,3 @@
     @*@Scripts.Render("~/adminlte/js")*@
 </body>
 </html>
-
-
-@*@{
-        ViewBag.Title = "Confirm Email";
-    }
-
-    <h2>@ViewBag.Title.</h2>
-    <div>
-        <p>
-            Thank you for confirming your email. Your account is still locked. Please contact Sales and Marketing Team for approval.
-        </p>
-    </div>*@

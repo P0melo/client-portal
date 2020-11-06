@@ -277,12 +277,15 @@
             success: function (result) {
 
                 if (result.data == 1) {
-                    $('#modal_success .modal-body p').html("Request successfully APPROVED!");
-                    $('#modal_success').modal();
+                    //$('#modal_success .modal-body p').html("Request successfully APPROVED!");
+                    //$('#modal_success').modal();
+                    generateSuccessModal("approve_new_crew_success", 2, "", "Request successfully APRROVED!");
                     getNewCrewRequest();
                 } else {
-                    $('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
-                    $('.modal-danger').modal();
+                    //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
+                    //$('.modal-danger').modal();
+                    generateDangerModal("approve_new_crew_error", "Sorry for the inconvenience. Please send this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the IT Department.");
+
                 }
             }
         });

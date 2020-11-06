@@ -89,6 +89,13 @@ namespace SAMPortal.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var lockoutEnabled = _context.Database.SqlQuery<int>("SELECT LockoutEnabled FROM users WHERE Email = '" + model.Email + "'").FirstOrDefault();
+
+            if (lockoutEnabled == 1)
+            {
+                return View("AccountLocked");
+            }
+
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {

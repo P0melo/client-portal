@@ -106,6 +106,9 @@ namespace SAMPortal.Controllers
                         _context.Database.ExecuteSqlCommand("DELETE FROM users WHERE email = @email",
                             new MySqlParameter("email", email));
 
+                        //send email
+                        mail.SendNotificationToClient(email, (int)Requests.ApproveNewAccount, null, (int)ApprovalStatus.Denied);
+
                         string[] logparameters = { "DELETED NEW USER REQUEST", "email:" + email };
                         string data1 = logging.ConvertToLoggingParameter(logparameters);
                         logging.Log(user, "ReviewAction", data1);

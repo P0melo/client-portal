@@ -356,6 +356,51 @@ function generateCourseListTable(result) {
 
 }
 
+//function getDateDiff(date) {
+//    let splitDate = date.split(' - ');
+
+//    let newDateFrom = new Date();
+//    let df = splitDate[0];
+//    let dfd = df.split('/')[0];
+//    let dfm = df.split('/')[1] - 1;
+//    let dfy = df.split('/')[2];
+
+//    newDateFrom.setDate(dfd);
+//    newDateFrom.setMonth(dfm);
+//    newDateFrom.setFullYear(dfy);
+
+//    let newDateTo = new Date();
+//    let dt = splitDate[1];
+//    let dtd = dt.split('/')[0];
+//    let dtm = dt.split('/')[1] - 1;
+//    let dty = dt.split('/')[2];
+
+//    newDateTo.setDate(dtd);
+//    newDateTo.setMonth(dtm);
+//    newDateTo.setFullYear(dty);
+
+//    let dateDifference = new Date(newDateTo - newDateFrom);
+
+//    let intDifference = Math.round((dateDifference / (1000 * 3600 * 24)));
+
+//    return intDifference;
+//}
+
+function getDateDiff(date) {
+    let splitDate = date.split(' - ');
+
+    let df = splitDate[0];
+    let newDateFrom = new Date(df.split('/')[2], df.split('/')[1] - 1, df.split('/')[0]);
+
+    let dt = splitDate[1];
+    let newDateTo = new Date(dt.split('/')[2], dt.split('/')[1] - 1, dt.split('/')[0]);
+
+    let dateDifference = new Date(newDateTo - newDateFrom);
+
+    let intDifference = Math.round((dateDifference / (1000 * 3600 * 24)));
+
+    return intDifference;
+}
 
 function getWeekNumber(myDate) {
     let d = new Date(myDate);

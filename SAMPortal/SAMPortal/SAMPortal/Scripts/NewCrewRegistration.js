@@ -1246,8 +1246,12 @@
             complete: function () {
                 let enrollees = parseInt(totalEnrollees[0]);
                 let maxEnrolless = parseInt(totalEnrollees[1]);
+                //courseStartDate
+                let startDate = new Date();
+                startDate.setDate(courseStartDate.split('/')[0]);
+                startDate.setMonth(courseStartDate.split('/')[1] - 1);
+                startDate.setFullYear(courseStartDate.split('/')[2]);
 
-                let startDate = new Date(courseStartDate);
                 let d = new Date();
 
                 if (d.getTime() >= startDate.getTime()) {
@@ -1433,8 +1437,8 @@
 
             let inboundDate = $('#transportation_date').val();
             let outboundDate = $('#transportation_date_outbound').val();
-            let file = $('#output').val();
-            let splitString = $('#InputFile').val().split("\\");
+            let file = $('#outputTransportation').val();
+            let splitString = $('#InputFileTransportation').val().split("\\");
             let fileName = splitString[splitString.length - 1];
             let fileNameSplit = fileName.split(".");
             let fileExtension = fileNameSplit[fileNameSplit.length - 1];
@@ -1492,7 +1496,11 @@
             type: 'POST',
             dataType: 'JSON',
             data: { parameters: saveTransportationParameter },
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
             success: function (result) {
+                $.unblockUI();
                 if (result.data == 1) {
                     generateSuccessModal("save_airport_transfer_modal", 2, "", "Airport Transfer request successfully submitted...");
                 } else {
@@ -1629,6 +1637,12 @@
         m_dinner_cb = $('#dinner_cb').is(':checked');
         m_dietary_requirement = $('#dietaryRequirement_input').val();
 
+        var dateDiff = getDateDiff(m_meal_reservation);
+        if (dateDiff > 30) {
+
+            generateWarningModal('meal_reservation_warning_modal', 2, '', "The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days")
+            return false;
+        } 
 
         if (m_meal_reservation == '' || m_dietary_requirement == '' || (m_breakfast_cb == false && m_am_snack_cb == false && m_lunch_cb == false && m_pm_snack_cb == false && m_dinner_cb == false)) {
             generateWarningModal("meals_arrangement_warning", 2, "", "Please make sure that required fields are not left blank before clicking submit");
@@ -1636,7 +1650,6 @@
         }
 
         mealsArrangementParameters = [mnno, rank, "", m_meal_reservation, m_reason_input, m_dietary_requirement, m_breakfast_cb, m_am_snack_cb, m_lunch_cb, m_pm_snack_cb, m_dinner_cb];
-
 
         generateWarningModal("submit_meals_arrangement_modal", 1, "submit_meals_arrangement_modal_yes", "Are you sure you want to submit?");
 

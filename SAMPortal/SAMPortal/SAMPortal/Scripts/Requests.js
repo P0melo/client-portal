@@ -251,6 +251,7 @@
         }
     });
 
+    var onSiteAccomodationParameters = [];
     $(document).on('click', '#e_save_accomodation_btn', function () {
 
         if ($('#e_room_type option:selected').val() == 3) {
@@ -264,37 +265,60 @@
         var pReservationType = $('#e_reservation_type option:selected').val();
         var pRoomType = $('#e_room_type option:selected').val();
 
-        var dates = $('#e_accomodation_date').val().split(' - ');
-        var pCheckInDate = dates[0];
-        var pCheckOutDate = dates[1];
+        var dates = $('#e_accomodation_date').val();
+        //var pCheckInDate = dates[0];
+        //var pCheckOutDate = dates[1];
         var pPayment = $('#e_mode_of_payment option:selected').val();
         var pReason = $('#e_accomodation_reason option:selected').val();
         var pRemarks = $('#e_accomodation_remarks_input').val();
 
-        var onSiteAccomodationParameters = [onSiteAccommodationRecordId, pReservationType, pRoomType, pCheckInDate, pCheckOutDate, pPayment, pReason, pRemarks];
+        onSiteAccomodationParameters = [onSiteAccommodationRecordId, pReservationType, pRoomType, dates, pPayment, pReason, pRemarks];
+
+        let modalMessage = "Are you sure you want to submit?";
+
+        generateWarningModal('e_submit_accommodation_warning_modal', 1, 'e_submit_accommodation_warning_modal_yes', modalMessage);
+        
+    });
+
+    $(document).on('click', '#e_submit_accommodation_warning_modal_yes', function () {
 
         $.ajax({
             url: '/SAMPortal/Forms/UpdateOnSiteReservation',
             dataType: 'json',
             type: 'post',
             data: { parameters: onSiteAccomodationParameters },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
             success: function (result) {
+                $.unblockUI();
                 if (result.data == 1) {
-                    $('#modal_success .modal-body p').html("Reservation updated successfully!");
-                    $('#modal_success').modal();
+                    //$('#modal_success .modal-body p').html("Reservation updated successfully!");
+                    //$('#modal_success').modal();
+                    generateSuccessModal("update_on_site_reservation_modal", 2, "", "Reservation UPDATED successfully!");
+                    $('#edit_onsite_booking_modal').modal('hide');
+
                 } else if (result.data == "Rooms") {
                     var fixedFormatting = result.data2.substring(0, result.data2.length - 2);
-                    $('#modal_warning_update_reservation .modal-body p').html("Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
-                    $('#modal_warning_update_reservation').modal();
+                    //$('#modal_warning_update_reservation .modal-body p').html("Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
+                    //$('#modal_warning_update_reservation').modal();
+                    generateWarningModal('e_submit_accommodation_warning_modal', 2, "", "Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
+
                 } else {
                     generateDangerModal("update_on_site_reservation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
 
                     //$('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                     //$('.modal-danger').modal();
                 }
+            }, complete: function () {
+                getOnSiteAccommodationRequests();
             }
         });
     });
+    
 
     function newCrewRequestsFormatDate(rawDate) {
         var data = rawDate.split('T')[0];
@@ -482,13 +506,16 @@
             success: function (result) {
                 $.unblockUI();
                 if (result.data == 1) {
-                    $('#modal_success .modal-body p').html('Reservation cancelled successfully!');
-                    $('#modal_success').modal();
+                    //$('#modal_success .modal-body p').html('Reservation cancelled successfully!');
+                    //$('#modal_success').modal();
+                    generateSuccessModal("e_cancel_accommodation_reservation_success_modal", "2", "", "Reservation CANCELLED successfully!");
+                    $('#edit_onsite_booking_modal').modal('hide');
                 } else {
-                    generateDangerModal("ecancel_accommodation_reservation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    generateDangerModal("e_cancel_accommodation_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
 
                     //$('.modal-danger .modal-body p').html("Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                     //$('.modal-danger').modal();
+
                 }
 
                 getOnSiteAccommodationRequests();
@@ -496,51 +523,16 @@
         });
     });
 
-    $('#modal_success').on('hidden.bs.modal', function () {
-        $('#edit_onsite_booking_modal').modal('toggle');
-    });
 
-
-
-    //$(document).on('click', '.modal #view_attachment', function () {
-    //    $('.modal_picture .modal-header .modal-title').html("");
-    //    var recordId = $(this).attr('rid');
-    //    var src = "";
-    //    var fileType = "";
-
-    //    $.ajax({
-    //        url: '/SAMPortal/api/Forms/GetTransportationAttachment',
-    //        dataType: 'JSON',
-    //        type: 'GET',
-    //        data: { recordId: recordId },
-    //        success: function (result) {
-    //            src = result[0].Picture;
-    //            fileType = result[0].FileType;
-    //            if (src !== null && src !== "" && src !== "null") {
-    //                if (fileType === "pdf" || fileType === "PDF") {
-    //                    $('.modal_picture .modal-body div').html('<embed src="data:application/pdf;base64,' + src + '" frameborder="0" width="100%" height="400px">');
-    //                } else if (fileType === "jpg" || fileType === "jpeg" || fileType === "JPG") {
-    //                    $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + src + '" />');
-    //                } else if (fileType === "png" || fileType === "PNG") {
-    //                    $('.modal_picture .modal-body div').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/png;base64,' + src + '" />');
-    //                } else {
-    //                    $('.modal_picture .modal-body div').html('<p style="text-align: center">Could not show attachment. The type of the file uploaded is not a PDF/PNG or a JPEG type.</p>');
-    //                }
-
-    //            } else {
-    //                $('.modal_picture .modal-body div').html('<p style="text-align: center">No data to show</p>');
-    //            }
-    //        },
-    //        complete: function () {
-    //            $('.modal_picture').modal();
-    //        }
-    //    });
-    //});
 
     // return values: 0 - not allowed to book, 1 - allowed to book
     function validateSchedule(date, serverDate) {
+        let dateSplit = date.split('/');
 
-        let chosenDate = date;
+        let chosenDate = new Date();
+        chosenDate.setDate(dateSplit[0]);
+        chosenDate.setMonth(dateSplit[1] - 1);
+        chosenDate.setYear(dateSplit[2]);
 
         let difference = getWeekNumber(chosenDate) - getWeekNumber(serverDate);
 
@@ -551,24 +543,6 @@
 
         return 1;
     }
-
-    function getWeekNumber(myDate) {
-        let d = new Date(myDate);
-        // Copy date so don't modify original
-        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        // Set to nearest Thursday: current date + 4 - current day number
-        // Make Sunday's day number 7
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        // Get first day of year
-        let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        // Calculate full weeks to nearest Thursday
-        let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-        // Return array of year and week number
-
-        return weekNo;
-    }
-
-
 
     $(document).on('click', '#modal_update_new_crew_request_save', function () {
         let datepickerSplit = $('#datepicker').val().split('/');

@@ -161,8 +161,26 @@
 
     });
 
+
+    function getDateDiff(date) {
+        let splitDate = date.split(' - ');
+
+        let df = splitDate[0];
+        let newDateFrom = new Date(df.split('/')[2], df.split('/')[1] - 1, df.split('/')[0]);
+
+        let dt = splitDate[1];
+        let newDateTo = new Date(dt.split('/')[2], dt.split('/')[1] - 1, dt.split('/')[0]);
+
+        let dateDifference = new Date(newDateTo - newDateFrom);
+
+        let intDifference = Math.round((dateDifference / (1000 * 3600 * 24)));
+
+        return intDifference;
+    }
+
     var saveMealProvistionParameter = [];
     $(document).on('click', '#save_meal_btn', function (e) {
+        
         var mnno = $('#mnno_input').val();
         var rank = $('#rank_input').val();
         var name = $('#name_input').val();
@@ -177,24 +195,25 @@
 
         var dateDiff = getDateDiff(date);
 
-
         if (dateDiff > 30) {
             //$('.modal-warning .modal-body p').html("The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days");
             //$('.modal-warning').modal();
             generateWarningModal('meal_reservation_warning_modal', 2, '', "The max length of a request is 30 days. If you want to book more than 30, we advice that you first book the 30 days then do another request for the remaining days")
-        } else {
-            if (mnno === "" || rank === "" || name === "" || reason === "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
-                //$('#meal_err_msg').css('display', 'block');
-                generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit");
-            } else {
-                $('#meal_err_msg').css('display', 'none');
-                saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
+            return false;
+        } 
 
-                $('#modal_warning_meal .modal-body p').html("Are you sure you want to submit?");
-                $('#modal_warning_meal').modal();
-            }
-        }
+        if (mnno === "" || rank === "" || name === "" || reason === "" || dietaryRequirement == "" || (breakfast_cb === false && am_snack_cb === false && lunch_cb === false && pm_snack_cb === false && dinner_cb === false)) {
+            //$('#meal_err_msg').css('display', 'block');
+            generateWarningModal('meal_reservation_warning_modal', 2, '', "Please make sure that required fields are not left blank before clicking submit");
+            return false;
+        } 
+        
+        saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
 
+        generateWarningModal("submit_meals_arrangement_modal", 1, "modal_warning_meal_yes", "Are you sure you want to submit?");
+        //$('#modal_warning_meal .modal-body p').html("Are you sure you want to submit?");
+        //$('#modal_warning_meal').modal();
+        
     });
 
     $(document).on('click', '#modal_warning_meal_yes', function () {
@@ -302,35 +321,6 @@
         return "<input id='meal_log_edit_cb' type='checkbox' " + checkedValue + " disabled='true'/>";
     }
 
-    function getDateDiff(date) {
-        let splitDate = date.split(' - ');
-
-        let newDateFrom = new Date();
-        let df = splitDate[0];
-        let dfd = df.split('/')[0];
-        let dfm = df.split('/')[1] - 1;
-        let dfy = df.split('/')[2];
-
-        newDateFrom.setDate(dfd);
-        newDateFrom.setMonth(dfm);
-        newDateFrom.setFullYear(dfy);
-
-        let newDateTo = new Date();
-        let dt = splitDate[1];
-        let dtd = dt.split('/')[0];
-        let dtm = dt.split('/')[1] - 1;
-        let dty = dt.split('/')[2];
-
-        newDateTo.setDate(dtd);
-        newDateTo.setMonth(dtm);
-        newDateTo.setFullYear(dty);
-
-        let dateDifference = new Date(newDateTo - newDateFrom);
-
-        let intDifference = Math.round((dateDifference / (1000 * 3600 * 24)));
-
-        return intDifference;
-    }
 
 
     //function formatDate(data, redirect) {
