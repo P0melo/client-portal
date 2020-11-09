@@ -264,10 +264,6 @@ namespace SAMPortal.Controllers
 
         public ActionResult SaveNewCrew(string firstName, string position, string lastName, string middleName, string datepicker, string birthPlace, string inputFile)
         {
-            //JsonResult inHouseBookingResponse = new JsonResult();
-            //JsonResult transportationResponse = new JsonResult();
-            //JsonResult mealsResponse = new JsonResult();
-            //JsonResult outHouseBookingResponse = new JsonResult();
            
             DateTime dateValue = new DateTime();
 
@@ -369,44 +365,6 @@ namespace SAMPortal.Controllers
                              JsonRequestBehavior.AllowGet);
                 }
             }
-            /*
-             * Add a code that will handle invalid ModelState correctly
-             */
-
-            //string[] ihbp, string[] tap, string[] map, string[] ohbp
-
-            //string[] myParameters = new string[1];
-            //myParameters[0] = "Temp" + tempId.KeySequence.ToString();
-
-            //if (ihbp != null)
-            //{
-            //    string[] combined = myParameters.Concat(ihbp).ToArray();
-
-            //    inHouseBookingResponse = (JsonResult)SaveAccomodation(combined);
-
-            //}
-
-            //if (tap != null)
-            //{
-            //    string[] combined = myParameters.Concat(tap).ToArray();
-
-            //    transportationResponse = (JsonResult)SaveTransportation(combined);
-
-            //}
-
-            //if (map != null)
-            //{
-            //    string[] combined = myParameters.Concat(map).ToArray();
-
-            //    mealsResponse = (JsonResult)SaveMealProvision(combined);
-            //}
-
-            //if (ohbp != null)
-            //{
-            //    string[] combined = myParameters.Concat(ohbp).ToArray();
-
-            //    outHouseBookingResponse = (JsonResult)SaveOffSiteAccomodation(combined);
-            //}
 
             return Json(new { status = "Success", tempId = tempId.KeySequence },
                              JsonRequestBehavior.AllowGet);

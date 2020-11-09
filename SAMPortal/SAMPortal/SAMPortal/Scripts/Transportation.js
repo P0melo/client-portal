@@ -38,7 +38,7 @@
                 }
 
                 $('#transportationHistory_tbl tbody').html(content);
-                $('#transportationHistory_tbl').DataTable();
+                historyTable = $('#transportationHistory_tbl').DataTable();
                 $('#transportationHistory_tbl_div').css('display', 'block');
                 $("#transportationHistory_tbl").css('width', 'inherit');
 
@@ -490,9 +490,15 @@
         //hrefSplit can be seen in userscript.js
         if (typeof (hrefSplit) !== 'undefined') {
             window.close();
-        } else {
+        }
+        else
+        {
             window.location.reload();
         }
+    });
+
+    $(document).on('click', '#transportation_clear_btn', function () {
+        window.location.reload();
     });
 
 });

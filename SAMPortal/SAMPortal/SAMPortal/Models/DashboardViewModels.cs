@@ -151,6 +151,7 @@ namespace SAMPortal.Models
 
     public class GetOnSiteAccommodationHistory
     {
+        public int Id{ get; set; }
         public string ReservationType { get; set; }
         public string RoomType { get; set; }
         public DateTime CheckInDate { get; set; }

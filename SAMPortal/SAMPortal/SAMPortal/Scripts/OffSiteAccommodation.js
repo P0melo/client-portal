@@ -142,4 +142,8 @@
         }
     });
 
+    $(document).on('click', '#clear_off_site_btn', function () {
+        window.location.reload();
+    });
+
 });

@@ -249,15 +249,12 @@
         </div>
         <div class="col-xs-12 form-group" style="display:inline-block; padding-left: 0px; padding-right: 0px;">
             <label for="transportation_details" class="col-md-2 control-label">Remarks</label>
-            @*<div class="col-xs-12 col-md-12 col-lg-10">
-                    <input id="transportation_details_input" type="text" class="form-control" style="border-radius: 3px;" placeholder="Pick Up and Drop Off Point" />
-                </div>*@
             <textarea class="form-control" rows="5" id="transportation_details"></textarea>
         </div>
 
         <div class="col-md-12 col-lg-12 form-group">
-            <span id="meal_err_msg" style="color: red; display: none">**All the fields must not be left blank</span>
             <button type="button" id="save_transportation_btn" class="btn btn-default pull-right">Submit</button>
+            <button type="button" id="transportation_clear_btn" class="btn btn-default pull-right">Clear</button>
         </div>
 
         <div id="transportationHistory_tbl_div" hidden>

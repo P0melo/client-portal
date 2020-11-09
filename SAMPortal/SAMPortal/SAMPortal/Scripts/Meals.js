@@ -377,7 +377,9 @@
         //hrefSplit can be seen in userscript.js
         if (typeof (hrefSplit) !== 'undefined') {
             window.close();
-        } else {
+        }
+        else
+        {
             window.location.reload();
         }
     });

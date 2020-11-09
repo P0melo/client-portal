@@ -219,7 +219,7 @@
             data: { Id: onSiteAccommodationRecordId },
             success: function (result) {
                 var e_name = result.LastName + ", " + result.FirstName;
-                var e_date = formatDate(result.CheckInDate) + " - " + formatDate(result.CheckOutDate);
+                //var e_date = formatDate(result.CheckInDate) + " - " + formatDate(result.CheckOutDate);
 
                 $('#e_mnno_input').val(result.MNNO);
                 $('#e_rank_input').val(result.Rank);
@@ -501,14 +501,17 @@
             dataType: 'json',
             type: 'post',
             beforeSend: function () {
-                $.blockUI({ message: null });
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
             },
             success: function (result) {
                 $.unblockUI();
                 if (result.data == 1) {
                     //$('#modal_success .modal-body p').html('Reservation cancelled successfully!');
                     //$('#modal_success').modal();
-                    generateSuccessModal("e_cancel_accommodation_reservation_success_modal", "2", "", "Reservation CANCELLED successfully!");
+                    generateSuccessModal("e_cancel_accommodation_reservation_success_modal", 2, "", "Reservation CANCELLED successfully!");
                     $('#edit_onsite_booking_modal').modal('hide');
                 } else {
                     generateDangerModal("e_cancel_accommodation_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
@@ -524,27 +527,12 @@
     });
 
 
-
-    // return values: 0 - not allowed to book, 1 - allowed to book
-    function validateSchedule(date, serverDate) {
-        let dateSplit = date.split('/');
-
-        let chosenDate = new Date();
-        chosenDate.setDate(dateSplit[0]);
-        chosenDate.setMonth(dateSplit[1] - 1);
-        chosenDate.setYear(dateSplit[2]);
-
-        let difference = getWeekNumber(chosenDate) - getWeekNumber(serverDate);
-
-        if (difference < 2) {
-
-            return 0;
-        }
-
-        return 1;
-    }
-
     $(document).on('click', '#modal_update_new_crew_request_save', function () {
+        let modalMessage = "Are you sure you want to update the request?";
+        generateWarningModal("modal_update_new_crew_request_warning", 1, "modal_update_new_crew_request_warning_yes", modalMessage);
+    });
+
+    $(document).on('click', '#modal_update_new_crew_request_warning_yes', function () {
         let datepickerSplit = $('#datepicker').val().split('/');
         let birthDate = datepickerSplit[2] + "-" + datepickerSplit[1] + "-" + datepickerSplit[0];
         let firstname = $('#FirstName').val();

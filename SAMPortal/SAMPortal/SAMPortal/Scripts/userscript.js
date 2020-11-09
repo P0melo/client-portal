@@ -114,6 +114,26 @@ function renderImageForZoom(recordId) {
     });
 };
 
+// return values: 0 - not allowed to book, 1 - allowed to book
+function validateSchedule(date, serverDate) {
+    let dateSplit = date.split('/');
+
+    let chosenDate = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
+    //chosenDate.setDate(dateSplit[0]);
+    //chosenDate.setMonth(dateSplit[1] - 1);
+    //chosenDate.setYear(dateSplit[2]);
+
+    let difference = getWeekNumber(chosenDate) - getWeekNumber(serverDate);
+
+    if (difference < 2) {
+
+        return 0;
+    }
+
+    return 1;
+}
+
+
 function refreshBookingTable() {
     let currentMonth = $('#month_select option:selected').val();
     let currentYear = $('#year_input').val();
@@ -660,7 +680,7 @@ function enrollThisCrew(parameters) {
 }
 
 function formatDate(data) {
-
+    
     if (data == null) {
         return "";
     }
@@ -711,8 +731,9 @@ function saveAccomodation(parameters) {
                 $('#duplicate_booking_modal_tbl tbody').html(content);
                 $('#duplicate_booking_modal').modal();
             } else {
-                $('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                $('.modal-danger').modal();
+                //$('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                //$('.modal-danger').modal();
+                generateDangerModal("save_accommodation_error", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
             }
 
             $('#modal_warning_accommodation_submit_yes').attr('disabled', false);

@@ -664,13 +664,18 @@
     // return values: 0 - not allowed to book, 1 - allowed to book
     function validateSchedule() {
 
-        let chosenDate = $('#date_select').val();
+        let dateSplit = $('#date_select').val().split('/')
+        let chosenDate = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
 
         let dateToday = new Date();
 
         let difference = getWeekNumber(chosenDate) - getWeekNumber(dateToday);
 
+
         if (difference < 2) {
+            if (chosenDate.getFullYear() > dateToday.getFullYear()) {
+                return 1;
+            }
 
             return 0;
         }
