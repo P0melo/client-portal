@@ -49,7 +49,8 @@ namespace SAMPortal.Enum
         SwapEnrolledCrew = 11,
         UnenrollThisCrew = 12,
         UpdateCrewRank = 13,
-        ApproveNewAccount = 14
+        ApproveNewAccount = 14,
+        CancelOffSiteAccommodation = 15
     }
 
     public enum ApprovalStatus

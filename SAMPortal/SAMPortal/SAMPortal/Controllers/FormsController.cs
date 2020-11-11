@@ -264,7 +264,7 @@ namespace SAMPortal.Controllers
 
         public ActionResult SaveNewCrew(string firstName, string position, string lastName, string middleName, string datepicker, string birthPlace, string inputFile)
         {
-           
+
             DateTime dateValue = new DateTime();
 
             int flag = 0;
@@ -1433,6 +1433,50 @@ namespace SAMPortal.Controllers
             }
 
             jsonResult = Json(new { data = "" },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult CancelOffSiteAccommodation(int recordId)
+        {
+            JsonResult jsonResult = new JsonResult();
+            var jsonStatus = (int)Status.Initialize;
+            var user = GetUser();
+            var userId = GetUserId(user);
+            var cancelStatusId = _context.Database.SqlQuery<int>("SELECT Id FROM tbloff_site_status WHERE Name='Cancelled'").FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("UPDATE tbloff_site_reservation SET Status=@status, LastUpdatedBy=@user, LastUpdated=@lastUpdated WHERE Id=@recordId",
+                        new MySqlParameter("@status", cancelStatusId),
+                        new MySqlParameter("@user", user),
+                        new MySqlParameter("@lastUpdated", DateTime.Now.ToString("yyyy-M-dd HH:mm:ss")),
+                        new MySqlParameter("@recordId", recordId));
+
+                    //for logging
+                    string[] logparameters = { "id:" + recordId, "Status:6", "LastUpdatedBy:" + userId, "LastUpdated:" + DateTime.Now.ToString("yyyy-M-dd HH:mm:ss") };
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+
+                    logging.Log(user, "CancelOffSiteAccommodation", data);
+
+                    //For Email Notif
+                    var details = _context.Database.SqlQuery<CancelOffSiteAccommodationModel>("SELECT MNNO, CheckInDate, CheckOutDate, HotelName, RoomType FROM tbloff_site_reservation WHERE Id='" + recordId + "'").FirstOrDefault();
+                    var msg = details.MNNO + "|" + details.HotelName + "|" + details.RoomType + "|" + details.CheckInDate + "|" + details.CheckOutDate;
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.CancelOffSiteAccommodation, msg);
+
+                    jsonStatus = (int)Status.Success;
+
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
+            jsonResult = Json(new { data = jsonStatus },
                   JsonRequestBehavior.AllowGet);
 
             return jsonResult;

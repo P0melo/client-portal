@@ -117,6 +117,15 @@ namespace SAMPortal.Models
 
     }
 
+    public class CancelOffSiteAccommodationModel
+    {
+        public string MNNO { get; set; }
+        public DateTime CheckInDate { get; set; }
+        public DateTime CheckOutDate { get; set; }
+        public string HotelName { get; set; }
+        public int RoomType { get; set; }
+    }
+
     public class Attachment
     {
         public string FileType { get; set; }

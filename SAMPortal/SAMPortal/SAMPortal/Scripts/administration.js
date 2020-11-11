@@ -416,7 +416,7 @@
     });
 
     $(document).on('click', '#modal_warning_review_offsite_accommodation_yes', function () {
-        let statusId = 9 //Booked
+        let statusId = 8 //Booked
         $.ajax({
             url: '/SAMPortal/Administration/UpdateOffSiteStatusId',
             type: 'get',

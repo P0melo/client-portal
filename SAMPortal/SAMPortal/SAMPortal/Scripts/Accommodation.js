@@ -15,7 +15,6 @@
 
     //}
 
-
     if (document.getElementById('mnno_input').value !== "") {
         let traineeNo = document.getElementById('mnno_input').value;
         getHistory(traineeNo);
@@ -47,8 +46,9 @@
                     let checkOutDate = result[i].CheckOutDate.split('T');
                     content += "<tr><td>" + (result[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td><td>" + (result[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") +
                         "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] +
-                        "</td><td>" + (result[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].Status +
-                        "</td><td style='padding: 0'>" +
+                        "</td><td>" + (result[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + (result[i].Reason == 12 ? "Accommodation Only" : "Due to In-house Training") +
+                        "</td><td>" + result[i].Remarks + 
+                        "</td><td>" + result[i].Status + " </td><td style='padding: 0'>" +
                         (result[i].Status == "RESERVED" || result[i].Status == "Reserved" ?
                         "<input type='button' class='btn btn-default' value='Edit' id='edit_accommodation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>" +
                         "<input type='button' class='btn btn-danger' value='Cancel' id='cancel_accommodation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>" 
@@ -68,19 +68,99 @@
     }
 
     var recordId = "";
+    var e_reservation_type = "";
+    var e_room_type = "";
+    var e_accomodation_date = "";
+    var e_mode_of_payment = "";
+    var e_accomodation_reason = "";
+    var e_accomodation_remarks_input = "";
 
     $(document).on('click', '#edit_accommodation_btn', function () {
-        let recordId = $(this).attr('reservation_id');
+        recordId = $(this).attr('reservation_id');
+        let row = $(this).parent().parent();
+        let checkInDate = row.children(':eq(2)').html().split(' ')[0];
+        let checkOutDate = row.children(':eq(3)').html().split(' ')[0];
+        let reservation_type = row.children(':eq(0)').html() == "New Booking" ? "1" : "2";
+        let room_type = row.children(':eq(1)').html() == "Dorm - Standard" ? "1" : "2";
+        let mode_of_payment = row.children(':eq(4)').html() == "Company Sponsored" ? "0" : "1";
+        let accomodation_reason = row.children(':eq(5)').html() == "Accommodation Only" ? "12" : "1";
 
+        $('#e_reservation_type').val(reservation_type);
+        $('#e_room_type').val(room_type)
+        $('#e_accomodation_date').val(checkInDate + " - " + checkOutDate);
+        $('#e_mode_of_payment').val(mode_of_payment);
+        $('#e_accomodation_reason').val(accomodation_reason);
+        $('#e_accomodation_remarks_input').val(row.children(':eq(6)').html());
+
+        $('#edit_accommodation_modal').modal();
     });
 
-    
+    $(document).on('click', '#save_edited_accomodation_btn', function () {
+
+        if ($('#e_room_type option:selected').val() == 3) {
+            $('#hotel_single_double_modal').modal();
+            return false;
+        } else if ($('#e_room_type option:selected').val() == 4) {
+            $('#hotel_single_double_modal').modal();
+            return false;
+        }
+
+        let modalMessage = "Are you sure you want to submit?";
+
+        generateWarningModal('edit_accommodation_warning_modal', 1, 'edit_accommodation_warning_modal_yes', modalMessage);
+    });
+
+    $(document).on('click', '#edit_accommodation_warning_modal_yes', function () {
+        e_reservation_type = $('#e_reservation_type').val();
+        e_room_type = $('#e_room_type').val();
+        e_accomodation_date = $('#e_accomodation_date').val();
+        //let checkInDate = e_accomodation_date.split(' - ')[0];
+        //let checkOutDate = e_accomodation_date.split(' - ')[1];
+        e_mode_of_payment = $('#e_mode_of_payment').val();
+        e_accomodation_reason = $('#e_accomodation_reason').val();
+        e_accomodation_remarks_input = $('#e_accomodation_remarks_input').val();
+
+        let onSiteAccomodationParameters = [recordId, e_reservation_type, e_room_type, e_accomodation_date, e_mode_of_payment, e_accomodation_reason, e_accomodation_remarks_input];
+
+        $.ajax({
+            url: '/SAMPortal/Forms/UpdateOnSiteReservation',
+            dataType: 'json',
+            type: 'post',
+            data: { parameters: onSiteAccomodationParameters },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    generateSuccessModal("update_on_site_reservation_modal", 2, "", "Reservation UPDATED successfully!");
+                    $('#edit_accommodation_modal').modal('hide');
+
+                    let traineeNo = document.getElementById('mnno_input').value;
+                    getHistory(traineeNo);
+
+                } else if (result.data == "Rooms") {
+                    var fixedFormatting = result.data2.substring(0, result.data2.length - 2);
+                    generateWarningModal('e_submit_accommodation_warning_modal', 2, "", "Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
+
+                } else {
+                    generateDangerModal("update_on_site_reservation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
+            }
+        });
+        
+    });
+
     $(document).on('click', '#cancel_accommodation_btn', function () {
 
         getServerDate().then(function (data) {
+
             // Run this when your request was successful
-            let serverDate = fixServerDateFormat(data.split(' ')[0]);
-            let checkInDate = $(this).parent().prev().prev().prev().prev().split(' ')[0];
+            let serverDate = fixServerDateFormat(data);
+            let checkInDate = $('#cancel_accommodation_btn').parent().parent().children(':eq(2)').html().split(' ')[0];
 
             let validatedSchedule = validateSchedule(checkInDate, serverDate);
 
@@ -89,11 +169,10 @@
                 let modalMessage = "You are no longer allowed to cancel because your accommodation will start next week. <br />If you really need to CANCEL, kindly contact our Sales and Marketing Team instead. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph";
                 generateWarningModal('cancel_reservation_not_allowed', 2, '', modalMessage);
             } else {
-                recordId = $(this).attr('reservation_id');
-
+                recordId = $('#cancel_accommodation_btn').attr('reservation_id');
                 let modalMessage = "Are you sure you want to CANCEL this reservation?";
 
-                generateWarningModal('cancel_accommodation_warning_modal', 1, 'e_cancel_accommodation_warning_modal_yes', modalMessage);
+                generateWarningModal('cancel_accommodation_warning_modal', 1, 'cancel_accommodation_warning_modal_yes', modalMessage);
             }
 
         }).catch(function (err) {
@@ -109,7 +188,7 @@
 
     });
 
-    $(document).on('click', '#cancel_accommodation_warning_modal_yes', function() {
+    $(document).on('click', '#cancel_accommodation_warning_modal_yes', function () {
         $.ajax({
             url: '/SAMPortal/Forms/CancelAccommodationReservation',
             data: { id: recordId },
@@ -124,12 +203,12 @@
             success: function (result) {
                 $.unblockUI();
                 if (result.data == 1) {
-                    generateSuccessModal("e_cancel_accommodation_reservation_success_modal", 2, "", "Reservation CANCELLED successfully!");
+                    generateSuccessModal("cancel_accommodation_reservation_success_modal", 2, "", "Reservation CANCELLED successfully!");
 
                     let traineeNo = document.getElementById('mnno_input').value;
                     getHistory(traineeNo);
                 } else {
-                    generateDangerModal("e_cancel_accommodation_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    generateDangerModal("cancel_accommodation_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 }
 
             }
@@ -155,6 +234,12 @@
 
     $('#accomodation_date').prev().click(function () {
         $(this).next().focus();
+    });
+
+    $('#e_accomodation_date').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
     });
 
     $(document).on('click', '#accommodation_search_btn', function () {

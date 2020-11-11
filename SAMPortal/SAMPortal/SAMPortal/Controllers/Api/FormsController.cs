@@ -129,8 +129,8 @@ namespace SAMPortal.Controllers.Api
         {
             var company = GetCompany();
 
-            var data = _context.Database.SqlQuery<GetOffSiteAccommodationHistory>("SELECT HotelName, RoomType, CheckInDate" +
-                                                                            ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status, BookerRemarks FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company AND MNNO = @mnno",
+            var data = _context.Database.SqlQuery<GetOffSiteAccommodationHistory>("SELECT osr.Id, HotelName, RoomType, CheckInDate" +
+                                                                            ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status, BookerRemarks, ReasonOfStay AS Reason FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company AND MNNO = @mnno",
                                                                             new MySqlParameter("@company", company),
                                                                             new MySqlParameter("@mnno", mnno)).ToList();
 
@@ -202,7 +202,7 @@ namespace SAMPortal.Controllers.Api
             var company = GetCompany();
 
             var data = _context.Database.SqlQuery<GetOnSiteAccommodationHistory>("SELECT rsrvtn_id AS Id, MNNO, `Rank`, FirstName, LastName, type_of_reservation AS ReservationType, room_type AS RoomType, expctd_checkInDate AS CheckInDate, " +
-                                                                            "expctd_checkOutDate AS CheckOutDate, mode_of_pymnt as Payment, stats AS Status FROM tbldorm_reservation_bank WHERE company_name = @company AND MNNO = @mnno",
+                                                                            "expctd_checkOutDate AS CheckOutDate, mode_of_pymnt as Payment, remarks AS Remarks, stats AS Status, reason_of_stay AS Reason FROM tbldorm_reservation_bank WHERE company_name = @company AND MNNO = @mnno",
                                                                             new MySqlParameter("@company", company),
                                                                             new MySqlParameter("@mnno", mnno)).ToList();
 

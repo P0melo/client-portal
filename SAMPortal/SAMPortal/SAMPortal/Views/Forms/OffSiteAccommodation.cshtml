@@ -124,10 +124,10 @@
 
         <div id="offSiteAccommodationHistory_tbl_div" hidden>
 
-            <table id="offSiteAccommodationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
+            <table id="offSiteAccommodationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12" style="table-layout: fixed;">
                 <thead>
                     <tr>
-                        <td colspan="8" style="font-size: large">Off-Site Accommodation History</td>
+                        <td colspan="9" style="font-size: large">Off-Site Accommodation History</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Hotel Name</td>
@@ -135,9 +135,10 @@
                         <td style="font-weight: bold">Check-In</td>
                         <td style="font-weight: bold">Check-Out</td>
                         <td style="font-weight: bold">Payment</td>
-                        <td style="font-weight: bold">Reservation By</td>
+                        <td style="font-weight: bold">Reason</td>
+                        <td style="font-weight: bold">Remarks</td>
                         <td style="font-weight: bold">Status</td>
-                        <td style="font-weight: bold">Booker Remarks</td>
+                        <td style="font-weight: bold">Action</td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -260,6 +261,99 @@
             <div class="modal-footer">
                 <button type="button" id="modal_offSiteAccommodation_submit_yes" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button>
                 <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_off_site_accommodation_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Edit Off-site Accommodation Booking</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="box box-solid">
+                    <div id="accomodation" class="box-body">
+                        <div class="col-lg-12 form-group">
+                            <div class="col-xs-12">
+                                <label for="e_off_site_hotel" class=" control-label">Hotel</label>
+                                <select id="e_off_site_hotel_name" class="form-control">
+                                    @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfHotels"]); i++)
+                                    {
+                                        <option value="@System.Configuration.ConfigurationManager.AppSettings["hotel" + (i + 1)]">
+                                            @System.Configuration.ConfigurationManager.AppSettings["hotel" + (i + 1)]
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="col-xs-12">
+                                <label class="control-label">Room</label>
+                                <select id="e_off_site_room_type" class="form-control">
+                                    <option value="1">Single (deluxe room)</option>
+                                    <option value="2">Double (deluxe room)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <div class="col-xs-12 col-md-12">
+                                <label for="accomodation_date" class="control-label">Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="e_off_site_accomodation_date" autocomplete="off">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 form-group">
+                            <div class="col-xs-12">
+                                <label for="mode_of_payment" class="control-label">Payment</label>
+
+                                <select id="e_off_site_mode_of_payment" class="form-control">
+                                    <option value="0">
+                                        Company Sponsored
+                                    </option>
+                                    <option value="1">
+                                        Personal Account
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12">
+                                <label for="reason" class="control-label">Reason</label>
+                                <select id="e_off_site_accomodation_reason" class="form-control">
+                                    <option value="@System.Configuration.ConfigurationManager.AppSettings["accomodation_reason_value1"]">
+                                        @System.Configuration.ConfigurationManager.AppSettings["accomodation_reason_text1"]
+                                    </option>
+                                    <option value="@System.Configuration.ConfigurationManager.AppSettings["accomodation_reason_value2"]">
+                                        @System.Configuration.ConfigurationManager.AppSettings["accomodation_reason_text2"]
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <div class="col-xs-12">
+                                <label for="off_site_accomodation_remarks" class="control-label">Remarks</label>
+                                <input id="e_off_site_accomodation_remarks_input" type="text" class="form-control" style="border-radius: 3px;" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <div class="col-sm-12">
+                                <button type="button" id="save_edited_off_site_accomodation_btn" class="btn btn-default pull-right">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

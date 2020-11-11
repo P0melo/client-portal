@@ -124,6 +124,7 @@ namespace SAMPortal.Models
 
     public class GetOffSiteAccommodationHistory
     {
+        public int Id { get; set; }
         public string HotelName { get; set; }
         public int RoomType { get; set; }
         public DateTime CheckInDate { get; set; }
@@ -131,6 +132,7 @@ namespace SAMPortal.Models
         public int ModeOfPayment { get; set; }
         public string ReservationBy { get; set; }
         public string Status { get; set; }
+        public string Reason { get; set; }
         public string BookerRemarks { get; set; }
     }
 
@@ -158,6 +160,8 @@ namespace SAMPortal.Models
         public DateTime CheckOutDate { get; set; }
         public string Payment { get; set; }
         public string Status { get; set; }
+        public string Reason { get; set; }
+        public string Remarks { get; set; }
     }
 
     public class OnSiteAccommodationEdit

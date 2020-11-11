@@ -22,7 +22,7 @@
         var buttonType = "";
 
         if (type === "single") {
-            buttonType = "<button type='button' class='btn btn-default' id='choose_this_crew'>Select</button>";
+            buttonType = "<button type='button' class='btn btn-default' id='choose_this_crew' style='width: 100%'>Select</button>";
         } else if (type === "batch") {
 
             $("#modal_search_crew_submit").css('display', 'inline-block');

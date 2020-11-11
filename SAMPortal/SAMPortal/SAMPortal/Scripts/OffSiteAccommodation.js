@@ -32,7 +32,14 @@
                     for (var i = 0; i < result.length; i++) {
                         content += "<tr><td>" + result[i].HotelName + "</td>" +
                             "<td>" + (result[i].RoomType == 1 ? "Single (deluxe room)" : "Double (deluxe room)") + "</td><td>" + fixDateFormat(result[i].CheckInDate.split('T')[0]) + "</td><td>" + fixDateFormat(result[i].CheckOutDate.split('T')[0]) + "</td>" +
-                            "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + result[i].ReservationBy + "</td><td>" + result[i].Status + "</td><td>" + result[i].BookerRemarks + "</td></tr>";
+                            "<td>" + (result[i].ModeOfPayment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + (result[i].Reason == 12 ? "Accommodation Only" : "Due to In-house Training") + "</td><td>" + result[i].BookerRemarks + "</td><td>" + result[i].Status + "</td><td style='padding: 0'>" +
+                            (result[i].Status == "In Process" || result[i].Status == "IN PROCESS" ?
+                                "<input type='button' class='btn btn-default' value='Edit' id='edit_off_site_accommodation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>" +
+                                "<input type='button' class='btn btn-danger' value='Cancel' id='cancel_off_site_accommodation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>"
+
+                                : "--") +
+
+                            "</td></tr>";
                     }
                 }
 
@@ -58,7 +65,14 @@
     $('#off_site_date').daterangepicker({
         locale: {
             format: 'DD/MM/YYYY'
-        }});
+        }
+    });
+    $('#e_off_site_accomodation_date').daterangepicker({
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
+    
 
     $('#off_site_date').prev().click(function () {
         $(this).next().focus();
@@ -116,7 +130,7 @@
             type: 'post',
             dataType: 'json',
             beforeSend: function () {
-                $.blockUI({ message:null});
+                $.blockUI({ message: null });
             },
             data: { parameters: parameters },
             success: function (result) {
@@ -144,6 +158,65 @@
 
     $(document).on('click', '#clear_off_site_btn', function () {
         window.location.reload();
+    });
+
+    var recordId = "";
+    var e_off_site_hotel_name = "";
+    var e_off_site_room_type = "";
+    var e_off_site_accomodation_date = "";
+    var e_mode_of_payment = "";
+    var e_accomodation_reason = "";
+    var e_accomodation_remarks_input = "";
+
+    $(document).on('click', '#cancel_off_site_accommodation_btn', function () {
+        recordId = $(this).attr('reservation_id');
+
+        let modalMessage = "Are you sure you want to CANCEL this request?";
+        generateWarningModal("cancel_off_site_accommodation_modal", 1, "cancel_off_site_accommodation_modal_yes", modalMessage)
+    });
+
+    $(document).on('click', '#cancel_off_site_accommodation_modal_yes', function () {
+        $.ajax({
+            url: '/SAMPortal/Forms/CancelOffSiteAccommodation',
+            dataType: 'JSON',
+            type: 'POST',
+            data: { recordId: recordId },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    generateSuccessModal("cancel_off_site_reservation_modal", 2, "", "Reservation CANCELLED successfully!");
+
+                } else {
+                    generateDangerModal("cancel_off_site_reservation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#edit_off_site_accommodation_btn', function () {
+        recordId = $(this).attr('reservation_id');
+
+        let row = $(this).parent().parent();
+        let checkInDate = row.children(':eq(2)').html();
+        let checkOutDate = row.children(':eq(3)').html();
+        let room_type = row.children(':eq(1)').html() == "Single (deluxe room)" ? "1" : "2";
+        let mode_of_payment = row.children(':eq(4)').html() == "Company Sponsored" ? "0" : "1";
+        let reason = row.children(':eq(5)').html() == "Accommodation Only" ? "12" : "1";
+
+        $('#e_off_site_hotel_name').val(row.children(':eq(0)').html());
+        $('#e_off_site_room_type').val(room_type);
+        $('#e_off_site_accomodation_date').val(checkInDate + " - " + checkOutDate);
+        $('#e_off_site_mode_of_payment').val(mode_of_payment);
+        $('#e_off_site_accomodation_reason').val(reason);  
+        $('#e_off_site_accomodation_remarks_input').val(row.children(':eq(6)').html());
+
+        $('#edit_off_site_accommodation_modal').modal();
     });
 
 });
