@@ -32,8 +32,15 @@
                     for (var i = 0; i < result.length; i++) {
 
                         content += "<tr><td><a id='detailed_view'>" + result[i].ReferenceId + "</a></td><td>" + result[i].Type + "</td>" +
-                            "<td>" + result[i].Vehicle + "</td><td>" + result[i].Status + "</td><td>" + result[i].Notes + "</td>" +
-                            "<td>" + fixDateFormat(result[i].DateBooked.split('T')[0]) + "</td></tr>";
+                            "<td>" + result[i].Vehicle + "</td><td>" + result[i].Notes + "</td>" +
+                            "<td>" + fixDateFormat(result[i].DateBooked.split('T')[0]) + "</td><td>" + result[i].Status + "</td><td style='padding: 0'>" +
+                            (result[i].Status == "IN PROCESS" || result[i].Status == "In Process" ?
+                                "<input type='button' class='btn btn-default' value='Edit' id='edit_transportation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>" +
+                                "<input type='button' class='btn btn-danger' value='Cancel' id='cancel_transportation_btn' reservation_id='" + result[i].Id + "' style='width: 50%;'>"
+
+                                : "--") +
+
+                        "</td></tr>";
                     }
                 }
 
@@ -152,6 +159,11 @@
     $('#pick_up_date_2').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
     $('#pick_up_time').timepicker({interval: '15', timeFormat: 'HH:mm'}).val('08:00');
     $('#pick_up_time_2').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
+
+    $('#e_pick_up_date').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
+    $('#e_pick_up_date_2').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
+    $('#e_pick_up_time').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
+    $('#e_pick_up_time_2').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
 
     $(document).on('click', '#transportation_search_btn', function () {
         var mnno = $('#transportation_mnno_input').val();
@@ -327,7 +339,11 @@
             type: 'POST',
             dataType: 'JSON',
             data: { parameters: saveDailyTransportationParameter },
+            beforeSend: function () {
+                $.blockUI({ message: null });
+            },
             success: function (result) {
+                $.unblockUI();
                 if (result.data == 1) {
                     generateSuccessModal("save_daily_transfer_modal", 2, "", "Daily Transportation request successfully submitted!");
                 } else {
@@ -499,6 +515,86 @@
 
     $(document).on('click', '#transportation_clear_btn', function () {
         window.location.reload();
+    });
+
+    var recordId = ""
+    $(document).on('click', '#cancel_transportation_btn', function () {
+        recordId = $(this).attr('reservation_id');
+
+        let modalMessage = "Are you sure you want to CANCEL this request?";
+
+        generateWarningModal('e_cancel_daily_transfer_warning_modal', 1, 'e_cancel_daily_transfer_warning_yes', modalMessage);
+
+    });
+
+    $(document).on('click', '#e_cancel_daily_transfer_warning_yes', function () {
+        $.ajax({
+            url: '/SAMPortal/Forms/CancelTransportationRequest',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { recordId: recordId },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    generateSuccessModal("e_cancel_daily_transfer_reservation_success_modal", 2, "", "Request CANCELLED successfully!");
+
+                    let traineeNo = document.getElementById('mnno_input').value;
+                    getHistory(traineeNo);
+                } else {
+                    generateDangerModal("e_cancel_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
+            }
+        })
+    })
+
+    $(document).on('click', 'input[name=e_dt_optradio]', function () {
+        let selected = $('input[name=e_dt_optradio]:checked').val();
+
+        if (selected === "1") {
+            $('.e_one_trip_details').css('display', 'inline-block');
+            $('.e_two_trip_details').css('display', 'none');
+        } else if (selected === "2") {
+            $('.e_one_trip_details').css('display', 'inline-block');
+            $('.e_two_trip_details').css('display', 'inline-block');
+        }
+
+    });
+
+    $(document).on('click', '#edit_transportation_btn', function () {
+        recordId = $(this).attr('reservation_id');
+
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetDailyTransferRequestForEdit',
+            type: 'GET',
+            dataType: 'JSON',
+            data: { recordId: recordId },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
+            success: function (result) {
+                $.unblockUI();
+                alert(result[0].Id);
+                //if (result.data == 1) {
+                //    generateSuccessModal("e_cancel_daily_transfer_reservation_success_modal", 2, "", "Request CANCELLED successfully!");
+
+                //    let traineeNo = document.getElementById('mnno_input').value;
+                //    getHistory(traineeNo);
+                //} else {
+                //    generateDangerModal("e_cancel_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                //}
+            }
+        })
+
+        $('#edit_daily_transfer_modal').modal();
     });
 
 });

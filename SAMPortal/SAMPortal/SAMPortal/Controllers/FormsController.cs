@@ -582,7 +582,7 @@ namespace SAMPortal.Controllers
                     flag = 1;
 
                     //For Email Notif
-                    sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
+                    //sendEmail.Send(User.Identity, (int)Enum.Requests.OffSiteAccommodationRequest, "");
 
                 }
                 catch (Exception e)
@@ -593,6 +593,63 @@ namespace SAMPortal.Controllers
             }
 
             var jsonResult = Json(new { data = flag },
+                JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult UpdateOffSiteAccommodation(params string[] parameters)
+        {
+            var user = GetUser();
+
+            var jsonStatus = (int)Status.Initialize;
+
+            var recordId = parameters[0];
+            var hotel = parameters[1];
+            var roomType = parameters[2];
+            var date = parameters[3].Split('-');
+            var payment = parameters[4];
+            var reason = parameters[5];
+            var remarks = parameters[6];
+
+            DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            DateTime checkOutDate = DateTime.ParseExact(date[1].Trim() + " 12:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                _context.Database.ExecuteSqlCommand("UPDATE tbloff_site_reservation SET HotelName=@hotel, RoomType=@roomType, CheckInDate=@checkInDate, CheckOutDate=@checkOutDate, ModeOfPayment=@payment, " +
+                    "ReasonOfStay=@reason, BookerRemarks=@remarks, LastUpdatedBy=@lastUpdatedBy, LastUpdated=@lastUpdated WHERE Id=@recordId",
+                    new MySqlParameter("@recordId", recordId),
+                    new MySqlParameter("@hotel", hotel),
+                    new MySqlParameter("@roomType", roomType),
+                    new MySqlParameter("@checkInDate", checkInDate),
+                    new MySqlParameter("@checkOutDate", checkOutDate),
+                    new MySqlParameter("@payment", payment),
+                    new MySqlParameter("@reason", reason),
+                    new MySqlParameter("@remarks", remarks),
+                    new MySqlParameter("@lastUpdatedBy", user),
+                    new MySqlParameter("@lastUpdated", DateTime.Now));
+
+                //for logging
+                string[] logparameters = { "recordId:"+recordId, "hotelName:"+hotel, "roomType:"+roomType,
+                                     "checkInDate:" + checkInDate, "checkOutDate:"+checkOutDate, "modeOfPayment:"+payment, "reasonOfStay:"+reason,
+                                    "bookerremarks:" + remarks };
+                string data = logging.ConvertToLoggingParameter(logparameters);
+                logging.Log(user, "UpdateOffSiteAccommodation", data);
+
+                string additionalMessage = "recordId:" + recordId + "|hotelName:" + hotel + "|roomType:" + roomType + "|checkInDate:" + checkInDate + "|checkOutDate:" + checkOutDate +
+                    "|modeOfPayment:" + payment + "|reasonOfStay:" + reason + "|bookerremarks:" + remarks;
+                //For Email Notif
+                sendEmail.Send(User.Identity, (int)Enum.Requests.UpdateOffSiteAccommodation, additionalMessage);
+
+                jsonStatus = (int)Status.Success;
+            }
+            catch (Exception e)
+            {
+                jsonStatus = logging.LogError(user, "UpdateOffSiteAccommodation", e);
+            }
+
+            var jsonResult = Json(new { data = jsonStatus },
                 JsonRequestBehavior.AllowGet);
 
             return jsonResult;
@@ -1472,10 +1529,52 @@ namespace SAMPortal.Controllers
                 }
                 catch (Exception e)
                 {
-
+                    jsonStatus = logging.LogError(user, "CancelOffSiteAccommodation", e);
                 }
             }
 
+            jsonResult = Json(new { data = jsonStatus },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
+        public ActionResult CancelTransportationRequest(int recordId)
+        {
+            JsonResult jsonResult = new JsonResult();
+            var jsonStatus = (int)Status.Initialize;
+            var user = GetUser();
+            var userId = GetUserId(user);
+            var cancelStatusId = "Cancelled";//6;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Status=@status WHERE Id=@recordId",
+                        new MySqlParameter("@status", cancelStatusId),
+                        new MySqlParameter("@recordId", recordId));
+
+                    //for logging
+                    string[] logparameters = { "id:" + recordId, "Status:6", "LastUpdatedBy:" + userId, "LastUpdated:" + DateTime.Now.ToString("yyyy-M-dd HH:mm:ss") };
+                    string data = logging.ConvertToLoggingParameter(logparameters);
+
+                    logging.Log(user, "CancelTransportationRequest", data);
+
+                    //For Email Notif
+                    var details = _context.Database.SqlQuery<CancelTransportationModel>("SELECT MNNO, Type, Vehicle, ReferenceId FROM tbltransportation WHERE Id='" + recordId + "'").FirstOrDefault();
+                    var msg = details.MNNO + "|" + details.Type + "|" + details.Vehicle + "|" + details.ReferenceId;
+
+                    //sendEmail.Send(User.Identity, (int)Enum.Requests.CancelDailyTransferRequest, msg);
+
+                    jsonStatus = (int)Status.Success;
+
+                }
+                catch (Exception e)
+                {
+                    jsonStatus = logging.LogError(user, "CancelDailyTransferRequest", e);
+                }
+            }
             jsonResult = Json(new { data = jsonStatus },
                   JsonRequestBehavior.AllowGet);
 

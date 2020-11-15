@@ -161,12 +161,6 @@
     });
 
     var recordId = "";
-    var e_off_site_hotel_name = "";
-    var e_off_site_room_type = "";
-    var e_off_site_accomodation_date = "";
-    var e_mode_of_payment = "";
-    var e_accomodation_reason = "";
-    var e_accomodation_remarks_input = "";
 
     $(document).on('click', '#cancel_off_site_accommodation_btn', function () {
         recordId = $(this).attr('reservation_id');
@@ -190,8 +184,10 @@
             success: function (result) {
                 $.unblockUI();
                 if (result.data == 1) {
-                    generateSuccessModal("cancel_off_site_reservation_modal", 2, "", "Reservation CANCELLED successfully!");
+                    generateSuccessModal("cancel_off_site_reservation_modal", 2, "", "Request CANCELLED successfully!");
 
+                    let traineeNo = document.getElementById('mnno_input').value;
+                    getHistory(traineeNo);
                 } else {
                     generateDangerModal("cancel_off_site_reservation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
                 }
@@ -219,4 +215,44 @@
         $('#edit_off_site_accommodation_modal').modal();
     });
 
+    $(document).on('click', '#save_edited_off_site_accomodation_btn', function () {
+        let e_off_site_hotel_name = $('#e_off_site_hotel_name').val();
+        let e_off_site_room_type = $('#e_off_site_room_type').val();
+        let e_off_site_accomodation_date = $('#e_off_site_accomodation_date').val();
+        let e_mode_of_payment = $('#e_off_site_mode_of_payment').val();
+        let e_accomodation_reason = $('#e_off_site_accomodation_reason').val();
+        let e_accomodation_remarks_input = $('#e_off_site_accomodation_remarks_input').val();
+
+        parameters = [recordId, e_off_site_hotel_name, e_off_site_room_type, e_off_site_accomodation_date, e_mode_of_payment, e_accomodation_reason, e_accomodation_remarks_input];
+
+        let modalMessage = "Are you sure you want to UPDATE this request?";
+        generateWarningModal("save_edit_off_site_accommodation_modal", 1, "save_edit_off_site_accommodation_yes", modalMessage)
+
+        $(document).on('click', '#save_edit_off_site_accommodation_yes', function () {
+            $.ajax({
+                url: '/SAMPortal/Forms/UpdateOffSiteAccommodation',
+                type: 'POST',
+                dataType: 'JSON',
+                data: { parameters: parameters },
+                beforeSend: function () {
+                    $.blockUI({
+                        baseZ: 2000,
+                        message: null
+                    });
+                },
+                success: function (result) {
+                    $.unblockUI();
+                    if (result.data == 1) {
+                        generateSuccessModal("success_edit_off_site_accommodation_modal", 2, "", "Request UPDATED successfully!");
+                        $('#edit_off_site_accommodation_modal').modal('hide');
+                    } else {
+                        generateDangerModal("save_edit_off_site_accommodation_error", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    }
+                }
+            })
+        });
+
+    });
+
+    
 });

@@ -493,7 +493,7 @@ input[type="password"]:-moz-placeholder {
     *overflow: hidden;
 }
 
-#dt_optradio_1, #dt_optradio_2, #regular_optradio, #special_optradio, #block_booking_optradio {
+#dt_optradio_1, #dt_optradio_2, #regular_optradio, #special_optradio, #block_booking_optradio, #e_dt_optradio_1, #e_dt_optradio_2 {
     /*position: absolute;
     top: 0;
     left: 0;
@@ -717,4 +717,8 @@ div#test_diva{
 
 #pick_up_time_2 {
     z-index: 0;
+}
+
+.ui-timepicker-container {
+    z-index: 1151 !important;
 }

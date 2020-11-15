@@ -126,6 +126,14 @@ namespace SAMPortal.Models
         public int RoomType { get; set; }
     }
 
+    public class CancelTransportationModel
+    {
+        public string MNNO { get; set; }
+        public string Type { get; set; }
+        public string Vehicle { get; set; }
+        public string ReferenceId { get; set; }
+    }
+
     public class Attachment
     {
         public string FileType { get; set; }
@@ -228,6 +236,7 @@ namespace SAMPortal.Models
 
     public class GetTransportationHistory
     {
+        public int Id { get; set; }
         public string Type { get; set; }
         public string Vehicle { get; set; }
         public string Status { get; set; }

@@ -81,9 +81,26 @@ namespace SAMPortal
                 var remarks = data[7].Split(':')[1];
 
                 WebMail.Send(to: email, subject: "[NOTIFICATION] ON SITE ACCOMMODATION UPDATE!", body:
-                user.Name + " has UPDATED his/her On Site Accommodation Request.<br />Reservation ID: " + reservationId + "<br />Reservation Type: " + (reservationType == "1" ? "New Booking" : "Extension") + "<br />Room Type: " + (roomType == "1" ? "Dorm - Standard": "Dorm - Superior") +
+                user.Name + " has UPDATED his/her On Site Accommodation Request.<br />Reservation ID: " + reservationId + "<br />Reservation Type: " + (reservationType == "1" ? "New Booking" : "Extension") + "<br />Room Type: " + (roomType == "1" ? "Dorm - Standard" : "Dorm - Superior") +
                 "<br />Check In date(dd/MM/yyyy): " + checkindate + "<br/>Check Out Date: " + checkoutdate + "<br />Payment: " + (payment == "0" ? "Company Sponsored" : "Personal Account") + "<br />Reason: " + (reason == "12" ? "Accommodation Only" : "Due to In-house Training") + "<br />Remarks: " + remarks, cc: "", bcc: "", isBodyHtml: true);
 
+            }
+            else if (request == (int)Requests.UpdateOffSiteAccommodation)
+            {
+
+                var data = additionalMessage.Split('|');
+                var recordId = data[0].Split(':')[1];
+                var hotel = data[1].Split(':')[1];
+                var roomType = data[2].Split(':')[1];
+                var checkindate = data[3].Split(':')[1].Substring(0, data[3].Split(':')[1].Length - 2); ;
+                var checkoutdate = data[4].Split(':')[1].Substring(0, data[4].Split(':')[1].Length - 2); ;
+                var payment = data[5].Split(':')[1];
+                var reason = data[6].Split(':')[1];
+                var remarks = data[7].Split(':')[1];
+
+                WebMail.Send(to: email, subject: "[NOTIFICATION] OFF-SITE ACCOMMODATION UPDATE!", body:
+                user.Name + " has UPDATED his/her On Site Accommodation Request.<br />Record ID: " + recordId + "<br />Hotel Name: " + hotel + "<br />Room Type: " + (roomType == "1" ? "Single (deluxe room)" : "Double (deluxe room)") +
+                "<br />Check In date(dd/MM/yyyy): " + checkindate + "<br/>Check Out Date: " + checkoutdate + "<br />Payment: " + (payment == "0" ? "Company Sponsored" : "Personal Account") + "<br />Reason: " + (reason == "12" ? "Accommodation Only" : "Due to In-house Training") + "<br />Remarks: " + remarks, cc: "", bcc: "", isBodyHtml: true);
             }
             else if (request == (int)Requests.CancelAccommodationReservation)
             {
@@ -282,7 +299,8 @@ namespace SAMPortal
                   "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged." +
                   "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>", cc: "", bcc: "", isBodyHtml: true);
 
-            }else if (request == (int)Requests.OffSiteAccommodationRequest)
+            }
+            else if (request == (int)Requests.OffSiteAccommodationRequest)
             {
 
                 string MNNO = parameters[1];
@@ -363,7 +381,7 @@ namespace SAMPortal
                     //"Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>", 
                     "Dear " + clientReceipient + ", <br /><br />" +
                     "Your registration has been " + status + ". <br /><br />" +
-                    ( status == "APPROVED" ? approvedMessage : "" ) +
+                    (status == "APPROVED" ? approvedMessage : "") +
                     "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
                     "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged. " +
                     "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>"

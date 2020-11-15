@@ -188,15 +188,6 @@
             </div>
         </div>
 
-        @*<div class="col-lg-6 form-group two_trip_details">
-                <label for="transportation_name" class="col-md-4 control-label">Details</label>
-                <div class="col-xs-12 col-md-12 col-lg-8 ">
-                    <input id="twotrips_1stpickup_input" type="text" class="form-group form-control" placeholder="1st Pick Up Point" style="border-radius: 3px;" />
-                    <input id="twotrips_1stdatetime_input" type="text" class="form-group form-control" placeholder="1st Pick Up Date and Time" style="border-radius: 3px;" />
-                    <input id="twotrips_1stdropoff_input" type="text" class="form-group form-control" placeholder="1st Drop Off Point" style="border-radius: 3px;" />
-                </div>
-            </div>*@
-
         <div class="col-xs-12 col-lg-6 form-group two_trip_details" style="padding-left: 0px; padding-right: 0px;">
             <label for="transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
 
@@ -261,16 +252,16 @@
             <table id="transportationHistory_tbl" class="table table-bordered table-striped table-hover col-sm-12">
                 <thead>
                     <tr>
-                        <td colspan="8" style="font-size: large">Transportation Arrangement History</td>
+                        <td colspan="9" style="font-size: large">Transportation Arrangement History</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold">Reference ID</td>
                         <td style="font-weight: bold">Type</td>
                         <td style="font-weight: bold">Vehicle</td>
-                        <td style="font-weight: bold">Status</td>
                         <td style="font-weight: bold">Notes</td>
                         <td style="font-weight: bold">Date Booked</td>
-
+                        <td style="font-weight: bold">Status</td>
+                        <td style="font-weight: bold">Action</td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -522,6 +513,135 @@
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-default pull-right" id="transportation_confirm_btn" data-dismiss="modal">Complete</button>*@
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="edit_daily_transfer_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Edit Daily Transfer Request</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="box box-solid">
+                    <div id="e_transportation" class="box-body">
+                        <div class="col-xs-12 form-group" style="padding-left: 0px; padding-right: 0px;">
+                            <div class="col-xs-12">
+                                <label for="e_transportation_name" class="control-label">Vehicle</label>
+                                <select id="e_transportation_vehicle" class="form-control">
+                                    @for (var i = 0; i < Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["numberOfVehicles"]); i++)
+                                    {
+                                        <option value="@System.Configuration.ConfigurationManager.AppSettings["vehicle" + (i + 1)]">
+                                            @System.Configuration.ConfigurationManager.AppSettings["vehicle" + (i + 1)]
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="e_daily_transfer col-xs-12 form-group" style="padding-left: 0px; padding-right: 0px;">
+                            <div class="col-xs-12">
+                                <label for="e_transportation_destination" class="control-label">Daily Transfer</label>
+                            </div>
+                            <div class="col-xs-12">
+                                <label class="radio-inline"><input type="radio" name="e_dt_optradio" id="e_dt_optradio_1" value="1" checked>One-way</label>
+                            </div>
+                            <div class="col-xs-12">
+                                <label class="radio-inline"><input type="radio" name="e_dt_optradio" id="e_dt_optradio_2" value="2">Round-trip</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 form-group e_one_trip_details" style="padding-left: 0px; padding-right: 0px;">
+                            <label for="e_transportation_name" class="col-md-12 control-label">First Pick-up/Drop-off point<span class="mandatory">*</span></label>
+                            <div class="col-xs-12 col-md-12 col-lg-12 ">
+                                <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                                <input id="e_pickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
+                                <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                                <input id="e_dropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="e_pick_up_date" placeholder="Choose date">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="e_pick_up_time" placeholder="Choose time">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 form-group e_two_trip_details" style="padding-left: 0px; padding-right: 0px;">
+                            <label for="e_transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
+
+                            <div class="col-xs-12 col-md-12 col-lg-12 ">
+                                <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
+                                <input id="e_2ndpickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
+                                <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
+                                <input id="e_2nddropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="e_pick_up_date_2" placeholder="Choose date" disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="e_pick_up_time_2" placeholder="Choose time">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="e_daily_transfer_table">
+                            <div class="col-xs-12">
+                                <button class="btn btn-default" id="e_add_daily_transfer">Add to table</button>
+                            </div>
+                            <div class="box-body col-xs-12">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Pick-up</th>
+                                            <th>Drop-off</th>
+                                            <th>Date and Time</th>
+                                            <th>2nd Pick-up</th>
+                                            <th>2nd Drop-off</th>
+                                            <th>Date and Time</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 form-group" style="display:inline-block; padding-left: 0px; padding-right: 0px;">
+                            <label for="transportation_details" class="col-md-2 control-label">Remarks</label>
+                            <textarea class="form-control" rows="5" id="e_transportation_details"></textarea>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12 form-group">
+                            <button type="button" id="e_save_transportation_btn" class="btn btn-default pull-right">Submit</button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

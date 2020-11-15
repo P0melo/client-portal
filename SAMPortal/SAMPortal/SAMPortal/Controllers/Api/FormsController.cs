@@ -118,7 +118,7 @@ namespace SAMPortal.Controllers.Api
         {
             var company = GetCompany();
 
-            var data = _context.Database.SqlQuery<OffSiteAccommodationRequests>("SELECT Mnno, `Rank`, FirstName, LastName, HotelName, RoomType, CheckInDate" + 
+            var data = _context.Database.SqlQuery<OffSiteAccommodationRequests>("SELECT Mnno, `Rank`, FirstName, LastName, HotelName, RoomType, CheckInDate" +
                                                                             ", CheckOutDate, ModeOfPayment, ReservationBy, oss.Name AS Status, BookerRemarks FROM tbloff_site_reservation osr JOIN tbloff_site_status oss ON osr.Status = oss.Id WHERE CompanyId = @company",
                                                                             new MySqlParameter("@company", company)).ToList();
 
@@ -154,7 +154,7 @@ namespace SAMPortal.Controllers.Api
 
             //var data = _context.tbltransportations.Where(m => m.Company == company).OrderBy(m => m.Status).OrderByDescending(m => m.DateBooked).ToList();
 
-            var data = _context.Database.SqlQuery<GetTransportationHistory>("SELECT Type, Vehicle, Status, Notes, ReferenceId, DateBooked FROM tbltransportation WHERE Company = @company AND Mnno = @mnno ORDER BY status ASC, datebooked DESC",
+            var data = _context.Database.SqlQuery<GetTransportationHistory>("SELECT Id, Type, Vehicle, Status, Notes, ReferenceId, DateBooked FROM tbltransportation WHERE Company = @company AND Mnno = @mnno ORDER BY status ASC, datebooked DESC",
                                                                           new MySqlParameter("@company", company),
                                                                           new MySqlParameter("@mnno", mnno)).ToList();
 
@@ -172,7 +172,8 @@ namespace SAMPortal.Controllers.Api
                                                            "WHERE ReferenceId = @rid", new MySqlParameter("@rid", referenceId)).FirstOrDefault();
 
                 return Ok(details);
-            }else if (type == "Daily Transfer")
+            }
+            else if (type == "Daily Transfer")
             {
 
                 var details = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, Notes " +
@@ -237,7 +238,7 @@ namespace SAMPortal.Controllers.Api
         {
             var company = GetCompany();
 
-            var data = _context.Database.SqlQuery<CompanyProfile>("SELECT companyName, companyEmail as Email, companyLocation as Location, contactPerson, contactPersonPos as ContactPersonPosition, " + 
+            var data = _context.Database.SqlQuery<CompanyProfile>("SELECT companyName, companyEmail as Email, companyLocation as Location, contactPerson, contactPersonPos as ContactPersonPosition, " +
                                                                 "companyContactNo as ContactNumber, description, logo as Picture, imageFileType as FileType FROM tbltpcompany WHERE companyID = @company",
                                                                 new MySqlParameter("@company", company)).FirstOrDefault();
 
@@ -258,6 +259,16 @@ namespace SAMPortal.Controllers.Api
             var data = _context.Database.SqlQuery<string>("SELECT DATE_FORMAT(CURDATE(), '%d-%m-%Y')").FirstOrDefault();
 
 
+
+            return Ok(data);
+        }
+
+        public IHttpActionResult GetDailyTransferRequestForEdit(int recordId)
+        {
+            var data = _context.Database.SqlQuery<GetDailyTransferRequestForEditModel>("SELECT t.Id, Type, Vehicle, Status, Notes, ReferenceId,IsRoundTrip,PickUpPlace,DateTimeOfPickUp,DropOffPlace,SecondPickUpPlace,SecondDateTimeOfPickUp,SecondDropOffPlace " +
+                            "FROM tbltransportation t JOIN tbldaily_transfer_details td " +
+                            "on t.Id = td.TransportationId " +
+                            "WHERE t.Id = " + recordId).ToList();
 
             return Ok(data);
         }

@@ -51,7 +51,7 @@ namespace SAMPortal.Models
     public class CrewViewModel
     {
         public IEnumerable<Crew> ListOfCrews { get; set; }
-       
+
     }
 
     public class Crew
@@ -153,7 +153,7 @@ namespace SAMPortal.Models
 
     public class GetOnSiteAccommodationHistory
     {
-        public int Id{ get; set; }
+        public int Id { get; set; }
         public string ReservationType { get; set; }
         public string RoomType { get; set; }
         public DateTime CheckInDate { get; set; }
@@ -185,5 +185,23 @@ namespace SAMPortal.Models
         public string Day { get; set; }
         public string Month { get; set; }
         public string Year { get; set; }
+    }
+
+    public class GetDailyTransferRequestForEditModel
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Vehicle { get; set; }
+        public string Status { get; set; }
+        public string Notes { get; set; }
+        public string ReferenceId { get; set; }
+        public int IsRoundTrip { get; set; }
+        public string PickUpPlace { get; set; }
+        public string DateTimeOfPickUp { get; set; }
+        public string DropOffPlace { get; set; }
+        public string SecondPickUpPlace { get; set; }
+        public string SecondDateTimeOfPickUp { get; set; }
+        public string SecondDropOffPlace { get; set; }
+
     }
 }
