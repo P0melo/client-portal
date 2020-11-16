@@ -202,6 +202,6 @@ namespace SAMPortal.Models
         public string SecondPickUpPlace { get; set; }
         public string SecondDateTimeOfPickUp { get; set; }
         public string SecondDropOffPlace { get; set; }
-
+        public int DtId { get; set; }
     }
 }

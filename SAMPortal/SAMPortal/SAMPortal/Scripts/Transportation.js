@@ -40,7 +40,7 @@
 
                                 : "--") +
 
-                        "</td></tr>";
+                            "</td></tr>";
                     }
                 }
 
@@ -153,11 +153,11 @@
     var dailyTransferDateDay = dailyTransferDate.getDate();
 
     var dailyTransferDateOutput = (dailyTransferDateDay < 10 ? '0' : '') + dailyTransferDateDay + '/' + (dailyTransferDateMonth < 10 ? '0' : '') + dailyTransferDateMonth + '/' + dailyTransferDate.getFullYear();
-        
 
-    $('#pick_up_date').datepicker({ format: "dd/mm/yyyy"}).val(dailyTransferDateOutput);
+
+    $('#pick_up_date').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
     $('#pick_up_date_2').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
-    $('#pick_up_time').timepicker({interval: '15', timeFormat: 'HH:mm'}).val('08:00');
+    $('#pick_up_time').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
     $('#pick_up_time_2').timepicker({ interval: '15', timeFormat: 'HH:mm' }).val('08:00');
 
     $('#e_pick_up_date').datepicker({ format: "dd/mm/yyyy" }).val(dailyTransferDateOutput);
@@ -416,12 +416,32 @@
         }
     });
 
+    $(document).on('change', '#e_pickup_input', function () {
+        if ($('input[name=e_dt_optradio]:checked').val() == 2) {
+            $('#e_2ndpickup_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#e_dropoff_input', function () {
+        if ($('input[name=e_dt_optradio]:checked').val() == 2) {
+            $('#e_2nddropoff_input').val($(this).val());
+        }
+    });
+
+    $(document).on('change', '#e_pick_up_date', function () {
+        if ($('input[name=e_dt_optradio]:checked').val() == 2) {
+            $('#e_pick_up_date_2').val($(this).val());
+        }
+    });
+
     $(document).on('click', '#add_daily_transfer', function () {
-        let type = $('input[name=dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";
-        let pickup = $('#pickup_input').val();
-        let dropoff = $('#dropoff_input').val();
-        let pickup_date = $('#pick_up_date').val();
-        let pickup_time = $('#pick_up_time').val();
+        let editModalVisible = $('#edit_daily_transfer_modal').css('display') == 'block';
+
+        let type = "";
+        let pickups = "";
+        let dropoff = "";
+        let pickup_date = "";
+        let pickup_time = "";
         let pickup_2 = "";
         let dropoff_2 = "";
         let pickup_date_2 = "";
@@ -429,29 +449,59 @@
 
         let entry = [];
 
+        if (editModalVisible) {
+            type = $('input[name=e_dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";
+            pickup = $('#e_pickup_input').val();
+            dropoff = $('#e_dropoff_input').val();
+            pickup_date = $('#e_pick_up_date').val();
+            pickup_time = $('#e_pick_up_time').val();
+        } else {
+            type = $('input[name=dt_optradio]:checked').val() == 1 ? "One-way" : "Round-trip";
+            pickup = $('#pickup_input').val();
+            dropoff = $('#dropoff_input').val();
+            pickup_date = $('#pick_up_date').val();
+            pickup_time = $('#pick_up_time').val();
+            
+        }
+
         if (pickup == '' || dropoff == '' || pickup_date == '' || pickup_time == '') {
 
             generateWarningModal("transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking 'Add to table'");
             return false;
         }
 
-        if ($('#2ndpickup_input').is(':visible') === true) {
-            pickup_2 = $('#2ndpickup_input').val();
-            dropoff_2 = $('#2nddropoff_input').val();
-            pickup_date_2 = $('#pick_up_date_2').val();
-            pickup_time_2 = $('#pick_up_time_2').val();
+        if ($('#2ndpickup_input').is(':visible') === true || $('#e_2ndpickup_input').is(':visible')) {
+            if (editModalVisible) {
+                pickup_2 = $('#e_2ndpickup_input').val();
+                dropoff_2 = $('#e_2nddropoff_input').val();
+                pickup_date_2 = $('#e_pick_up_date_2').val();
+                pickup_time_2 = $('#e_pick_up_time_2').val();
+                
+            } else {
+                pickup_2 = $('#2ndpickup_input').val();
+                dropoff_2 = $('#2nddropoff_input').val();
+                pickup_date_2 = $('#pick_up_date_2').val();
+                pickup_time_2 = $('#pick_up_time_2').val();
+            }
 
             if (pickup_2 == '' || dropoff_2 == '' || pickup_date_2 == '' || pickup_time_2 == '') {
 
                 generateWarningModal("transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking 'Add to table'");
                 return false;
             }
+
+           
         }
 
-        let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
-            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter +"' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
 
-        $('#daily_transfer_table div table tbody').append(details);
+        let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+
+        if (editModalVisible) {
+            $('#e_daily_transfer_table div table tbody').append(details);
+        } else {
+            $('#daily_transfer_table div table tbody').append(details);
+        }
 
         entry[0] = type;
         entry[1] = pickup;
@@ -492,7 +542,7 @@
     });
 
     $(document).on('click', '#transportation_warning_yes', function () {
-        
+
         let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
 
         //code below is ES6 so beware...
@@ -507,8 +557,7 @@
         if (typeof (hrefSplit) !== 'undefined') {
             window.close();
         }
-        else
-        {
+        else {
             window.location.reload();
         }
     });
@@ -568,33 +617,122 @@
 
     $(document).on('click', '#edit_transportation_btn', function () {
         recordId = $(this).attr('reservation_id');
+        let type = $(this).parent().parent().children(':eq(1)').html();
+
+        if (type == "Daily Transfer") {
+            $.ajax({
+                url: '/SAMPortal/Api/Forms/GetDailyTransferRequestForEdit',
+                type: 'GET',
+                dataType: 'JSON',
+                data: { recordId: recordId },
+                beforeSend: function () {
+                    $.blockUI({
+                        baseZ: 2000,
+                        message: null
+                    });
+                },
+                success: function (result) {
+                    $.unblockUI();
+                    $('#e_transportation_vehicle').val(result[0].Vehicle);
+                    $('#e_dt_optradio_1').prop('checked', true)//1 because Daily Transfer
+
+                    //if (result[0].IsRoundTrip == 0) {
+                    //    $('.e_two_trip_details').css('display', 'none');
+                    //}
+
+                    $('#e_transportation_details').val(result[0].Notes);
+
+                    $('#e_daily_transfer_table div table tbody').html('');
+                    let content = "";
+                    for (let i = 0; i < result.length; i++) {
+                        content += "<tr><td>" + result[i].Type + "</td><td>" + result[i].PickUpPlace + "</td><td>" + result[i].DropOffPlace + "</td><td>" + result[i].DateTimeOfPickUp + "</td>" +
+                            "<td>" + result[i].SecondPickUpPlace + "</td><td>" + result[i].SecondDropOffPlace + "</td><td>" + result[i].SecondDateTimeOfPickUp + "</td>" +
+                            "<td style='padding: 1px'><button id='e_remove_daily_transfer_entry' dtid = '" + result[i].DtId + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr>"
+                    }
+                    $('#e_daily_transfer_table div table tbody').append(content);
+
+                    //Id, Type, Vehicle, Status, Notes, ReferenceId,IsRoundTrip,PickUpPlace,DateTimeOfPickUp,DropOffPlace,SecondPickUpPlace,SecondDateTimeOfPickUp,SecondDropOffPlace
+                    //if (result.data == 1) {
+                    //    generateSuccessModal("e_cancel_daily_transfer_reservation_success_modal", 2, "", "Request CANCELLED successfully!");
+
+                    //    let traineeNo = document.getElementById('mnno_input').value;
+                    //    getHistory(traineeNo);
+                    //} else {
+                    //    generateDangerModal("e_cancel_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                    //}
+
+                    $('#edit_daily_transfer_modal').modal();
+
+                }
+            })
+
+        }
+
+    });
+
+    let dailyTransferRecordToRemove = [];
+
+    $(document).on('click', '#e_remove_daily_transfer_entry', function () {
+        dailyTransferRecordToRemove.push($(this).attr('dtid'));
+
+        let row = $(this).parent().parent();
+        let type = row.children().eq(0).html();
+        let pickup = row.children().eq(1).html();
+        let dropoff = row.children().eq(2).html();
+        let pickup_date_time = row.children().eq(3).html();
+        let pickup_2 = row.children().eq(4).html();
+        let dropoff_2 = row.children().eq(5).html();
+        let pickup_date_time_2 = row.children().eq(6).html();
+        let rowEntry = ""
+
+        if (pickup_2.trim() != "") {
+            rowEntry = type + ", " + pickup + ", " + dropoff + ", " + pickup_date_time + ", " + pickup_2 + ", " + dropoff_2 + ", " + pickup_date_time_2;
+        } else {
+            rowEntry = type + ", " + pickup + ", " + dropoff + ", " + pickup_date_time
+        }
+
+        dailyTransferEntryToRemove = row;
+
+        generateWarningModal("transportation_warning", 1, "e_transportation_warning_yes", "Are you sure you want to remove this item? <br /><br /> " + rowEntry, "e_transportation_warning_no");
+
+    });
+
+    $(document).on('click', '#e_transportation_warning_yes', function () {
+        let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
+
+        //code below is ES6 so beware...
+        dailyTransferDetails = dailyTransferDetails.filter(item => item[7] != id);
+        //end of code
+
+        dailyTransferEntryToRemove.remove();
+
+    });
+
+    $(document).on('click', '#e_transportation_warning_no', function () {
+        dailyTransferRecordToRemove.pop();
+    });
+
+    $(document).on('click', '#e_save_transportation_btn', function () {
+        //alert(dailyTransferDetails);
+        if ($('#e_daily_transfer_table div table tbody tr').length === 0) {
+            generateWarningModal("no_rows_left", 2, "", "Please make sure that there is atleast 1 request left in the table...");
+        } else {
+            generateWarningModal("e_save_daily_transportation", 1, "e_save_daily_transportation_yes", "Are you sure you want to UPDATE this request?");
+        }
+    });
+
+    $(document).on('click', '#e_save_daily_transportation_yes', function () {
 
         $.ajax({
-            url: '/SAMPortal/Api/Forms/GetDailyTransferRequestForEdit',
-            type: 'GET',
+            url: '/SAMPortal/Forms/UpdateDailyTransfer',
+            type: 'POST',
             dataType: 'JSON',
-            data: { recordId: recordId },
-            beforeSend: function () {
-                $.blockUI({
-                    baseZ: 2000,
-                    message: null
-                });
-            },
+            data: { recordId: recordId, dailyTransferRecordToRemove: dailyTransferRecordToRemove, dailyTransferDetails: dailyTransferDetails },
             success: function (result) {
-                $.unblockUI();
-                alert(result[0].Id);
-                //if (result.data == 1) {
-                //    generateSuccessModal("e_cancel_daily_transfer_reservation_success_modal", 2, "", "Request CANCELLED successfully!");
 
-                //    let traineeNo = document.getElementById('mnno_input').value;
-                //    getHistory(traineeNo);
-                //} else {
-                //    generateDangerModal("e_cancel_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                //}
+              
             }
-        })
-
-        $('#edit_daily_transfer_modal').modal();
+        });
     });
 
 });

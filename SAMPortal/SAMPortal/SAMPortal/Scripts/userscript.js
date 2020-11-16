@@ -58,12 +58,12 @@ $(document).on('click', '#transportation_lnkbtn', function () {
 });
 
 //footerType: 1 = Yes and No, 2 = Ok
-function generateWarningModal(modalId, footerType, modalButtonId, modalMessage) {
+function generateWarningModal(modalId, footerType, modalButtonId, modalMessage, modalButtonNoId) {
     $('.modal_warning_template').attr('id', modalId);
     $('.modal_warning_template .modal-content .modal-body p').html(modalMessage);
 
     if (footerType === 1) {
-        $('.modal_warning_template .modal-content .modal-footer').html('<button type="button" id="' + modalButtonId + '" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button><button type="button" class="btn btn-outline pull-right" data-dismiss="modal"> No</button>');
+        $('.modal_warning_template .modal-content .modal-footer').html('<button type="button" id="' + modalButtonId + '" class="btn btn-outline pull-right" data-dismiss="modal">Yes</button><button type="button" id="' + modalButtonNoId + '" class="btn btn-outline pull-right" data-dismiss="modal"> No</button>');
 
         $('#' + modalId).modal();
 

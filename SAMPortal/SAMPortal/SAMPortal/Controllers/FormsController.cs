@@ -1581,5 +1581,23 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
+        public ActionResult UpdateDailyTransfer(int recordId, string[] dailyTransferRecordToRemove)
+        {
+            JsonResult jsonResult = new JsonResult();
+            var jsonStatus = (int)Status.Initialize;
+            var user = GetUser();
+            var userId = GetUserId(user);
+
+
+
+            //_context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
+            //      "VALUES " + stringToAppend);
+
+            jsonResult = Json(new { data = jsonStatus },
+                  JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
     }
 }

@@ -583,7 +583,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-12 form-group e_two_trip_details" style="padding-left: 0px; padding-right: 0px;">
+                        <div class="col-xs-12 form-group e_two_trip_details" style="padding-left: 0px; padding-right: 0px; display: none">
                             <label for="e_transportation_name" class="col-md-12 control-label">Second Pick-up/Drop-off point<span class="mandatory">*</span></label>
 
                             <div class="col-xs-12 col-md-12 col-lg-12 ">
@@ -611,11 +611,11 @@
                         </div>
                         <div id="e_daily_transfer_table">
                             <div class="col-xs-12">
-                                <button class="btn btn-default" id="e_add_daily_transfer">Add to table</button>
+                                <button class="btn btn-default" id="add_daily_transfer">Add to table</button>
                             </div>
                             <div class="box-body col-xs-12">
                                 <table class="table table-bordered">
-                                    <tbody>
+                                    <thead>
                                         <tr>
                                             <th>Type</th>
                                             <th>Pick-up</th>
@@ -626,6 +626,9 @@
                                             <th>Date and Time</th>
                                             <th>Action</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                       
                                     </tbody>
                                 </table>
                                 <hr />
