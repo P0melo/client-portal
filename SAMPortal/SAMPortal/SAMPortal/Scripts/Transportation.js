@@ -616,6 +616,7 @@
     });
 
     $(document).on('click', '#edit_transportation_btn', function () {
+        dailyTransferRecordToRemove = [];
         recordId = $(this).attr('reservation_id');
         let type = $(this).parent().parent().children(':eq(1)').html();
 
@@ -636,35 +637,23 @@
                     $('#e_transportation_vehicle').val(result[0].Vehicle);
                     $('#e_dt_optradio_1').prop('checked', true)//1 because Daily Transfer
 
-                    //if (result[0].IsRoundTrip == 0) {
-                    //    $('.e_two_trip_details').css('display', 'none');
-                    //}
 
                     $('#e_transportation_details').val(result[0].Notes);
 
                     $('#e_daily_transfer_table div table tbody').html('');
                     let content = "";
                     for (let i = 0; i < result.length; i++) {
-                        content += "<tr><td>" + result[i].Type + "</td><td>" + result[i].PickUpPlace + "</td><td>" + result[i].DropOffPlace + "</td><td>" + result[i].DateTimeOfPickUp + "</td>" +
+                        content += "<tr><td>" + (result[i].Type == "1" ? "Round-trip" : "One-way") + "</td><td>" + result[i].PickUpPlace + "</td><td>" + result[i].DropOffPlace + "</td><td>" + result[i].DateTimeOfPickUp + "</td>" +
                             "<td>" + result[i].SecondPickUpPlace + "</td><td>" + result[i].SecondDropOffPlace + "</td><td>" + result[i].SecondDateTimeOfPickUp + "</td>" +
                             "<td style='padding: 1px'><button id='e_remove_daily_transfer_entry' dtid = '" + result[i].DtId + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr>"
                     }
                     $('#e_daily_transfer_table div table tbody').append(content);
-
-                    //Id, Type, Vehicle, Status, Notes, ReferenceId,IsRoundTrip,PickUpPlace,DateTimeOfPickUp,DropOffPlace,SecondPickUpPlace,SecondDateTimeOfPickUp,SecondDropOffPlace
-                    //if (result.data == 1) {
-                    //    generateSuccessModal("e_cancel_daily_transfer_reservation_success_modal", 2, "", "Request CANCELLED successfully!");
-
-                    //    let traineeNo = document.getElementById('mnno_input').value;
-                    //    getHistory(traineeNo);
-                    //} else {
-                    //    generateDangerModal("e_cancel_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                    //}
-
                     $('#edit_daily_transfer_modal').modal();
 
                 }
             })
+
+        } else if (type == "Airport Transfer"){
 
         }
 
@@ -713,7 +702,6 @@
     });
 
     $(document).on('click', '#e_save_transportation_btn', function () {
-        //alert(dailyTransferDetails);
         if ($('#e_daily_transfer_table div table tbody tr').length === 0) {
             generateWarningModal("no_rows_left", 2, "", "Please make sure that there is atleast 1 request left in the table...");
         } else {
@@ -723,16 +711,40 @@
 
     $(document).on('click', '#e_save_daily_transportation_yes', function () {
 
+        let vehicle = $('#e_transportation_vehicle').val();
+        let remarks = $('#e_transportation_details').val()
+
+        let dtdParameters = [recordId, vehicle, remarks, JSON.stringify(dailyTransferRecordToRemove), JSON.stringify(dailyTransferDetails)] 
+
         $.ajax({
             url: '/SAMPortal/Forms/UpdateDailyTransfer',
             type: 'POST',
             dataType: 'JSON',
-            data: { recordId: recordId, dailyTransferRecordToRemove: dailyTransferRecordToRemove, dailyTransferDetails: dailyTransferDetails },
+            data: { dtdParameters: dtdParameters },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
             success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    generateSuccessModal("e_save_daily_transfer_reservation_success_modal", 2, "", "Request UPDATED successfully!");
 
-              
+                    let traineeNo = document.getElementById('mnno_input').value;
+                    getHistory(traineeNo);
+                } else {
+                    generateDangerModal("e_save_daily_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
             }
         });
     });
 
+    //prevents the user to scroll the main body when the modal is still open
+    $('.modal').on('hidden.bs.modal', function (e) {
+        if ($('#edit_daily_transfer_modal').hasClass('in')) {
+            $('body').addClass('modal-open');
+        }
+    });
 });

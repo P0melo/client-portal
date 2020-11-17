@@ -265,7 +265,7 @@ namespace SAMPortal.Controllers.Api
 
         public IHttpActionResult GetDailyTransferRequestForEdit(int recordId)
         {
-            var data = _context.Database.SqlQuery<GetDailyTransferRequestForEditModel>("SELECT t.Id, Type, Vehicle, Status, Notes, ReferenceId,IsRoundTrip,PickUpPlace,DateTimeOfPickUp,DropOffPlace,SecondPickUpPlace,SecondDateTimeOfPickUp,SecondDropOffPlace, td.Id AS DtId " +
+            var data = _context.Database.SqlQuery<GetDailyTransferRequestForEditModel>("SELECT t.Id, IsRoundTrip AS Type, Vehicle, Status, Notes, ReferenceId,IsRoundTrip,PickUpPlace,DateTimeOfPickUp,DropOffPlace,SecondPickUpPlace,SecondDateTimeOfPickUp,SecondDropOffPlace, td.Id AS DtId " +
                             "FROM tbltransportation t JOIN tbldaily_transfer_details td " +
                             "on t.Id = td.TransportationId " +
                             "WHERE t.Id = " + recordId).ToList();

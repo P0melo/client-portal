@@ -1562,10 +1562,10 @@ namespace SAMPortal.Controllers
                     logging.Log(user, "CancelTransportationRequest", data);
 
                     //For Email Notif
-                    var details = _context.Database.SqlQuery<CancelTransportationModel>("SELECT MNNO, Type, Vehicle, ReferenceId FROM tbltransportation WHERE Id='" + recordId + "'").FirstOrDefault();
-                    var msg = details.MNNO + "|" + details.Type + "|" + details.Vehicle + "|" + details.ReferenceId;
+                    var details = _context.Database.SqlQuery<string>("SELECT ReferenceId FROM tbltransportation WHERE Id='" + recordId + "'").FirstOrDefault();
+                    //var msg = details.MNNO + "|" + details.Type + "|" + details.Vehicle + "|" + details.ReferenceId;
 
-                    //sendEmail.Send(User.Identity, (int)Enum.Requests.CancelDailyTransferRequest, msg);
+                    sendEmail.Send(User.Identity, (int)Enum.Requests.CancelTransportationRequest, details);
 
                     jsonStatus = (int)Status.Success;
 
@@ -1581,14 +1581,109 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
-        public ActionResult UpdateDailyTransfer(int recordId, string[] dailyTransferRecordToRemove)
+        public ActionResult UpdateDailyTransfer(params string[] dtdParameters)
         {
             JsonResult jsonResult = new JsonResult();
             var jsonStatus = (int)Status.Initialize;
             var user = GetUser();
             var userId = GetUserId(user);
 
+            var vehicle = dtdParameters[1];
+            var notes = dtdParameters[2];
+            var recordId = dtdParameters[0];
 
+            try
+            {
+                //update tbltransportation
+                _context.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Vehicle=@vehicle, Notes=@notes WHERE Id=@recordId",
+                   new MySqlParameter("@vehicle", vehicle),
+                   new MySqlParameter("@notes", notes),
+                   new MySqlParameter("@recordId", recordId));
+
+                //for logging
+                string[] logparameters = { "id:" + recordId, "Vehicle:" + vehicle, "Notes:" + notes, "LastUpdated:" + DateTime.Now.ToString("yyyy-M-dd HH:mm:ss") };
+                string data = logging.ConvertToLoggingParameter(logparameters);
+
+                logging.Log(user, "UpdateDailyTransfer", data);
+
+                //end of update tbltransportation
+
+                //Remove items
+                JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+                dynamic itemsToRemove = jsonSerializer.DeserializeObject(dtdParameters[3]);
+
+                var stringToAppend = "";
+                if (itemsToRemove.Length > 0)
+                {
+                    for (var i = 0; i < itemsToRemove.Length; i++)
+                    {
+                        stringToAppend += itemsToRemove[i] + ",";
+                    }
+
+                    stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
+                    _context.Database.ExecuteSqlCommand("DELETE FROM tbldaily_transfer_details WHERE Id in (" + stringToAppend + ")");
+
+                    string[] logparameters2 = { "ID of Removed Items in tbldaily_transfer_details: " + stringToAppend };
+                    data = logging.ConvertToLoggingParameter(logparameters2);
+
+                    logging.Log(user, "UpdateDailyTransfer", data);
+
+                    stringToAppend = "";
+
+                }
+                //end of remove items
+
+                //insert new items in tbl_daily_transfer_details
+                dynamic itemsToAdd = jsonSerializer.DeserializeObject(dtdParameters[4]);
+                foreach (var items in itemsToAdd)
+                {
+                    int dtType = 0;
+
+                    if (items[0] == "One-way")
+                    {
+                        dtType = 0;
+                    }
+                    else if (items[0] == "Round-trip")
+                    {
+                        dtType = 1;
+                    }
+
+                    var pickUp = items[1];
+                    var dropOff = items[2];
+                    var pickup_date_time = items[3];
+                    var pickUp2 = items[4];
+                    var dropOff2 = items[5];
+                    var pickup_date_time2 = items[6];
+
+                    stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + recordId + "),";
+                }
+
+                if (itemsToAdd.Length > 0)
+                {
+                    stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
+
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
+                           "VALUES " + stringToAppend);
+                    //end of insert new items in tbl_daily_transfer_details
+
+                    string[] logparameters3 = { "Items added (daily transfer details update): " + stringToAppend };
+
+                    data = logging.ConvertToLoggingParameter(logparameters3);
+
+                    logging.Log(user, "UpdateDailyTransfer", data);
+                }
+
+                //For Email Notif
+                var details = _context.Database.SqlQuery<string>("SELECT ReferenceId FROM tbltransportation WHERE Id='" + recordId + "'").FirstOrDefault();
+                sendEmail.Send(User.Identity, (int)Enum.Requests.UpdateDailyTransfer, details);
+
+                jsonStatus = (int)Status.Success;
+
+            }
+            catch (Exception e)
+            {
+                jsonStatus = logging.LogError(user, "UpdateDailyTransfer", e);
+            }
 
             //_context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
             //      "VALUES " + stringToAppend);

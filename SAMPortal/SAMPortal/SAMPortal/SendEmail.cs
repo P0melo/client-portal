@@ -108,6 +108,18 @@ namespace SAMPortal
                 user.Name + " has CANCELLED his/her On Site Accommodation Request.", cc: "", bcc: "", isBodyHtml: true);
 
             }
+            else if (request == (int)Requests.CancelTransportationRequest)
+            {
+                WebMail.Send(to: email, subject: "[NOTIFICATION] TRANSPORTATION REQUEST CANCELLED!", body:
+                user.Name + " has CANCELLED his/her Transportation Request with Reference Id: " + additionalMessage, cc: "", bcc: "", isBodyHtml: true);
+
+            }
+            else if (request == (int)Requests.UpdateDailyTransfer)
+            {
+                WebMail.Send(to: email, subject: "[NOTIFICATION] DAILY TRANSFER DETAILS UPDATED!", body:
+                user.Name + " has UPDATED his/her Daily Transfer Request with Reference Id: " + additionalMessage, cc: "", bcc: "", isBodyHtml: true);
+
+            }
             else if (request == (int)Requests.MealProvision)
             {
 
