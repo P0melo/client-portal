@@ -1694,5 +1694,93 @@ namespace SAMPortal.Controllers
             return jsonResult;
         }
 
+        public ActionResult UpdateAirportTransfer(string[] parameters)
+        {
+            JsonResult jsonResult = new JsonResult();
+            var jsonStatus = (int)Status.Initialize;
+            var user = GetUser();
+            var userId = GetUserId(user);
+            var fileType = parameters[5];
+            var remarks = parameters[4];
+
+            try
+            {
+
+                var byteArr = new object();
+                if (parameters[3] != "")
+                {
+                    byte[] bytes = Convert.FromBase64String(parameters[3].Split(',')[1]);
+                    byteArr = bytes;
+                }
+                else
+                {
+                    byteArr = null;
+                }
+
+                DateTime? inboundDate = null;
+                DateTime? outboundDate = null;
+                int inbound = 0;
+                int outbound = 0;
+
+                if (!parameters[1].Equals(""))
+                {
+                    inboundDate = DateTime.ParseExact(parameters[1], "dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    inbound = 1;
+                }
+
+                if (!parameters[2].Equals(""))
+                {
+                    outboundDate = DateTime.ParseExact(parameters[2], "dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    outbound = 1;
+                }
+
+                _context.Database.ExecuteSqlCommand("UPDATE tbltransportation SET Notes=@remarks WHERE Id=@recordId",
+                    new MySqlParameter("@recordId", parameters[0]),
+                    new MySqlParameter("@remarks", remarks));
+
+                //for logging
+                string[] logparameters = { "id:" + parameters[0], "Notes:" + remarks, "LastUpdated:" + DateTime.Now.ToString("yyyy-M-dd HH:mm:ss") };
+                string data = logging.ConvertToLoggingParameter(logparameters);
+
+                logging.Log(user, "UpdateAirportTransfer", data);
+
+                _context.Database.ExecuteSqlCommand("UPDATE tblairport_transfer_details SET Inbound=@inbound, Outbound=@outbound, InboundDate=@inboundDate, OutboundDate=@outboundDate, " + 
+                    "FileType=@fileType, Attachment=@attachment WHERE TransportationId=@recordId",
+                    new MySqlParameter("@inbound", inbound),
+                    new MySqlParameter("@outbound", outbound),
+                    new MySqlParameter("@inboundDate", inboundDate),
+                    new MySqlParameter("@outboundDate", outboundDate),
+                    new MySqlParameter("@fileType", fileType),
+                    new MySqlParameter("@attachment", byteArr),
+                    new MySqlParameter("@recordId", parameters[0])
+                    );
+
+                //for logging
+                string[] logparameters2 = { "id:" + parameters[0], "Inbound:" + inbound, "Outbound:"+outbound, "InboundDate:"+inboundDate, "OutboundDate:"+outboundDate,
+                    "FileType:"+fileType, "LastUpdated:" + DateTime.Now.ToString("yyyy-M-dd HH:mm:ss") };
+                string data2 = logging.ConvertToLoggingParameter(logparameters2);
+
+                logging.Log(user, "UpdateAirportTransfer", data2);
+
+                //For Email Notif
+                var referenceId = _context.Database.SqlQuery<string>("SELECT ReferenceId FROM tbltransportation WHERE Id=@recordId", new MySqlParameter("@recordId", parameters[0])).FirstOrDefault();
+                var msg = referenceId;
+
+                sendEmail.Send(User.Identity, (int)Enum.Requests.UpdateAirportTransfer, msg);
+
+                jsonStatus = (int)Status.Success;
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            jsonResult = Json(new { data = jsonStatus },
+                                JsonRequestBehavior.AllowGet);
+
+            return jsonResult;
+        }
+
     }
 }

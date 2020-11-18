@@ -94,10 +94,8 @@
                     $('.modal_airport_transportation .modal-body #inboundDate').html(inboundDate);
                     $('.modal_airport_transportation .modal-body #outboundDate').html(outboundDate);
                     $('.modal_airport_transportation .modal-body #notes').val(result.Notes);
-                    //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
                     $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
-                    //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
-                    renderImageForZoom(result.Id);
+                    renderImageForZoom(result.Id, 'View');
 
                     $('.modal_airport_transportation .modal-title').html("Transportaion Arrangement History");
                 }
@@ -134,10 +132,25 @@
 
     });
 
+    $(document).on('change', '#e_flight_details_inputFile', function () {
+        var inputFile = document.getElementById('e_flight_details_inputFile');
+        var reader = new FileReader();
+        reader.readAsDataURL(inputFile.files[0]);
+        reader.onload = function () {
+            inputFile = reader.result;
+            $('#e_attachment').attr('src', inputFile);
+            $('#imgForZoom').attr('src', inputFile);
+            $('.zoomImg').attr('src', inputFile);
+        };
+
+    });
+
     $('#transportation_lnk').parent().addClass('active');
 
     $('#transportation_date').datepicker({ format: "dd/mm/yyyy" });
     $('#transportation_date_outbound').datepicker({ format: "dd/mm/yyyy" });
+    $('#e_inboundDate').datepicker({ format: "dd MM yyyy" });
+    $('#e_outboundDate').datepicker({ format: "dd MM yyyy" });
 
     $('#transportation_date').prev().click(function () {
         $(this).next().focus();
@@ -619,7 +632,8 @@
         dailyTransferRecordToRemove = [];
         recordId = $(this).attr('reservation_id');
         let type = $(this).parent().parent().children(':eq(1)').html();
-
+        let referenceId = $(this).parent().parent().children(':eq(0)').find('a').html();
+        
         if (type == "Daily Transfer") {
             $.ajax({
                 url: '/SAMPortal/Api/Forms/GetDailyTransferRequestForEdit',
@@ -653,7 +667,32 @@
                 }
             })
 
-        } else if (type == "Airport Transfer"){
+        } else if (type == "Airport Transfer") {
+
+            $.ajax({
+                url: '/SAMPortal/Api/Forms/GetTransportationHistoryDetails',
+                type: 'GET',
+                dataType: 'JSON',
+                data: { referenceId: referenceId, type: type },
+                success: function (result) {
+                    let inbound = result.Inbound == 1 ? "Yes" : " No";
+                    let outbound = result.Outbound == 1 ? "Yes" : " No";
+                    let inboundDate = result.InboundDate === null ? "-----------------" : formatDate(result.InboundDate);
+                    let outboundDate = result.OutboundDate === null ? "-----------------" : formatDate(result.OutboundDate);
+
+                    $('#edit_airport_transfer_modal .modal-body #e_inboundDate').val(inboundDate);
+                    $('#edit_airport_transfer_modal .modal-body #e_outboundDate').val(outboundDate);
+                    $('#edit_airport_transfer_modal .modal-body #e_notes').val(result.Notes);
+                    $('#edit_airport_transfer_modal .modal-body #e_attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
+                    renderImageForZoom(result.Id, 'Edit');
+
+                    $('#edit_airport_transfer_modal .modal-title').html("Transportaion Arrangement History");
+
+                    $('#edit_airport_transfer_modal').modal();
+
+                }
+            })
+
 
         }
 
@@ -741,9 +780,51 @@
         });
     });
 
+    $(document).on('click', '#e_save_transportation_btn', function () {
+        generateWarningModal("e_save_airport_transportation", 1, "e_save_airport_transportation_yes", "Are you sure you want to UPDATE this request?");
+    });
+
+    $(document).on('click', '#e_save_airport_transportation_yes', function () {
+        let inboundDate = $('#e_inboundDate').val();
+        let outboundDate = $('#e_outboundDate').val();
+        let attachment = $('#imgForZoom').attr('src');
+        let remarks = $('#e_notes').val();
+        let fileType = attachment.split(';')[0].split('/')[1];
+
+        if (fileType == "JPEG" || fileType == "jpeg") {
+            fileType = "jpg";
+        }
+
+        let updateAirportTransportationDetails = [recordId, inboundDate, outboundDate, attachment, remarks, fileType];
+
+        $.ajax({
+            url: '/SAMPortal/Forms/UpdateAirportTransfer',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { parameters: updateAirportTransportationDetails },
+            beforeSend: function () {
+                $.blockUI({
+                    baseZ: 2000,
+                    message: null
+                });
+            },
+            success: function (result) {
+                $.unblockUI();
+                if (result.data == 1) {
+                    generateSuccessModal("e_save_airport_transfer_reservation_success_modal", 2, "", "Request UPDATED successfully!");
+
+                    let traineeNo = document.getElementById('mnno_input').value;
+                    getHistory(traineeNo);
+                } else {
+                    generateDangerModal("e_save_airport_transfer_reservation_error_modal", "Please send the this error ID (" + (result.data == null || result.data == "" ? "000" : result.data) + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+                }
+            }
+        });
+    });
+
     //prevents the user to scroll the main body when the modal is still open
     $('.modal').on('hidden.bs.modal', function (e) {
-        if ($('#edit_daily_transfer_modal').hasClass('in')) {
+        if ($('#edit_daily_transfer_modal').hasClass('in') || $('#edit_airport_transfer_modal').hasClass('in')) {
             $('body').addClass('modal-open');
         }
     });

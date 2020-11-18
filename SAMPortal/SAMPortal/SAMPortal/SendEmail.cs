@@ -119,6 +119,10 @@ namespace SAMPortal
                 WebMail.Send(to: email, subject: "[NOTIFICATION] DAILY TRANSFER DETAILS UPDATED!", body:
                 user.Name + " has UPDATED his/her Daily Transfer Request with Reference Id: " + additionalMessage, cc: "", bcc: "", isBodyHtml: true);
 
+            } else if (request == (int)Requests.UpdateAirportTransfer)
+            {
+                WebMail.Send(to: email, subject: "[NOTIFICATION] AIRPORT TRANSFER DETAILS UPDATED!", body:
+                user.Name + " has UPDATED his/her Airport Transfer Request with Reference Id: " + additionalMessage, cc: "", bcc: "", isBodyHtml: true);
             }
             else if (request == (int)Requests.MealProvision)
             {
