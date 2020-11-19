@@ -17,44 +17,48 @@ if (typeof (hrefSplit) !== 'undefined') {
 var protocol = window.location.protocol;
 var hostName = window.location.hostname;
 
-function openToNewTab(actionName, traineeNo, rank, name) {
-    window.open(protocol + "//" + hostName + "/SAMPortal/Forms/" + actionName + "?" + traineeNo + "+" + rank + "+" + name);
+function openToNewTab(actionName, traineeNo, rank, name, schedId) {
+    window.open(protocol + "//" + hostName + "/SAMPortal/Forms/" + actionName + "?" + traineeNo + "+" + rank + "+" + name + "+" + schedId);
 }
 
 $(document).on('click', '#onSite_lnkbtn', function () {
     let traineeNo = $(this).parent().prev().prev().prev().html();
     let rank = $(this).parent().prev().prev().html();
     let name = $(this).parent().prev().html();
+    let schedId = $(this).attr('sched_id');
     let actionName = "OnSiteAccommodation";
 
-    openToNewTab(actionName, traineeNo, rank, name)
+    openToNewTab(actionName, traineeNo, rank, name, schedId)
 });
 
 $(document).on('click', '#offSite_lnkbtn', function () {
     let traineeNo = $(this).parent().prev().prev().prev().html();
     let rank = $(this).parent().prev().prev().html();
     let name = $(this).parent().prev().html();
+    let schedId = $(this).attr('sched_id');
     let actionName = "OffSiteAccommodation";
 
-    openToNewTab(actionName, traineeNo, rank, name)
+    openToNewTab(actionName, traineeNo, rank, name, schedId)
 });
 
 $(document).on('click', '#meals_lnkbtn', function () {
     let traineeNo = $(this).parent().prev().prev().prev().html();
     let rank = $(this).parent().prev().prev().html();
     let name = $(this).parent().prev().html();
+    let schedId = $(this).attr('sched_id');
     let actionName = "Meals";
 
-    openToNewTab(actionName, traineeNo, rank, name)
+    openToNewTab(actionName, traineeNo, rank, name, schedId)
 });
 
 $(document).on('click', '#transportation_lnkbtn', function () {
     let traineeNo = $(this).parent().prev().prev().prev().html();
     let rank = $(this).parent().prev().prev().html();
     let name = $(this).parent().prev().html();
+    let schedId = $(this).attr('sched_id');
     let actionName = "Transportation";
 
-    openToNewTab(actionName, traineeNo, rank, name)
+    openToNewTab(actionName, traineeNo, rank, name, schedId)
 });
 
 //footerType: 1 = Yes and No, 2 = Ok
@@ -622,10 +626,10 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
             $('.modal-body #message').html('Number of enrollees from other company: ' + o_numberOfEnrollees);
 
-            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
-                '<button class="btn btn-default" id="offSite_lnkbtn" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
-                '<button class="btn btn-default" id="meals_lnkbtn" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
-                '<button class="btn btn-default" id="transportation_lnkbtn" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
+            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" sched_id="' + schedId + '" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
+                '<button class="btn btn-default" id="offSite_lnkbtn" sched_id="' + schedId + '" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
+                '<button class="btn btn-default" id="meals_lnkbtn" sched_id="' + schedId + '" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
+                '<button class="btn btn-default" id="transportation_lnkbtn" sched_id="' + schedId + '" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
 
             $.ajax({
                 url: '/SAMPortal/api/CourseBooking/GetEnrollees',
@@ -634,19 +638,21 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                 data: { schedId: schedId },
                 success: function (result) {
                     var content = "";
+                    var data = result.data;
 
                     if (course_enrollee_tbl != "") {
                         course_enrollee_tbl.destroy();
                     }
 
-                    for (var i = 0; i < result.length; i++) {
-                        content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                            (result[i].MName === null ? "" : result[i].MName) + "</td><td>" + linkButtons + "</td></tr>";
+                    for (var i = 0; i < data.length; i++) {
+                        content += "<tr><td>" + data[i].MNNO + "</td><td>" + data[i].Rank + "</td><td>" + data[i].LName + ", " + data[i].FName + " " +
+                            (data[i].MName === null ? "" : data[i].MName) + "</td><td>" + linkButtons + "</td></tr>";
                     }
 
                     $('#course_enrollee_tbl_body').html(content);
                     $('#enrollees_modal').modal();
-
+                    $('#course_fee').html(result.courseFee);
+                    $('#total_cost').html(result.courseFee * data.length);
                     course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
                 }
             });

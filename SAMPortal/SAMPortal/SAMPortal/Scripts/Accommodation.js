@@ -297,6 +297,7 @@
         var mnno = $('#mnno_input').val();
         var rank = $('#rank_input').val();
         var name = $('#name_input').val().split(',');
+        let schedId = "";
 
         //let firstName = name[1].split(' ')[1].substring(1, name[1].split(' ')[1].length);
         let firstName = name[1].split(' ')[1].trim();
@@ -320,7 +321,11 @@
 
             $('#accomodation_err_msg').css('display', 'none');
 
-            saveAccommodationParameters = [mnno, rank, lastName, firstName, reservation_type, room_type, date, payment, reason, remarks];
+            if (typeof (hrefSplit) !== 'undefined') {
+                schedId = hrefSplit.split('+')[3];
+            } 
+
+            saveAccommodationParameters = [mnno, rank, lastName, firstName, reservation_type, room_type, date, payment, reason, remarks, schedId];
 
             //saveAccomodation(saveAccommodationParameters);
         }

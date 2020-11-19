@@ -193,7 +193,7 @@
             success: function (result) {
                 e_numberOfEnrollees = result;
                 $('#enroll_modal .modal-title').html("Schedule no. " + schedId + " - " + courseName);
-                $('.modal-body #message').html('Number of enrollees from other company: ' + e_numberOfEnrollees);
+                $('.modal-body #message').html('Number of enrollees from other companies: ' + e_numberOfEnrollees);
 
                 getEnrolleesAndCrewList(schedId);
             }

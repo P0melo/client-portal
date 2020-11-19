@@ -116,7 +116,14 @@ namespace SAMPortal.Controllers.Api
 
             var data = _context.Database.SqlQuery<CourseEnrollees>("select sd.MNNO, c.`Rank`, c.LName, c.FName, c.MName, c.ContactNo as Contact, c.Employer, sd.RegistrationNo from tblscheddata sd join tblcrew c on sd.MNNo = c.MNNo where SchedID = " + schedId + " and c.Employer = " + company).ToList();
 
-            return Ok(data);
+            var courseFee = _context.Database.SqlQuery<string>("SELECT tf.courseFee  FROM tbltrainings t " +
+                                                            "INNER JOIN tbltrainingsfee tf ON t.CourseCode = tf.courseCode " +
+                                                            "INNER JOIN tblschedule s ON t.SubjectCode = s.TrainingID " +
+                                                            "WHERE s.SchedID = 36496 " +
+                                                            "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
+
+            return Json(new { data, courseFee });
+            //return Ok(data);
         }
 
         public IHttpActionResult GetNumberOfEnrollees(int schedId)

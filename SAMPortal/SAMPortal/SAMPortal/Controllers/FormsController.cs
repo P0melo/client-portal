@@ -673,6 +673,8 @@ namespace SAMPortal.Controllers
             var reason = parameters[8];
             var remarks = parameters[9];
             var room_type = Convert.ToInt32(parameters[5]);
+            var schedId = parameters[10];
+
 
             DateTime checkInDateTimeFrom = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -721,9 +723,9 @@ namespace SAMPortal.Controllers
                 {
 
                     _context.Database.ExecuteSqlCommand("INSERT INTO tbldorm_reservation_bank(MNNO, `rank`, LastName, FirstName, type_of_reservation, room_type, classification, stats, expctd_checkInDate," +
-                        "expctd_checkOutDate, company_name, mode_of_pymnt, reason_of_stay, remarks, rsrvtn_by, rsrvtn_date, rsrvtn_last_updated_by, rsrvtn_last_updated, crew_batch)" +
+                        "expctd_checkOutDate, company_name, mode_of_pymnt, reason_of_stay, remarks, rsrvtn_by, rsrvtn_date, rsrvtn_last_updated_by, rsrvtn_last_updated, crew_batch, schedId)" +
                         "VALUE (@mnno, @rank, @lastName, @firstName, @type_of_reservation, @room_type, @classification, @stats, @expctd_checkInDate," +
-                        "@expctd_checkOutDate, @company_name, @mode_of_pymnt, @reason_of_stay, @remarks, @rsrvtn_by, @rsrvtn_date, @rsrvtn_last_updated_by, @rsrvtn_last_updated, @crew_batch)",
+                        "@expctd_checkOutDate, @company_name, @mode_of_pymnt, @reason_of_stay, @remarks, @rsrvtn_by, @rsrvtn_date, @rsrvtn_last_updated_by, @rsrvtn_last_updated, @crew_batch, @schedId)",
                         new MySqlParameter("@mnno", mnno),
                         new MySqlParameter("@rank", rank),
                         new MySqlParameter("@lastName", lastName),
@@ -742,7 +744,8 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@rsrvtn_date", DateTime.Now),
                         new MySqlParameter("@rsrvtn_last_updated_by", guid),
                         new MySqlParameter("@rsrvtn_last_updated", DateTime.Now),
-                        new MySqlParameter("@crew_batch", crew_batch));
+                        new MySqlParameter("@crew_batch", crew_batch),
+                        new MySqlParameter("@schedId", schedId));
 
                     string[] logparameters = { "mnno:"+mnno, "rank:"+rank, "lastName:"+lastName, "firstName:"+firstName, "type_of_reservation:"+reservation_type, "room_type:"+room_type, "classification:"+classification,
                                     "stats:" + status, "expctd_checkInDate:" + checkInDateTimeFrom, "expctd_checkOutDate:"+checkInDateTimeTo, "company_name:"+company, "mode_of_pymnt:"+payment, "reason_of_stay:"+reason,
