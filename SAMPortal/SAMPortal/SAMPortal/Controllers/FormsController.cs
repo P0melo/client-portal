@@ -1773,7 +1773,7 @@ namespace SAMPortal.Controllers
             }
             catch (Exception e)
             {
-
+                jsonStatus = logging.LogError(user, "UpdateDailyTransfer", e);
             }
 
             jsonResult = Json(new { data = jsonStatus },

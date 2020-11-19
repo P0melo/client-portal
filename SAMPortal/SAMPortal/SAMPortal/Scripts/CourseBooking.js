@@ -317,13 +317,11 @@
                 enrollees = result
                 maxEnrolless = parseInt(totalEnrollees[1]);
 
-                var startDate = new Date(courseStartDate);
+                let dateSplit = courseStartDate.split('/');
+
+                var startDate = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
+
                 var d = new Date();
-
-                //var dateDiff = Math.abs(d.getTime() - d.getTime());
-
-                //var timeDiff = Math.abs(startDate.getTime() - d.getTime());
-                //var daysBeforeStart = (Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1);
 
                 if (d.getTime() >= startDate.getTime()) {
                     $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course is finished or has already started.");
