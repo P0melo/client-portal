@@ -511,15 +511,15 @@
         });
     }
 
-    function getEnrollees(schedId) {
+    /*function getEnrollees(schedId) {
         var content1 = "";
         $.ajax({
             url: '/SAMPortal/api/CourseBooking/GetEnrollees',
             type: 'get',
             dataType: 'json',
             data: { schedId: schedId },
-            success: function (result) {
-
+            success: function (res) {
+                var result = res.data;
                 if (myEnrolledCrewTable !== "") {
                     $('#enrolled_crews_tbl').css('visibility', 'hidden');
                     myEnrolledCrewTable.destroy();
@@ -554,14 +554,14 @@
 
                 $('#enrolled_crews_tbl').css('width', 'inherit');
 
-                /*myEnrolledCrewTable =*/
+
 
             }, complete: function () {
                 $('#enrolled_crews_tbl').css('visibility', 'visible');
             }
         });
 
-    }
+    }*/
 
     function getEnrolleesAndCrewList(schedId) {
         var content1 = "";
@@ -571,7 +571,8 @@
             type: 'get',
             dataType: 'json',
             data: { schedId: schedId },
-            success: function (result) {
+            success: function (res) {
+                var result = res.data;
                 if (myEnrolledCrewTable !== "") {
                     $('#enrolled_crews_tbl').css('visibility', 'hidden');
                     myEnrolledCrewTable.destroy();

@@ -312,7 +312,6 @@
         var remarks = $('#accomodation_remarks_input').val();
 
         if (mnno === "" || rank === "" || name === "") {
-            //$('#accomodation_err_msg').css('display', 'block');
             generateWarningModal('on_site_accommodation_warning_modal', 2, '', "Please make sure that the required fields are not left blank before clicking Submit...");
         } else {
 

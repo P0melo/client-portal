@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Mvc;
 using SAMPortal.DTO;
+using Microsoft.AspNet.SignalR;
 
 namespace SAMPortal.Controllers.Api
 {
@@ -16,11 +17,13 @@ namespace SAMPortal.Controllers.Api
     {
         private officecadetprogramEntities _context;
         private dbidentityEntities _usercontext;
+        private IHubContext hubContext;
 
         public CourseBookingController()
         {
             _context = new officecadetprogramEntities();
             _usercontext = new dbidentityEntities();
+            hubContext = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
         }
 
         public IHttpActionResult GetCourseList(string month, int year)
@@ -116,13 +119,18 @@ namespace SAMPortal.Controllers.Api
 
             var data = _context.Database.SqlQuery<CourseEnrollees>("select sd.MNNO, c.`Rank`, c.LName, c.FName, c.MName, c.ContactNo as Contact, c.Employer, sd.RegistrationNo from tblscheddata sd join tblcrew c on sd.MNNo = c.MNNo where SchedID = " + schedId + " and c.Employer = " + company).ToList();
 
-            var courseFee = _context.Database.SqlQuery<string>("SELECT tf.courseFee  FROM tbltrainings t " +
+            int courseFee = _context.Database.SqlQuery<int>("SELECT tf.courseFee  FROM tbltrainings t " +
                                                             "INNER JOIN tbltrainingsfee tf ON t.CourseCode = tf.courseCode " +
                                                             "INNER JOIN tblschedule s ON t.SubjectCode = s.TrainingID " +
-                                                            "WHERE s.SchedID = 36496 " +
+                                                            "WHERE s.SchedID = " + schedId + " " + 
                                                             "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
 
-            return Json(new { data, courseFee });
+            float onSiteAccomodationTotalCost = _context.Database.SqlQuery<int>("SELECT (COUNT(drb.rsrvtn_by) * df.price) AS 'Total Cost' " +
+                            "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+                            "WHERE company_name = @company AND stats = 'Reserved'", new MySqlParameter("@company", company)).FirstOrDefault();
+
+
+            return Json(new { data, courseFee, onSiteAccomodationTotalCost });
             //return Ok(data);
         }
 

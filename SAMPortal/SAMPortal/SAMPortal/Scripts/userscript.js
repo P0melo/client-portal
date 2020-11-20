@@ -1,6 +1,8 @@
-﻿//for the redirection found in CourseBooking page
+﻿
+//for the redirection found in CourseBooking page
 var myHref = window.location.href;
 var hrefSplit = myHref.split('?')[1];
+var signalR = $.connection.myHub;
 
 if (typeof (hrefSplit) !== 'undefined') {
     let traineeNo = hrefSplit.split('+')[0];
@@ -636,9 +638,13 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                 type: 'get',
                 dataType: 'json',
                 data: { schedId: schedId },
+                beforeSend: function () {
+                    $.blockUI({ message: null });
+                },
                 success: function (result) {
-                    var content = "";
-                    var data = result.data;
+                    $.unblockUI();
+                    let content = "";
+                    let data = result.data;
 
                     if (course_enrollee_tbl != "") {
                         course_enrollee_tbl.destroy();
@@ -650,10 +656,25 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                     }
 
                     $('#course_enrollee_tbl_body').html(content);
-                    $('#enrollees_modal').modal();
-                    $('#course_fee').html(result.courseFee);
-                    $('#total_cost').html(result.courseFee * data.length);
+
                     course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
+
+                    signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {
+                        $('#course_fee').html(courseFee);
+                        $('#course_total_cost').html();
+                            //$('#course_fee').html(courseFee);
+                            $('#on_site_accommodation_fee').html(onSiteAccommodationFee);
+                            //$('#off_site_accommodation_fee').html(offSiteAccommodationFee);
+                            //$('#meals_fee').html(mealsFee);
+                            //$('#transportation_fee').html(transportationFee);
+
+                            $('#enrollees_modal').modal();
+                    };
+
+                    $.connection.hub.start().done(function () {
+                        signalR.server.updateOffSiteAccommodationTotalFee(result.courseFee, result.onSiteAccomodationTotalCost, signalR.connection.id);
+                    });
+
                 }
             });
         }

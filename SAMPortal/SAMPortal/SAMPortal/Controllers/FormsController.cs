@@ -14,16 +14,18 @@ using System.Web.Script.Serialization;
 using Org.BouncyCastle.Crypto.Tls;
 using Org.BouncyCastle.Asn1.Mozilla;
 using Newtonsoft.Json;
+using Microsoft.AspNet.SignalR;
 
 namespace SAMPortal.Controllers
 {
-    [Authorize]
+    [System.Web.Http.Authorize]
     public class FormsController : Controller
     {
         private officecadetprogramEntities _context;
         private dbidentityEntities _usercontext;
         private Logging logging;
         private SendEmail sendEmail;
+        private IHubContext hubContext;
 
         public FormsController()
         {
@@ -31,6 +33,7 @@ namespace SAMPortal.Controllers
             _usercontext = new dbidentityEntities();
             logging = new Logging();
             sendEmail = new SendEmail();
+            hubContext = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
         }
 
         public ActionResult Requests()
@@ -684,43 +687,44 @@ namespace SAMPortal.Controllers
             var status = "Reserved";
             var crew_batch = 141;
 
-            var duplicateBooking = _context.Database.SqlQuery<DuplicateReservation>("CALL CheckDuplicateAccommodationBooking(@pMNNO, @pRank, @pLastName, @pFirstName, @pCheckInDate, @pCheckOutDate, @pCompanyId);",
-                new MySqlParameter("@pMNNO", mnno),
-                new MySqlParameter("@pRank", rank),
-                new MySqlParameter("@pLastName", lastName),
-                new MySqlParameter("@pFirstName", firstName),
-                new MySqlParameter("@pCheckInDate", checkInDateTimeFrom),
-                new MySqlParameter("@pCheckOutDate", checkInDateTimeTo),
-                new MySqlParameter("@pCompanyId", company)).ToList();
-
-            if (duplicateBooking.Count > 0)
-            {
-                jsonResult = Json(new { data = "Duplicates", data2 = duplicateBooking },
-                JsonRequestBehavior.AllowGet);
-
-                return jsonResult;
-            }
-
-            var roomsFullDates = _context.Database.SqlQuery<RoomsFull>("CALL AccommodationReservationCheck(@roomType, @cid, @cod);",
-            new MySqlParameter("@roomType", room_type),
-            new MySqlParameter("@cid", checkInDateTimeFrom),
-            new MySqlParameter("@cod", checkInDateTimeTo)).FirstOrDefault();
-
-            //var roomsFullDates = _context.AccommodationReservationCheck(room_type, checkInDateTimeFrom, checkInDateTimeTo);
-
-            if (roomsFullDates.RoomsFullDates != "")
-            {
-                jsonResult = Json(new { data = "Rooms", data2 = roomsFullDates.RoomsFullDates },
-                JsonRequestBehavior.AllowGet);
-
-                return jsonResult;
-            }
-
             int flag = 0;
             if (ModelState.IsValid)
             {
                 try
                 {
+
+                    var duplicateBooking = _context.Database.SqlQuery<DuplicateReservation>("CALL CheckDuplicateAccommodationBooking(@pMNNO, @pRank, @pLastName, @pFirstName, @pCheckInDate, @pCheckOutDate, @pCompanyId);",
+                        new MySqlParameter("@pMNNO", mnno),
+                        new MySqlParameter("@pRank", rank),
+                        new MySqlParameter("@pLastName", lastName),
+                        new MySqlParameter("@pFirstName", firstName),
+                        new MySqlParameter("@pCheckInDate", checkInDateTimeFrom),
+                        new MySqlParameter("@pCheckOutDate", checkInDateTimeTo),
+                        new MySqlParameter("@pCompanyId", company)).ToList();
+
+                    if (duplicateBooking.Count > 0)
+                    {
+                        jsonResult = Json(new { data = "Duplicates", data2 = duplicateBooking },
+                        JsonRequestBehavior.AllowGet);
+
+                        return jsonResult;
+                    }
+
+                    var roomsFullDates = _context.Database.SqlQuery<RoomsFull>("CALL AccommodationReservationCheck(@roomType, @cid, @cod);",
+                        new MySqlParameter("@roomType", room_type),
+                        new MySqlParameter("@cid", checkInDateTimeFrom),
+                        new MySqlParameter("@cod", checkInDateTimeTo)).FirstOrDefault();
+
+                    //var roomsFullDates = _context.AccommodationReservationCheck(room_type, checkInDateTimeFrom, checkInDateTimeTo);
+
+                    if (roomsFullDates.RoomsFullDates != "")
+                    {
+                        jsonResult = Json(new { data = "Rooms", data2 = roomsFullDates.RoomsFullDates },
+                        JsonRequestBehavior.AllowGet);
+
+                        return jsonResult;
+                    }
+
 
                     _context.Database.ExecuteSqlCommand("INSERT INTO tbldorm_reservation_bank(MNNO, `rank`, LastName, FirstName, type_of_reservation, room_type, classification, stats, expctd_checkInDate," +
                         "expctd_checkOutDate, company_name, mode_of_pymnt, reason_of_stay, remarks, rsrvtn_by, rsrvtn_date, rsrvtn_last_updated_by, rsrvtn_last_updated, crew_batch, schedId)" +
@@ -757,7 +761,16 @@ namespace SAMPortal.Controllers
                     sendEmail.Send(User.Identity, (int)Enum.Requests.OnSiteAccommodationRequest, "MNNO:" + mnno + "|reservationtype:" + reservation_type + "|room_type:" + room_type + "|classification:" +
                         classification + "|checkindatefrom:" + checkInDateTimeFrom + "|checkindateto:" + checkInDateTimeTo);
 
-                    flag = 1;
+                    if (!schedId.Equals(""))
+                    {
+                        int totalCost = _context.Database.SqlQuery<int>("SELECT (COUNT(drb.rsrvtn_by) * df.price) AS 'Total Cost' " +
+                            "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+                            "WHERE company_name = @company AND stats = 'Reserved'", new MySqlParameter("@company", company)).FirstOrDefault();
+
+                        hubContext.Clients.All.updateOffSiteAccommodationFee(totalCost);
+                    }
+
+                    flag = (int) Status.Success;
 
                 }
                 catch (Exception e)
@@ -1747,7 +1760,7 @@ namespace SAMPortal.Controllers
 
                 logging.Log(user, "UpdateAirportTransfer", data);
 
-                _context.Database.ExecuteSqlCommand("UPDATE tblairport_transfer_details SET Inbound=@inbound, Outbound=@outbound, InboundDate=@inboundDate, OutboundDate=@outboundDate, " + 
+                _context.Database.ExecuteSqlCommand("UPDATE tblairport_transfer_details SET Inbound=@inbound, Outbound=@outbound, InboundDate=@inboundDate, OutboundDate=@outboundDate, " +
                     "FileType=@fileType, Attachment=@attachment WHERE TransportationId=@recordId",
                     new MySqlParameter("@inbound", inbound),
                     new MySqlParameter("@outbound", outbound),
