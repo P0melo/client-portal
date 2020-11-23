@@ -34,6 +34,15 @@ namespace SAMPortal.Models
         public string RegistrationNo { get; set; }
     }
 
+    public class OnSiteAccommodationFeesModel
+    {
+        public int RoomType { get; set; }
+        public string  AccommodationType { get; set; }
+        public float PricePerPax { get; set; }
+        public int NumberOfBooking { get; set; }
+        public float TotalCost { get; set; }
+    }
+
     public class CourseNames
     {
         public string CourseName { get; set; }

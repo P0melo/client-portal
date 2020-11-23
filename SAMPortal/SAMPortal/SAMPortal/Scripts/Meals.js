@@ -192,6 +192,11 @@
         var dinner_cb = $('#dinner_cb').prop('checked');
         var reason = $('#reason_input').val();
         var dietaryRequirement = $('#dietaryRequirement_input').val();
+        var schedId = "";
+
+        if (typeof (hrefSplit) !== 'undefined') {
+            schedId = hrefSplit.split('+')[3];
+        } 
 
         var dateDiff = getDateDiff(date);
 
@@ -208,7 +213,7 @@
             return false;
         } 
         
-        saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb];
+        saveMealProvistionParameter = [mnno, rank, name, date, reason, dietaryRequirement, breakfast_cb, am_snack_cb, lunch_cb, pm_snack_cb, dinner_cb, schedId];
 
         generateWarningModal("submit_meals_arrangement_modal", 1, "modal_warning_meal_yes", "Are you sure you want to submit?");
         //$('#modal_warning_meal .modal-body p').html("Are you sure you want to submit?");

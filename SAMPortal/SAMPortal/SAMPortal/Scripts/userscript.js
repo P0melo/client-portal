@@ -348,7 +348,11 @@ function renderButtonFontAwesome(data, serverDate) {
     let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
 
     if (!(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity)) {
-        if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)) {
+        //if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)) {
+        //    return "-";
+        //}
+
+        if (data.DateFrom <= dateNow) {
             return "-";
         }
 
@@ -646,6 +650,7 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                     let content = "";
                     let data = result.data;
 
+
                     if (course_enrollee_tbl != "") {
                         course_enrollee_tbl.destroy();
                     }
@@ -659,21 +664,31 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
                     course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
 
-                    signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {
-                        $('#course_fee').html(courseFee);
-                        $('#course_total_cost').html();
-                            //$('#course_fee').html(courseFee);
-                            $('#on_site_accommodation_fee').html(onSiteAccommodationFee);
-                            //$('#off_site_accommodation_fee').html(offSiteAccommodationFee);
-                            //$('#meals_fee').html(mealsFee);
-                            //$('#transportation_fee').html(transportationFee);
+                    $('#course_fee').html(result.courseFee);
+                    $('#course_total_cost').html(result.courseFee * data.length);
+                    $('#on_site_accommodation_total_cost').html(result.onSiteAccommodationTotalCost);
 
-                            $('#enrollees_modal').modal();
-                    };
+                    $('#dorm_standard_fee').html(result.data2[0].PricePerPax);
+                    $('#total_standard_fee').html(result.data2[0].TotalCost)
+                    $('#dorm_superior_fee').html(result.data2[1].PricePerPax);
+                    $('#total_superior_fee').html(result.data2[1].TotalCost)
 
-                    $.connection.hub.start().done(function () {
-                        signalR.server.updateOffSiteAccommodationTotalFee(result.courseFee, result.onSiteAccomodationTotalCost, signalR.connection.id);
-                    });
+                    $('#number_of_people_standard').html("(" + result.data2[0].NumberOfBooking + ")");
+                    $('#number_of_people_superior').html("(" + result.data2[1].NumberOfBooking + ")");
+
+                    $('#enrollees_modal').modal();
+
+                    //signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {
+                    //    $('#course_fee').html(courseFee);
+                    //    alert(courseFee * data.length);
+                    //    $('#course_total_cost').html(courseFee * data.length);
+                  
+                    //    
+                    //};
+
+                    //$.connection.hub.start().done(function () {
+                    //    signalR.server.updateOffSiteAccommodationTotalFee(result.courseFee, result.onSiteAccomodationTotalCost, signalR.connection.id);
+                    //});
 
                 }
             });

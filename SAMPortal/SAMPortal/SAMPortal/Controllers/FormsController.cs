@@ -391,6 +391,7 @@ namespace SAMPortal.Controllers
             bool lunch_cb = parameters[8] == "true";
             bool pm_snack_cb = parameters[9] == "true";
             bool dinner_cb = parameters[10] == "true";
+            var schedId = parameters[11];
 
             var guid = GetGuid(user);
 
@@ -419,9 +420,9 @@ namespace SAMPortal.Controllers
                                     ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
 
                         _context.Database.ExecuteSqlCommand("INSERT INTO tblmeal_provision (MNNO, meal_group, meal_b, meal_l, meal_d, meal_ms, meal_as, meal_date_from, meal_date_to, " +
-                            "meal_reason, meal_assigned_by, meal_date_assigned, reference_id, dietaryRequirement)" +
+                            "meal_reason, meal_assigned_by, meal_date_assigned, reference_id, dietaryRequirement, SchedId)" +
                                     "VALUE (@mnno, @meal_group, @meal_b, @meal_l, @meal_d, @meal_ms, @meal_as, @meal_date_from, " +
-                                    "@meal_date_to, @meal_reason, @meal_assigned_by, @meal_date_assigned, @reference_id, @dietaryRequirement)",
+                                    "@meal_date_to, @meal_reason, @meal_assigned_by, @meal_date_assigned, @reference_id, @dietaryRequirement, @schedId)",
                                     new MySqlParameter("@mnno", mnno),
                                     new MySqlParameter("@meal_group", 4),
                                     new MySqlParameter("@meal_b", breakfast_cb),
@@ -435,7 +436,8 @@ namespace SAMPortal.Controllers
                                     new MySqlParameter("@meal_assigned_by", guid),
                                     new MySqlParameter("@meal_date_assigned", mealDateAssigned),
                                     new MySqlParameter("@reference_id", reference_id),
-                                    new MySqlParameter("@dietaryRequirement", dietaryRequirement));
+                                    new MySqlParameter("@dietaryRequirement", dietaryRequirement),
+                                    new MySqlParameter("@schedId", schedId));
 
                         dateFrom = dateFrom.AddDays(1);
 

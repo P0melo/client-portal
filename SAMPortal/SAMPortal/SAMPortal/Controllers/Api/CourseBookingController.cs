@@ -125,12 +125,21 @@ namespace SAMPortal.Controllers.Api
                                                             "WHERE s.SchedID = " + schedId + " " + 
                                                             "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
 
-            float onSiteAccomodationTotalCost = _context.Database.SqlQuery<int>("SELECT (COUNT(drb.rsrvtn_by) * df.price) AS 'Total Cost' " +
+            float? onSiteAccommodationTotalCost = _context.Database.SqlQuery<float?>("SELECT SUM(df.price) AS 'TotalCost' " +
                             "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
-                            "WHERE company_name = @company AND stats = 'Reserved'", new MySqlParameter("@company", company)).FirstOrDefault();
+                            "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID=@schedId", 
+                            new MySqlParameter("@company", company),
+                            new MySqlParameter("@schedId", schedId)).FirstOrDefault();
+
+            var data2 = _context.Database.SqlQuery<OnSiteAccommodationFeesModel>("SELECT room_type AS 'RoomType', accommodation AS AccommodationType, df.price AS 'PricePerPax', " +
+                            "COUNT(room_type) AS 'NumberOfBooking', SUM(df.price) AS 'TotalCost' " +
+                            "FROM tbldorm_reservation_bank drb INNER JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+                            "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID = @schedId GROUP BY room_type ORDER BY room_Type ASC",
+                            new MySqlParameter("@company", company),
+                            new MySqlParameter("@schedId", schedId)).ToList();
 
 
-            return Json(new { data, courseFee, onSiteAccomodationTotalCost });
+            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost });
             //return Ok(data);
         }
 
