@@ -37,10 +37,31 @@ namespace SAMPortal.Models
     public class OnSiteAccommodationFeesModel
     {
         public int RoomType { get; set; }
-        public string  AccommodationType { get; set; }
+        public string AccommodationType { get; set; }
         public float PricePerPax { get; set; }
         public int NumberOfBooking { get; set; }
         public float TotalCost { get; set; }
+    }
+
+    public class MealFeesModel
+    {
+        public int Id { get; set; }
+        public string Meal { get; set; }
+        public float price { get; set; }
+    }
+
+    public class MealCountAndTotalCostModel
+    {
+        public int BreakfastCount { get; set; }
+        public int BreakfastCost { get; set; }
+        public int LunchCount { get; set; }
+        public int LunchCost { get; set; }
+        public int DinnerCount { get; set; }
+        public int DinnerCost { get; set; }
+        public int MorningSnackCount { get; set; }
+        public int MorningSnackCost { get; set; }
+        public int AfternoonSnackCount { get; set; }
+        public int AfternoonSnackCost { get; set; }
     }
 
     public class CourseNames

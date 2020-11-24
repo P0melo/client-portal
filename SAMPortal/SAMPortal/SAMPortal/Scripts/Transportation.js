@@ -264,6 +264,7 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
+        let areaOfDestination = $('#area_dropdown').val();
 
         if (mnno === "") {
             generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
@@ -316,7 +317,7 @@
                 return false;
             }
 
-            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails)]
+            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails), areaOfDestination]
 
             generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
 

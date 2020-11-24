@@ -676,6 +676,20 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                     $('#number_of_people_standard').html("(" + result.data2[0].NumberOfBooking + ")");
                     $('#number_of_people_superior').html("(" + result.data2[1].NumberOfBooking + ")");
 
+                    $('#breakfast_fee').html(result.mealPricesList[0].price);
+                    $('#lunch_fee').html(result.mealPricesList[1].price);
+                    $('#dinner_fee').html(result.mealPricesList[2].price);
+                    $('#am_snack_fee').html(result.mealPricesList[3].price);
+                    $('#pm_snack_fee').html(result.mealPricesList[4].price);
+
+                    $('#number_of_people_b').html("(" + result.mealCountAndTotalCost[0].BreakfastCount + ")");
+                    $('#number_of_people_l').html("(" + result.mealCountAndTotalCost[0].LunchCount + ")");
+                    $('#number_of_people_d').html("(" + result.mealCountAndTotalCost[0].DinnerCount + ")");
+                    $('#number_of_people_am').html("(" + result.mealCountAndTotalCost[0].MorningSnackCount + ")");
+                    $('#number_of_people_pm').html("(" + result.mealCountAndTotalCost[0].AfternoonSnackCount + ")");
+                    $('#meals_cost').html(result.mealCountAndTotalCost[0].BreakfastCount + result.mealCountAndTotalCost[0].LunchCost +
+                        result.mealCountAndTotalCost[0].DinnerCost + result.mealCountAndTotalCost[0].MorningSnackCost + result.mealCountAndTotalCost[0].AfternoonSnackCost);
+
                     $('#enrollees_modal').modal();
 
                     //signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {

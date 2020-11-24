@@ -1024,6 +1024,7 @@ namespace SAMPortal.Controllers
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
+            var areaOfDestination = parameters[7];
 
             var status = "In Process";
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");

@@ -166,9 +166,15 @@
             <div class="col-xs-12 col-md-12 col-lg-12 ">
                 <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
                 <input id="pickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
-                @*<input id="datetime_input" type="text" class="form-group form-control" placeholder="Pick Up Date and Time" style="border-radius: 3px;" />*@
                 <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
                 <input id="dropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" />
+                <label for="area_dropdown" class="col-md-12 control-label" style="padding:0; font-size: smaller">Area of destination<span class="mandatory">*</span></label>
+                <select id="area_dropdown" class="col-md-12 form-control form-group">
+                    <option value=""></option>
+                    <option value="Makati">Makita</option>
+                    <option value="Manila">Manila</option>
+                    <option value="Pasay">Pasay</option>
+                </select>
             </div>
             <div class="col-xs-6">
                 <div class="input-group">
@@ -194,9 +200,15 @@
             <div class="col-xs-12 col-md-12 col-lg-12 ">
                 <label for="from" class="col-md-12 control-label" style="padding:0; font-size: smaller">From<span class="mandatory">*</span></label>
                 <input id="2ndpickup_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
-                @*<input id="2nddatetime_input" type="text" class="form-group form-control" placeholder="2nd Pick Up Date and Time" style="border-radius: 3px;" />*@
                 <label for="to" class="col-md-12 control-label" style="padding:0; font-size: smaller">To<span class="mandatory">*</span></label>
                 <input id="2nddropoff_input" type="text" class="form-group form-control" style="border-radius: 3px;" disabled />
+                @*<label for="2ndarea_dropdown" class="col-md-12 control-label" style="padding:0; font-size: smaller">Area of destination<span class="mandatory">*</span></label>
+                <select id="2ndarea_dropdown" class="col-md-12 form-control form-group">
+                    <option value=""></option>
+                    <option value="Makati">Makita</option>
+                    <option value="Manila">Manila</option>
+                    <option value="Pasay">Pasay</option>
+                </select>*@
             </div>
             <div class="col-xs-6">
                 <div class="input-group">

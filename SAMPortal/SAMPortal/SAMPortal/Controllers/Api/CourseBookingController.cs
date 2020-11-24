@@ -124,7 +124,7 @@ namespace SAMPortal.Controllers.Api
                                                             "INNER JOIN tblschedule s ON t.SubjectCode = s.TrainingID " +
                                                             "WHERE s.SchedID = " + schedId + " " + 
                                                             "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
-
+            //for on-site
             float? onSiteAccommodationTotalCost = _context.Database.SqlQuery<float?>("SELECT SUM(df.price) AS 'TotalCost' " +
                             "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
                             "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID=@schedId", 
@@ -138,8 +138,25 @@ namespace SAMPortal.Controllers.Api
                             new MySqlParameter("@company", company),
                             new MySqlParameter("@schedId", schedId)).ToList();
 
+            //for meals
+            var mealPricesList = _context.Database.SqlQuery<MealFeesModel>("SELECT meal_fee_id, meal, price FROM tblmeal_fees WHERE meal_fee_id < 6").ToList();
 
-            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost });
+            var mealCountAndTotalCost = _context.Database.SqlQuery<MealCountAndTotalCostModel>("SELECT SUM(meal_b) AS BreakfastCount, " +
+                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_b_fee_id) * SUM(meal_b)) AS BreakfastCost, " +
+                            "SUM(meal_l) AS LunchCount, " +
+                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_l_fee_id) *SUM(meal_l)) AS LunchCost, " +
+                            "SUM(meal_d) AS DinnerCount, " +
+                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_d_fee_id) *SUM(meal_d)) AS DinnerCost," +
+                            "SUM(meal_ms) AS MorningSnackCount, " +
+                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_ms)) AS MorningSnackCost, " +
+                            "SUM(meal_as) AS AfternoonSnackCount, " +
+                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_as)) AS AfternoonSnackCost " +
+                            "FROM tblmeal_provision mp INNER JOIN tblcrew c ON mp.MNNO = c.MNNO " +
+                            "WHERE schedId = @schedId AND c.Employer = @company",
+                            new MySqlParameter("@schedId", schedId),
+                            new MySqlParameter("@company", company)).ToList();
+
+            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost });
             //return Ok(data);
         }
 
