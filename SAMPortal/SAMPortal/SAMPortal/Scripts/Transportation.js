@@ -264,7 +264,12 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
-        let areaOfDestination = $('#area_dropdown').val();
+        let areaOfDestination = $('#airport_transfer_area_dropdown').val();
+        let schedId = "";
+
+        if (typeof (hrefSplit) !== 'undefined') {
+            schedId = hrefSplit.split('+')[3];
+        } 
 
         if (mnno === "") {
             generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");
@@ -282,8 +287,9 @@
             let fileExtension = fileNameSplit[fileNameSplit.length - 1];
             let inbound = $('#airport_cb_i').is(':checked');
             let outbound = $('#airport_cb_o').is(':checked');
+            //let areaOfDestination = $('#airport_transfer_area_dropdown').val();
 
-            saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension];
+            saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, inbound, outbound, inboundDate, outboundDate, file, fileExtension, schedId];
 
             if (file === "") {
                 generateWarningModal("save_transportation_warning", 2, "", "Please make sure that no fields are left blank before clicking submit");

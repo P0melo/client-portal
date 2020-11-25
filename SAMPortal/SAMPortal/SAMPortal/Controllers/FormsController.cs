@@ -949,6 +949,7 @@ namespace SAMPortal.Controllers
 
             var file = byteArr;
             var fileExtension = parameters[11];
+            var schedId = parameters[12];
             var status = "In Process";
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
@@ -958,8 +959,8 @@ namespace SAMPortal.Controllers
             {
                 try
                 {
-                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy) " +
-                        "VALUE (@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy)",
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy, SchedId) " +
+                        "VALUE (@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy, @schedId)",
                         new MySqlParameter("@mnno", mnno),
                         new MySqlParameter("@rank", rank),
                         new MySqlParameter("@firstName", firstName),
@@ -971,7 +972,8 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@notes", notes),
                         new MySqlParameter("@referenceId", referenceId),
                         new MySqlParameter("@dateBooked", dateBooked),
-                        new MySqlParameter("@requestedBy", user));
+                        new MySqlParameter("@requestedBy", user),
+                        new MySqlParameter("@schedId", schedId));
 
                     var transportationId = _context.Database.SqlQuery<int>("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
                         new MySqlParameter("@referenceId", referenceId)).FirstOrDefault();
@@ -1041,7 +1043,7 @@ namespace SAMPortal.Controllers
                 try
                 {
                     _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy) " +
-                        "Values(@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy)",
+                        "Values(@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy, @area)",
                         new MySqlParameter("@mnno", mnno),
                         new MySqlParameter("@rank", rank),
                         new MySqlParameter("@firstName", firstName),
@@ -1053,7 +1055,8 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@notes", notes),
                         new MySqlParameter("@referenceId", referenceId),
                         new MySqlParameter("@dateBooked", dateBooked),
-                        new MySqlParameter("@requestedBy", user)
+                        new MySqlParameter("@requestedBy", user),
+                        new MySqlParameter("@area", areaOfDestination)
                         );
 
                     var transportationId = _context.Database.SqlQuery<int>("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",

@@ -690,6 +690,10 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                     $('#meals_cost').html(result.mealCountAndTotalCost[0].BreakfastCount + result.mealCountAndTotalCost[0].LunchCost +
                         result.mealCountAndTotalCost[0].DinnerCost + result.mealCountAndTotalCost[0].MorningSnackCost + result.mealCountAndTotalCost[0].AfternoonSnackCost);
 
+                    $('#car_fee').html(result.airportTransportationFee[0].Price);
+                    $('#mini_van_fee').html(result.airportTransportationFee[1].Price);
+                    $('#van_fee').html(result.airportTransportationFee[2].Price);
+
                     $('#enrollees_modal').modal();
 
                     //signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {

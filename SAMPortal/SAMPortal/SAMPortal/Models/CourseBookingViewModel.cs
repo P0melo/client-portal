@@ -64,6 +64,13 @@ namespace SAMPortal.Models
         public int AfternoonSnackCost { get; set; }
     }
 
+    public class AirportTransportationFees
+    {
+        public int FeeId { get; set; }
+        public string VehicleType { get; set; }
+        public float Price { get; set; }
+    }
+
     public class CourseNames
     {
         public string CourseName { get; set; }

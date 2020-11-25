@@ -156,7 +156,9 @@ namespace SAMPortal.Controllers.Api
                             new MySqlParameter("@schedId", schedId),
                             new MySqlParameter("@company", company)).ToList();
 
-            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost });
+            var airportTransportationFee = _context.Database.SqlQuery<AirportTransportationFees>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price FROM tbltransportation_fee WHERE transpo_type = 'Airport Transfer'").ToList();
+
+            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost, airportTransportationFee });
             //return Ok(data);
         }
 
