@@ -1026,7 +1026,7 @@ namespace SAMPortal.Controllers
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
-            var areaOfDestination = parameters[7];
+            var schedId = parameters[7];
 
             var status = "In Process";
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
@@ -1042,8 +1042,8 @@ namespace SAMPortal.Controllers
             {
                 try
                 {
-                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy) " +
-                        "Values(@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy, @area)",
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbltransportation (Mnno, `Rank`, FirstName, LastName, Company, Type, Vehicle, Status, Notes, ReferenceId, DateBooked, RequestedBy, SchedId) " +
+                        "Values(@mnno, @rank, @firstName, @lastName, @company, @type, @vehicle, @status, @notes, @referenceId, @dateBooked, @requestedBy, @schedId)",
                         new MySqlParameter("@mnno", mnno),
                         new MySqlParameter("@rank", rank),
                         new MySqlParameter("@firstName", firstName),
@@ -1056,7 +1056,7 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@referenceId", referenceId),
                         new MySqlParameter("@dateBooked", dateBooked),
                         new MySqlParameter("@requestedBy", user),
-                        new MySqlParameter("@area", areaOfDestination)
+                        new MySqlParameter("@schedId", schedId)
                         );
 
                     var transportationId = _context.Database.SqlQuery<int>("SELECT Id FROM tbltransportation WHERE referenceId = @referenceId",
@@ -1082,12 +1082,12 @@ namespace SAMPortal.Controllers
                         var dropOff2 = items[5];
                         var pickup_date_time2 = items[6];
 
-                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + "),";
+                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + ", '" + items[8] + "'),";
                     }
 
                     stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
 
-                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId, Area) " +
                            "VALUES " + stringToAppend);
 
                     //for logging

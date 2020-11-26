@@ -71,6 +71,21 @@ namespace SAMPortal.Models
         public float Price { get; set; }
     }
 
+    public class AirportTransportationBookingsAndCosts
+    {
+        public int NumberOfBooking { get; set; }
+        public float TotalCost { get; set; }
+        public string Vehicle { get; set; }
+    }
+
+    public class DailyTransporationPrices
+    {
+        public int FeeId { get; set; }
+        public string VehicleType { get; set; }
+        public int Price { get; set; }
+        public string Destination { get; set; }
+    }
+
     public class CourseNames
     {
         public string CourseName { get; set; }

@@ -264,7 +264,7 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
-        let areaOfDestination = $('#airport_transfer_area_dropdown').val();
+        let areaOfDestination = $('#area_dropdown').val();
         let schedId = "";
 
         if (typeof (hrefSplit) !== 'undefined') {
@@ -323,7 +323,7 @@
                 return false;
             }
 
-            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails), areaOfDestination]
+            saveDailyTransportationParameter = saveTransportationParameter = [mnno, rank, name, type, vehicle, notes, JSON.stringify(dailyTransferDetails), schedId]
 
             generateWarningModal("save_transportation_warning", 1, "save_daily_transportation_warning_yes", "Are you sure you want to submit?");
 
@@ -456,7 +456,7 @@
 
     $(document).on('click', '#add_daily_transfer', function () {
         let editModalVisible = $('#edit_daily_transfer_modal').css('display') == 'block';
-
+        let areaOfDestination = $('#area_dropdown').val();
         let type = "";
         let pickups = "";
         let dropoff = "";
@@ -515,7 +515,7 @@
 
 
         let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
-            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td>" + areaOfDestination + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
 
         if (editModalVisible) {
             $('#e_daily_transfer_table div table tbody').append(details);
@@ -531,6 +531,7 @@
         entry[5] = dropoff_2;
         entry[6] = pickup_2 != '' ? pickup_date_2 + " " + pickup_time_2 : "";
         entry[7] = dailyTransferCounter;
+        entry[8] = areaOfDestination;
 
         dailyTransferDetails.push(entry);
 
@@ -566,7 +567,7 @@
         let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
 
         //code below is ES6 so beware...
-        dailyTransferDetails = dailyTransferDetails.filter(item => item[7] != id);
+        dailyTransferDetails = dailyTransferDetails.filter(item => item[8] != id);
 
         dailyTransferEntryToRemove.remove();
 
@@ -736,7 +737,7 @@
         let id = dailyTransferEntryToRemove.children().eq(7).find('button').attr('dtid');
 
         //code below is ES6 so beware...
-        dailyTransferDetails = dailyTransferDetails.filter(item => item[7] != id);
+        dailyTransferDetails = dailyTransferDetails.filter(item => item[8] != id);
         //end of code
 
         dailyTransferEntryToRemove.remove();

@@ -158,7 +158,17 @@ namespace SAMPortal.Controllers.Api
 
             var airportTransportationFee = _context.Database.SqlQuery<AirportTransportationFees>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price FROM tbltransportation_fee WHERE transpo_type = 'Airport Transfer'").ToList();
 
-            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost, airportTransportationFee });
+            var atBookingAndCosts = _context.Database.SqlQuery<AirportTransportationBookingsAndCosts>("SELECT COUNT(t.Id) AS NumberOfBooking, SUM(rate_usd) AS TotalCost, Vehicle " +
+                            "FROM tbltransportation_fee tf RIGHT JOIN tbltransportation t " +
+                            "ON tf.vehicle_type = t.Vehicle COLLATE utf8_unicode_ci " +
+                            "WHERE transpo_type = 'Airport Transfer' AND t.SchedID = @schedId GROUP By Vehicle",
+                            new MySqlParameter("@schedId", schedId)).ToList();
+
+            var dtPricesAndDestination = _context.Database.SqlQuery<DailyTransporationPrices>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price, destination AS Destination " +
+                            "FROM tbltransportation_fee " +
+                            "WHERE transpo_type = 'Daily Transfer'").ToList();
+
+            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost, airportTransportationFee, atBookingAndCosts, dtPricesAndDestination });
             //return Ok(data);
         }
 
