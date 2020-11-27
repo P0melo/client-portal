@@ -648,7 +648,8 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                 success: function (result) {
                     $.unblockUI();
                     let content = "";
-                    let data = result.data;
+                    let data = result;
+                    //let data = result.data;
 
 
                     if (course_enrollee_tbl != "") {
@@ -664,55 +665,55 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
 
                     course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
 
-                    $('#course_fee').html(result.courseFee);
-                    $('#course_total_cost').html(result.courseFee * data.length);
-                    $('#on_site_accommodation_total_cost').html(result.onSiteAccommodationTotalCost);
+                    //$('#course_fee').html(result.courseFee);
+                    //$('#course_total_cost').html(result.courseFee * data.length);
+                    //$('#on_site_accommodation_total_cost').html(result.onSiteAccommodationTotalCost);
 
-                    $('#dorm_standard_fee').html(result.data2[0].PricePerPax);
-                    $('#total_standard_fee').html(result.data2[0].TotalCost)
-                    $('#dorm_superior_fee').html(result.data2[1].PricePerPax);
-                    $('#total_superior_fee').html(result.data2[1].TotalCost)
+                    //$('#dorm_standard_fee').html(result.data2[0].PricePerPax);
+                    //$('#total_standard_fee').html(result.data2[0].TotalCost)
+                    //$('#dorm_superior_fee').html(result.data2[1].PricePerPax);
+                    //$('#total_superior_fee').html(result.data2[1].TotalCost)
 
-                    $('#number_of_people_standard').html("(" + result.data2[0].NumberOfBooking + ")");
-                    $('#number_of_people_superior').html("(" + result.data2[1].NumberOfBooking + ")");
+                    //$('#number_of_people_standard').html("(" + result.data2[0].NumberOfBooking + ")");
+                    //$('#number_of_people_superior').html("(" + result.data2[1].NumberOfBooking + ")");
 
-                    $('#breakfast_fee').html(result.mealPricesList[0].price);
-                    $('#lunch_fee').html(result.mealPricesList[1].price);
-                    $('#dinner_fee').html(result.mealPricesList[2].price);
-                    $('#am_snack_fee').html(result.mealPricesList[3].price);
-                    $('#pm_snack_fee').html(result.mealPricesList[4].price);
+                    //$('#breakfast_fee').html(result.mealPricesList[0].price);
+                    //$('#lunch_fee').html(result.mealPricesList[1].price);
+                    //$('#dinner_fee').html(result.mealPricesList[2].price);
+                    //$('#am_snack_fee').html(result.mealPricesList[3].price);
+                    //$('#pm_snack_fee').html(result.mealPricesList[4].price);
 
-                    $('#number_of_people_b').html("(" + result.mealCountAndTotalCost[0].BreakfastCount + ")");
-                    $('#number_of_people_l').html("(" + result.mealCountAndTotalCost[0].LunchCount + ")");
-                    $('#number_of_people_d').html("(" + result.mealCountAndTotalCost[0].DinnerCount + ")");
-                    $('#number_of_people_am').html("(" + result.mealCountAndTotalCost[0].MorningSnackCount + ")");
-                    $('#number_of_people_pm').html("(" + result.mealCountAndTotalCost[0].AfternoonSnackCount + ")");
-                    $('#meals_cost').html(result.mealCountAndTotalCost[0].BreakfastCount + result.mealCountAndTotalCost[0].LunchCost +
-                        result.mealCountAndTotalCost[0].DinnerCost + result.mealCountAndTotalCost[0].MorningSnackCost + result.mealCountAndTotalCost[0].AfternoonSnackCost);
+                    //$('#number_of_people_b').html("(" + result.mealCountAndTotalCost[0].BreakfastCount + ")");
+                    //$('#number_of_people_l').html("(" + result.mealCountAndTotalCost[0].LunchCount + ")");
+                    //$('#number_of_people_d').html("(" + result.mealCountAndTotalCost[0].DinnerCount + ")");
+                    //$('#number_of_people_am').html("(" + result.mealCountAndTotalCost[0].MorningSnackCount + ")");
+                    //$('#number_of_people_pm').html("(" + result.mealCountAndTotalCost[0].AfternoonSnackCount + ")");
+                    //$('#meals_cost').html(result.mealCountAndTotalCost[0].BreakfastCount + result.mealCountAndTotalCost[0].LunchCost +
+                    //    result.mealCountAndTotalCost[0].DinnerCost + result.mealCountAndTotalCost[0].MorningSnackCost + result.mealCountAndTotalCost[0].AfternoonSnackCost);
 
-                    $('#car_fee').html(result.airportTransportationFee[0].Price);
-                    $('#mini_van_fee').html(result.airportTransportationFee[1].Price);
-                    $('#van_fee').html(result.airportTransportationFee[2].Price);
+                    //$('#car_fee').html(result.airportTransportationFee[0].Price);
+                    //$('#mini_van_fee').html(result.airportTransportationFee[1].Price);
+                    //$('#van_fee').html(result.airportTransportationFee[2].Price);
 
-                    $('#number_of_people_car').html("(" + result.atBookingAndCosts[0].NumberOfBooking + ")");
-                    $('#number_of_people_minivan').html("(" + result.atBookingAndCosts[1].NumberOfBooking + ")");
-                    $('#number_of_people_van').html("(" + result.atBookingAndCosts[2].NumberOfBooking + ")");
+                    //$('#number_of_people_car').html("(" + result.atBookingAndCosts[0].NumberOfBooking + ")");
+                    //$('#number_of_people_minivan').html("(" + result.atBookingAndCosts[1].NumberOfBooking + ")");
+                    //$('#number_of_people_van').html("(" + result.atBookingAndCosts[2].NumberOfBooking + ")");
 
-                    $('#transportation_cost').html((result.atBookingAndCosts[0].NumberOfBooking * result.airportTransportationFee[0].Price) +
-                        (result.atBookingAndCosts[1].NumberOfBooking * result.airportTransportationFee[1].Price) +
-                        (result.atBookingAndCosts[2].NumberOfBooking * result.airportTransportationFee[2].Price));
+                    //$('#transportation_cost').html((result.atBookingAndCosts[0].NumberOfBooking * result.airportTransportationFee[0].Price) +
+                    //    (result.atBookingAndCosts[1].NumberOfBooking * result.airportTransportationFee[1].Price) +
+                    //    (result.atBookingAndCosts[2].NumberOfBooking * result.airportTransportationFee[2].Price));
 
-                    $('#dt_mn_car_fee').html(result.dtPricesAndDestination[0].Price);
-                    $('#dt_mn_mini_van_fee').html(result.dtPricesAndDestination[1].Price);
-                    $('#dt_mn_van_fee').html(result.dtPricesAndDestination[2].Price);
+                    //$('#dt_mn_car_fee').html(result.dtPricesAndDestination[0].Price);
+                    //$('#dt_mn_mini_van_fee').html(result.dtPricesAndDestination[1].Price);
+                    //$('#dt_mn_van_fee').html(result.dtPricesAndDestination[2].Price);
 
-                    $('#dt_mk_car_fee').html(result.dtPricesAndDestination[3].Price);
-                    $('#dt_mk_mini_van_fee').html(result.dtPricesAndDestination[4].Price);
-                    $('#dt_mk_van_fee').html(result.dtPricesAndDestination[5].Price);
+                    //$('#dt_mk_car_fee').html(result.dtPricesAndDestination[3].Price);
+                    //$('#dt_mk_mini_van_fee').html(result.dtPricesAndDestination[4].Price);
+                    //$('#dt_mk_van_fee').html(result.dtPricesAndDestination[5].Price);
 
-                    $('#dt_pa_car_fee').html(result.dtPricesAndDestination[6].Price);
-                    $('#dt_pa_mini_van_fee').html(result.dtPricesAndDestination[7].Price);
-                    $('#dt_pa_van_fee').html(result.dtPricesAndDestination[8].Price);
+                    //$('#dt_pa_car_fee').html(result.dtPricesAndDestination[6].Price);
+                    //$('#dt_pa_mini_van_fee').html(result.dtPricesAndDestination[7].Price);
+                    //$('#dt_pa_van_fee').html(result.dtPricesAndDestination[8].Price);
 
                     $('#enrollees_modal').modal();
 

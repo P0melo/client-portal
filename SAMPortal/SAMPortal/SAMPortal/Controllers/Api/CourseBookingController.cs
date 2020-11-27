@@ -119,57 +119,57 @@ namespace SAMPortal.Controllers.Api
 
             var data = _context.Database.SqlQuery<CourseEnrollees>("select sd.MNNO, c.`Rank`, c.LName, c.FName, c.MName, c.ContactNo as Contact, c.Employer, sd.RegistrationNo from tblscheddata sd join tblcrew c on sd.MNNo = c.MNNo where SchedID = " + schedId + " and c.Employer = " + company).ToList();
 
-            int courseFee = _context.Database.SqlQuery<int>("SELECT tf.courseFee  FROM tbltrainings t " +
-                                                            "INNER JOIN tbltrainingsfee tf ON t.CourseCode = tf.courseCode " +
-                                                            "INNER JOIN tblschedule s ON t.SubjectCode = s.TrainingID " +
-                                                            "WHERE s.SchedID = " + schedId + " " + 
-                                                            "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
-            //for on-site
-            float? onSiteAccommodationTotalCost = _context.Database.SqlQuery<float?>("SELECT SUM(df.price) AS 'TotalCost' " +
-                            "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
-                            "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID=@schedId", 
-                            new MySqlParameter("@company", company),
-                            new MySqlParameter("@schedId", schedId)).FirstOrDefault();
+            //int courseFee = _context.Database.SqlQuery<int>("SELECT tf.courseFee  FROM tbltrainings t " +
+            //                                                "INNER JOIN tbltrainingsfee tf ON t.CourseCode = tf.courseCode " +
+            //                                                "INNER JOIN tblschedule s ON t.SubjectCode = s.TrainingID " +
+            //                                                "WHERE s.SchedID = " + schedId + " " + 
+            //                                                "ORDER BY courseFeeUpdate DESC").FirstOrDefault();
+            ////for on-site
+            //float? onSiteAccommodationTotalCost = _context.Database.SqlQuery<float?>("SELECT SUM(df.price) AS 'TotalCost' " +
+            //                "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+            //                "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID=@schedId", 
+            //                new MySqlParameter("@company", company),
+            //                new MySqlParameter("@schedId", schedId)).FirstOrDefault();
 
-            var data2 = _context.Database.SqlQuery<OnSiteAccommodationFeesModel>("SELECT room_type AS 'RoomType', accommodation AS AccommodationType, df.price AS 'PricePerPax', " +
-                            "COUNT(room_type) AS 'NumberOfBooking', SUM(df.price) AS 'TotalCost' " +
-                            "FROM tbldorm_reservation_bank drb INNER JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
-                            "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID = @schedId GROUP BY room_type ORDER BY room_Type ASC",
-                            new MySqlParameter("@company", company),
-                            new MySqlParameter("@schedId", schedId)).ToList();
+            //var data2 = _context.Database.SqlQuery<OnSiteAccommodationFeesModel>("SELECT room_type AS 'RoomType', accommodation AS AccommodationType, df.price AS 'PricePerPax', " +
+            //                "COUNT(room_type) AS 'NumberOfBooking', SUM(df.price) AS 'TotalCost' " +
+            //                "FROM tbldorm_reservation_bank drb INNER JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+            //                "WHERE company_name = @company AND stats = 'Reserved' AND drb.SchedID = @schedId GROUP BY room_type ORDER BY room_Type ASC",
+            //                new MySqlParameter("@company", company),
+            //                new MySqlParameter("@schedId", schedId)).ToList();
 
-            //for meals
-            var mealPricesList = _context.Database.SqlQuery<MealFeesModel>("SELECT meal_fee_id, meal, price FROM tblmeal_fees WHERE meal_fee_id < 6").ToList();
+            ////for meals
+            //var mealPricesList = _context.Database.SqlQuery<MealFeesModel>("SELECT meal_fee_id, meal, price FROM tblmeal_fees WHERE meal_fee_id < 6").ToList();
 
-            var mealCountAndTotalCost = _context.Database.SqlQuery<MealCountAndTotalCostModel>("SELECT SUM(meal_b) AS BreakfastCount, " +
-                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_b_fee_id) * SUM(meal_b)) AS BreakfastCost, " +
-                            "SUM(meal_l) AS LunchCount, " +
-                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_l_fee_id) *SUM(meal_l)) AS LunchCost, " +
-                            "SUM(meal_d) AS DinnerCount, " +
-                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_d_fee_id) *SUM(meal_d)) AS DinnerCost," +
-                            "SUM(meal_ms) AS MorningSnackCount, " +
-                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_ms)) AS MorningSnackCost, " +
-                            "SUM(meal_as) AS AfternoonSnackCount, " +
-                            "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_as)) AS AfternoonSnackCost " +
-                            "FROM tblmeal_provision mp INNER JOIN tblcrew c ON mp.MNNO = c.MNNO " +
-                            "WHERE schedId = @schedId AND c.Employer = @company",
-                            new MySqlParameter("@schedId", schedId),
-                            new MySqlParameter("@company", company)).ToList();
+            //var mealCountAndTotalCost = _context.Database.SqlQuery<MealCountAndTotalCostModel>("SELECT SUM(meal_b) AS BreakfastCount, " +
+            //                "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_b_fee_id) * SUM(meal_b)) AS BreakfastCost, " +
+            //                "SUM(meal_l) AS LunchCount, " +
+            //                "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_l_fee_id) *SUM(meal_l)) AS LunchCost, " +
+            //                "SUM(meal_d) AS DinnerCount, " +
+            //                "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_d_fee_id) *SUM(meal_d)) AS DinnerCost," +
+            //                "SUM(meal_ms) AS MorningSnackCount, " +
+            //                "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_ms)) AS MorningSnackCost, " +
+            //                "SUM(meal_as) AS AfternoonSnackCount, " +
+            //                "((SELECT price FROM tblmeal_fees WHERE meal_fee_id = mp.meal_ms_fee_id) *SUM(meal_as)) AS AfternoonSnackCost " +
+            //                "FROM tblmeal_provision mp INNER JOIN tblcrew c ON mp.MNNO = c.MNNO " +
+            //                "WHERE schedId = @schedId AND c.Employer = @company",
+            //                new MySqlParameter("@schedId", schedId),
+            //                new MySqlParameter("@company", company)).ToList();
 
-            var airportTransportationFee = _context.Database.SqlQuery<AirportTransportationFees>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price FROM tbltransportation_fee WHERE transpo_type = 'Airport Transfer'").ToList();
+            //var airportTransportationFee = _context.Database.SqlQuery<AirportTransportationFees>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price FROM tbltransportation_fee WHERE transpo_type = 'Airport Transfer'").ToList();
 
-            var atBookingAndCosts = _context.Database.SqlQuery<AirportTransportationBookingsAndCosts>("SELECT COUNT(t.Id) AS NumberOfBooking, SUM(rate_usd) AS TotalCost, Vehicle " +
-                            "FROM tbltransportation_fee tf RIGHT JOIN tbltransportation t " +
-                            "ON tf.vehicle_type = t.Vehicle COLLATE utf8_unicode_ci " +
-                            "WHERE transpo_type = 'Airport Transfer' AND t.SchedID = @schedId GROUP By Vehicle",
-                            new MySqlParameter("@schedId", schedId)).ToList();
+            //var atBookingAndCosts = _context.Database.SqlQuery<AirportTransportationBookingsAndCosts>("SELECT COUNT(t.Id) AS NumberOfBooking, SUM(rate_usd) AS TotalCost, Vehicle " +
+            //                "FROM tbltransportation_fee tf RIGHT JOIN tbltransportation t " +
+            //                "ON tf.vehicle_type = t.Vehicle COLLATE utf8_unicode_ci " +
+            //                "WHERE transpo_type = 'Airport Transfer' AND t.SchedID = @schedId GROUP By Vehicle",
+            //                new MySqlParameter("@schedId", schedId)).ToList();
 
-            var dtPricesAndDestination = _context.Database.SqlQuery<DailyTransporationPrices>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price, destination AS Destination " +
-                            "FROM tbltransportation_fee " +
-                            "WHERE transpo_type = 'Daily Transfer'").ToList();
+            //var dtPricesAndDestination = _context.Database.SqlQuery<DailyTransporationPrices>("SELECT transpo_fee_id AS FeeId, vehicle_type AS VehicleType, rate_usd AS Price, destination AS Destination " +
+            //                "FROM tbltransportation_fee " +
+            //                "WHERE transpo_type = 'Daily Transfer'").ToList();
 
-            return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost, airportTransportationFee, atBookingAndCosts, dtPricesAndDestination });
-            //return Ok(data);
+            //return Json(new { data, data2, courseFee, onSiteAccommodationTotalCost, mealPricesList, mealCountAndTotalCost, airportTransportationFee, atBookingAndCosts, dtPricesAndDestination });
+            return Ok(data);
         }
 
         public IHttpActionResult GetNumberOfEnrollees(int schedId)
