@@ -572,7 +572,8 @@
             dataType: 'json',
             data: { schedId: schedId },
             success: function (res) {
-                var result = res.data;
+                //var result = res.data;
+                var result = res;
                 if (myEnrolledCrewTable !== "") {
                     $('#enrolled_crews_tbl').css('visibility', 'hidden');
                     myEnrolledCrewTable.destroy();

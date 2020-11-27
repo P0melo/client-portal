@@ -343,16 +343,22 @@ function generateOCourseListTable(result) {
 }
 
 function renderButtonFontAwesome(data, serverDate) {
-    let date = new Date();
 
-    let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
+    var myServerDate = new Date(fixServerDateFormat(serverDate));
+    var courseDate = new Date(data.DateFrom);
+    let diffTime = Math.abs(courseDate - myServerDate);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (!(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity)) {
+    //let date = new Date();
+
+    //let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
+
+    if (!(diffDays < 8 && data.Slots < data.MinCapacity)) {
         //if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)) {
         //    return "-";
         //}
 
-        if (data.DateFrom <= dateNow) {
+        if (courseDate <= myServerDate) {
             return "-";
         }
 
@@ -472,12 +478,17 @@ function getWeekNumber(myDate) {
 }
 
 function generateIndicator(data, serverDate) {
-    //alert(getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)));
-    //alert(data.DateFrom);
-    if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) === 2 && data.Slots < data.MinCapacity) {
+
+    var myServerDate = new Date(fixServerDateFormat(serverDate));
+    var courseDate = new Date(data.DateFrom);
+    let diffTime = Math.abs(courseDate - myServerDate);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    //alert(getWeekNumber(data.DateFrom) + " " + getWeekNumber(fixServerDateFormat(serverDate)));
+
+    if ((diffDays >= 8 && diffDays <= 14) && data.Slots < data.MinCapacity) {
         //alert('orange');
         return "<span id='indicator_orange' class='pull-right'><i style='color: orange; font-size: large' class='fa fa-warning'></i></span>";
-    } else if (getWeekNumber(data.DateFrom) - getWeekNumber(fixServerDateFormat(serverDate)) < 2 && data.Slots < data.MinCapacity) {
+    } else if (diffDays < 7 && data.Slots < data.MinCapacity) {
         //alert('red');
         return "<span id='indicator_red' class='pull-right'><i style='color: red; font-size: large'' class='fa fa-ban'></i></span>";
     }
