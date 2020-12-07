@@ -159,7 +159,7 @@
         getServerDate().then(function (data) {
 
             // Run this when your request was successful
-            let serverDate = fixServerDateFormat(data);
+            let serverDate = data;//fixServerDateFormat(data);
             let checkInDate = $('#cancel_accommodation_btn').parent().parent().children(':eq(2)').html().split(' ')[0];
 
             let validatedSchedule = validateSchedule(checkInDate, serverDate);

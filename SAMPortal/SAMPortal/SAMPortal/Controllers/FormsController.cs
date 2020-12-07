@@ -18,7 +18,7 @@ using Microsoft.AspNet.SignalR;
 
 namespace SAMPortal.Controllers
 {
-    [System.Web.Http.Authorize]
+    [AccountController.CustomAuthorize]
     public class FormsController : Controller
     {
         private officecadetprogramEntities _context;
@@ -391,7 +391,7 @@ namespace SAMPortal.Controllers
             bool lunch_cb = parameters[8] == "true";
             bool pm_snack_cb = parameters[9] == "true";
             bool dinner_cb = parameters[10] == "true";
-            var schedId = parameters[11];
+            var schedId = parameters[11] == "" ? null : parameters[11];
 
             var guid = GetGuid(user);
 
@@ -678,7 +678,7 @@ namespace SAMPortal.Controllers
             var reason = parameters[8];
             var remarks = parameters[9];
             var room_type = Convert.ToInt32(parameters[5]);
-            var schedId = parameters[10];
+            var schedId = parameters[10] == "" ? null: parameters[10];
 
 
             DateTime checkInDateTimeFrom = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
@@ -763,14 +763,14 @@ namespace SAMPortal.Controllers
                     sendEmail.Send(User.Identity, (int)Enum.Requests.OnSiteAccommodationRequest, "MNNO:" + mnno + "|reservationtype:" + reservation_type + "|room_type:" + room_type + "|classification:" +
                         classification + "|checkindatefrom:" + checkInDateTimeFrom + "|checkindateto:" + checkInDateTimeTo);
 
-                    if (!schedId.Equals(""))
-                    {
-                        int totalCost = _context.Database.SqlQuery<int>("SELECT (COUNT(drb.rsrvtn_by) * df.price) AS 'Total Cost' " +
-                            "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
-                            "WHERE company_name = @company AND stats = 'Reserved'", new MySqlParameter("@company", company)).FirstOrDefault();
+                    //if (!schedId.Equals(""))
+                    //{
+                    //    int totalCost = _context.Database.SqlQuery<int>("SELECT (COUNT(drb.rsrvtn_by) * df.price) AS 'Total Cost' " +
+                    //        "FROM tbldorm_reservation_bank drb JOIN tbldorm_fees df ON df.accom_type = drb.room_type " +
+                    //        "WHERE company_name = @company AND stats = 'Reserved'", new MySqlParameter("@company", company)).FirstOrDefault();
 
-                        hubContext.Clients.All.updateOffSiteAccommodationFee(totalCost);
-                    }
+                    //    hubContext.Clients.All.updateOffSiteAccommodationFee(totalCost);
+                    //}
 
                     flag = (int) Status.Success;
 
@@ -949,7 +949,7 @@ namespace SAMPortal.Controllers
 
             var file = byteArr;
             var fileExtension = parameters[11];
-            var schedId = parameters[12];
+            var schedId = parameters[12] == "" ? null : parameters[12];
             var status = "In Process";
             var company = _usercontext.users.Where(model => model.Email == user).Select(model => model.CompanyId).FirstOrDefault();
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
@@ -1026,7 +1026,7 @@ namespace SAMPortal.Controllers
             var type = parameters[3];
             var vehicle = parameters[4];
             var notes = parameters[5];
-            var schedId = parameters[7];
+            var schedId = parameters[7] == "" ? null : parameters[7];
 
             var status = "In Process";
             var referenceId = mnno + "" + DateTime.Now.ToString("yyMMddHHmmssff");
@@ -1082,12 +1082,12 @@ namespace SAMPortal.Controllers
                         var dropOff2 = items[5];
                         var pickup_date_time2 = items[6];
 
-                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + ", '" + items[8] + "'),";
+                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + "),";
                     }
 
                     stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
 
-                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId, Area) " +
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
                            "VALUES " + stringToAppend);
 
                     //for logging
@@ -1594,7 +1594,7 @@ namespace SAMPortal.Controllers
                 }
                 catch (Exception e)
                 {
-                    jsonStatus = logging.LogError(user, "CancelDailyTransferRequest", e);
+                    jsonStatus = logging.LogError(user, "CancelTransportationRequest", e);
                 }
             }
             jsonResult = Json(new { data = jsonStatus },

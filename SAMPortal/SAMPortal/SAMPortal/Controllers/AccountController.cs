@@ -15,6 +15,7 @@ using static SAMPortal.Controllers.ManageController;
 using System.Text.RegularExpressions;
 using SAMPortal.Enum;
 using MySql.Data.MySqlClient;
+using System.Web.Routing;
 
 namespace SAMPortal.Controllers
 {
@@ -231,36 +232,19 @@ namespace SAMPortal.Controllers
                         _context.useroldpasswords.Add(password);
                         _context.SaveChanges();
 
-                        //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
-                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                        // Send an email with this link
                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
-                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                        //smtp server
-                        //WebMail.SmtpServer = "smtp.gmail.com";
-                        //WebMail.SmtpServer = "mail.umtc.com.ph";
-                        WebMail.SmtpServer = "172.16.16.11";
-                        // port to send emails
-                        WebMail.SmtpPort = 25;
-                        //WebMail.SmtpUseDefaultCredentials = true;
-                        //sending email with secure protocol
-                        WebMail.EnableSsl = false;
-                        // email id used to send emails from application
-                        WebMail.UserName = "no-reply@umtc.com.ph";
-                        WebMail.Password = "Norep6682";
+                        WebMail.SmtpServer = @System.Configuration.ConfigurationManager.AppSettings["smtpServer"];
+                        WebMail.SmtpPort = Convert.ToInt32(@System.Configuration.ConfigurationManager.AppSettings["smtpPort"]);
+                        WebMail.EnableSsl = bool.Parse(@System.Configuration.ConfigurationManager.AppSettings["enableSSL"]);
+                        WebMail.UserName = @System.Configuration.ConfigurationManager.AppSettings["userName"];
+                        WebMail.Password = @System.Configuration.ConfigurationManager.AppSettings["password"];
 
-                        //WebMail.UserName = "markkevinboy@gmail.com";
-
-
-                        // sender email address
-                        WebMail.From = "no-reply@umtc.com.ph";
+                        WebMail.From = @System.Configuration.ConfigurationManager.AppSettings["sender"];
 
                         // send email
                         WebMail.Send(to: user.Email, subject: "Confirm your Account", body:
-                            //"Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>", 
                             "Dear " + model.FirstName + ", <br /><br />" +
                             "Please click the following link to confirm your account:<br /><br />" +
                             "<a href=\"" + callbackUrl + "\">Confirm Account</a><br /><br />" +
@@ -682,6 +666,22 @@ namespace SAMPortal.Controllers
             byte[] b = value.ToByteArray();
             int bint = BitConverter.ToInt32(b, 4);
             return bint - 66826682;
+        }
+
+        public class CustomAuthorize: AuthorizeAttribute
+        {
+            protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+            {
+                if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    filterContext.Result = new HttpUnauthorizedResult();
+                }
+                else
+                {
+                    filterContext.Result = new RedirectToRouteResult(new
+                        RouteValueDictionary(new { controller = "Account" }));
+                }
+            }
         }
         #endregion
     }

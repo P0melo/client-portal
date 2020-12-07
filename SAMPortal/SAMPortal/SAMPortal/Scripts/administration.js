@@ -560,9 +560,10 @@
                     //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
                     $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
                     //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
-                    renderImageForZoom(transportationRequestRecordId);
+                    renderImageForZoom(transportationRequestRecordId, "View");
 
                     $('.modal_airport_transportation .modal-title').html(mnno + " - " + name);
+                    $('.modal_airport_transportation').modal();
                 }
 
             }

@@ -323,15 +323,19 @@
 
                 var d = new Date();
 
+
+                let diffTime = Math.abs(startDate - d);
+                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
                 if (d.getTime() >= startDate.getTime()) {
                     $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course is finished or has already started.");
                     $('#enroll_this_crew_not_allowed').modal();
                     return false;
                 }
                 //(daysBeforeStart + 1) <= 7
-                if ((getWeekNumber(startDate) - getWeekNumber(d)) === 1) {
+                if (diffDays <= 7 && diffDays > 0) {
                     //$('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start in " + (daysBeforeStart + 1) + " day/s.");
-                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start next week.");
+                    $('#enroll_this_crew_not_allowed .modal-body p').html("You are no longer allowed to enroll because the course will already start this/next week.");
                     $('#enroll_this_crew_not_allowed').modal();
                     return false;
                 }

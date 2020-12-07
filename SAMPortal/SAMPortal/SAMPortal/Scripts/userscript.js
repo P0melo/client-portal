@@ -147,15 +147,17 @@ function renderImageForZoom(recordId, motif) {
 // return values: 0 - not allowed to book, 1 - allowed to book
 function validateSchedule(date, serverDate) {
     let dateSplit = date.split('/');
+    let sDate = serverDate.split('-');
 
     let chosenDate = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
-    //chosenDate.setDate(dateSplit[0]);
-    //chosenDate.setMonth(dateSplit[1] - 1);
-    //chosenDate.setYear(dateSplit[2]);
+    let fixedServerDate = new Date(sDate[2], sDate[1] - 1, sDate[0]);
 
-    let difference = getWeekNumber(chosenDate) - getWeekNumber(serverDate);
+    var startDate = new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]);
 
-    if (difference < 2) {
+    let diffTime = Math.abs(chosenDate - fixedServerDate);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 7) {
 
         return 0;
     }
@@ -307,7 +309,7 @@ function getOCourseListRange(monthFrom, monthTo, year) {
 }
 
 var o_courseTable = "";
-
+var o_minCapacity = ""
 function generateOCourseListTable(result) {
     var content = "";
     let serverDate = "";
@@ -318,8 +320,19 @@ function generateOCourseListTable(result) {
             o_courseTable.destroy();
         }
 
+
         for (var i = 0; i < result.length; i++) {
-            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
+
+            if (result[i].MinCapacity == null) {
+                o_minCapacity = "N/A";
+            } else if (result[i].MinCapacity >= result[i].MaxCapacity) {
+                o_minCapacity = result[i].MaxCapacity / 2;
+            } else {
+                o_minCapacity = result[i].MinCapacity;
+            }
+
+
+            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + o_minCapacity +
                 "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + fixDateFormat(result[i].DateFrom.split('T')[0]) +
                 "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'>" + renderButtonFontAwesome(result[i], serverDate) + "</td></tr>";
         }
@@ -348,12 +361,16 @@ function renderButtonFontAwesome(data, serverDate) {
     var courseDate = new Date(data.DateFrom);
     let diffTime = Math.abs(courseDate - myServerDate);
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let minCap = data.MinCapacity;
 
+    if (data.MinCapacity >= data.MaxCapacity) {
+        minCap = data.MaxCapacity / 2;
+    }
     //let date = new Date();
 
     //let dateNow = (date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + "-" + date.getDate() + "T00:00:00");
 
-    if (!(diffDays < 8 && data.Slots < data.MinCapacity)) {
+    if (!(diffDays < 8 && data.Slots < minCap)) {
         //if (getWeekNumber(data.DateFrom) <= getWeekNumber(dateNow)) {
         //    return "-";
         //}
@@ -375,7 +392,7 @@ function renderButtonFontAwesome(data, serverDate) {
 }
 
 var courseTable = "";
-
+var minCapacity = "";
 function generateCourseListTable(result) {
     var content = "";
     let serverDate = "";
@@ -391,7 +408,15 @@ function generateCourseListTable(result) {
 
         for (var i = 0; i < result.length; i++) {
 
-            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + (result[i].MinCapacity == null ? "N/A" : result[i].MinCapacity) +
+            if (result[i].MinCapacity == null) {
+                minCapacity = "N/A";
+            } else if (result[i].MinCapacity >= result[i].MaxCapacity) {
+                minCapacity = result[i].MaxCapacity / 2;
+            } else {
+                minCapacity = result[i].MinCapacity;
+            }
+
+            content += "<tr id='" + result[i].SchedID + "'><td style='text-align: left'><a>" + result[i].CourseName + "</a>" + generateIndicator(result[i], serverDate) + "</td><td>" + minCapacity +
                 "</td><td>" + (result[i].CourseDuration == null ? "N/A" : result[i].CourseDuration) + "</td><td>" + fixDateFormat(result[i].DateFrom.split('T')[0]) +
                 "</td><td>" + result[i].Slots + " / " + result[i].MaxCapacity + "</td><td style='padding: 1px'>" + renderButtonFontAwesome(result[i], serverDate) + "</td></tr>";
 
@@ -484,11 +509,16 @@ function generateIndicator(data, serverDate) {
     let diffTime = Math.abs(courseDate - myServerDate);
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     //alert(getWeekNumber(data.DateFrom) + " " + getWeekNumber(fixServerDateFormat(serverDate)));
+    let minCap = data.MinCapacity;
 
-    if ((diffDays >= 8 && diffDays <= 14) && data.Slots < data.MinCapacity) {
+    if (data.MinCapacity >= data.MaxCapacity) {
+        minCap = data.MaxCapacity / 2;
+    }
+
+    if ((diffDays >= 8 && diffDays <= 14) && data.Slots < minCap) {
         //alert('orange');
         return "<span id='indicator_orange' class='pull-right'><i style='color: orange; font-size: large' class='fa fa-warning'></i></span>";
-    } else if (diffDays < 7 && data.Slots < data.MinCapacity) {
+    } else if (diffDays < 7 && data.Slots < minCap) {
         //alert('red');
         return "<span id='indicator_red' class='pull-right'><i style='color: red; font-size: large'' class='fa fa-ban'></i></span>";
     }

@@ -16,6 +16,7 @@ using SAMPortal.Enum;
 namespace SAMPortal.Controllers
 {
     [Authorize(Roles = "Administrator")]
+    [AccountController.CustomAuthorize]
     public class AdministrationController : Controller
     {
         private officecadetprogramEntities _cadetContext;

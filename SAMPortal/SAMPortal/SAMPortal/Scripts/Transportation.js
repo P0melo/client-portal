@@ -98,6 +98,7 @@
                     renderImageForZoom(result.Id, 'View');
 
                     $('.modal_airport_transportation .modal-title').html("Transportaion Arrangement History");
+                    $('.modal_airport_transportation').modal();
                 }
             }
         });
@@ -264,7 +265,7 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
-        let areaOfDestination = $('#area_dropdown').val();
+        //let areaOfDestination = $('#area_dropdown').val();
         let schedId = "";
 
         if (typeof (hrefSplit) !== 'undefined') {
@@ -456,7 +457,7 @@
 
     $(document).on('click', '#add_daily_transfer', function () {
         let editModalVisible = $('#edit_daily_transfer_modal').css('display') == 'block';
-        let areaOfDestination = $('#area_dropdown').val();
+        //let areaOfDestination = $('#area_dropdown').val();
         let type = "";
         let pickups = "";
         let dropoff = "";
@@ -515,7 +516,7 @@
 
 
         let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
-            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td>" + areaOfDestination + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
 
         if (editModalVisible) {
             $('#e_daily_transfer_table div table tbody').append(details);
@@ -531,7 +532,7 @@
         entry[5] = dropoff_2;
         entry[6] = pickup_2 != '' ? pickup_date_2 + " " + pickup_time_2 : "";
         entry[7] = dailyTransferCounter;
-        entry[8] = areaOfDestination;
+        //entry[8] = areaOfDestination;
 
         dailyTransferDetails.push(entry);
 
@@ -748,7 +749,7 @@
         dailyTransferRecordToRemove.pop();
     });
 
-    $(document).on('click', '#e_save_transportation_btn', function () {
+    $(document).on('click', '#e_daily_transfer_save_transportation_btn', function () {
         if ($('#e_daily_transfer_table div table tbody tr').length === 0) {
             generateWarningModal("no_rows_left", 2, "", "Please make sure that there is atleast 1 request left in the table...");
         } else {

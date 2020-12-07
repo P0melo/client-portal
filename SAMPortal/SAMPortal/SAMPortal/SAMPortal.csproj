@@ -39,6 +39,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <IncludeIisSettings>true</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,9 +51,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
-    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
     <IncludeIisSettings>true</IncludeIisSettings>
-    <IncludeAppPool>false</IncludeAppPool>
+    <IncludeAppPool>true</IncludeAppPool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -85,14 +87,14 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MySql.Data, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.19\lib\net452\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=8.0.17.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.17\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data.Entity.EF6, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.Entity.6.10.9\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data.EntityFramework, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.19\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.17.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.17\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Web, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,9 +187,6 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Ubiety.Dns.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.19\lib\net452\Ubiety.Dns.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -754,6 +753,20 @@
     <Content Include="admin-lte\bower_components\bootstrap-datepicker\tests\suites\touch_navigation\all.js" />
     <Content Include="admin-lte\bower_components\bootstrap-datepicker\tests\tests.html" />
     <Content Include="admin-lte\bower_components\bootstrap-datepicker\tests\timezone.html" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\daterangepicker.css" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\daterangepicker.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\demo.html" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\drp.png" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\amd\index.html" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\amd\main.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\amd\require.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\browserify\bundle.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\browserify\index.html" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\browserify\main.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\package.js" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\website\index.html" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\website\website.css" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\website\website.js" />
     <Content Include="admin-lte\bower_components\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="admin-lte\bower_components\bootstrap-slider\locks.png" />
     <Content Include="admin-lte\bower_components\bootstrap-slider\slider.css" />
@@ -8510,6 +8523,12 @@
     <Content Include="officecadetprogramEntities.edmx.diagram">
       <DependentUpon>officecadetprogramEntities.edmx</DependentUpon>
     </Content>
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\.bower.json" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\bower.json" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\daterangepicker.scss" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\example\browserify\README.md" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\package.json" />
+    <Content Include="admin-lte\bower_components\bootstrap-daterangepicker\README.md" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="officecadetprogramEntities.Context.tt">
@@ -8653,17 +8672,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\AspNet.Identity.MySQL\AspNet.Identity.MySQL.csproj">
-      <Project>{26f6ecf9-4369-417b-8cf2-54fa92df3660}</Project>
-      <Name>AspNet.Identity.MySQL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="admin-lte\bower_components\moment\moment.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AspNet.Identity.MySQL\AspNet.Identity.MySQL.csproj">
+      <Project>{26f6ecf9-4369-417b-8cf2-54fa92df3660}</Project>
+      <Name>AspNet.Identity.MySQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

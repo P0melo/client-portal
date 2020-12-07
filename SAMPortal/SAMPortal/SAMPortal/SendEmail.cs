@@ -24,12 +24,12 @@ namespace SAMPortal
         public SendEmail()
         {
             smtpServer = @System.Configuration.ConfigurationManager.AppSettings["smtpServer"];
-            smtpPort = Convert.ToInt32(@System.Configuration.ConfigurationManager.AppSettings["smtpPort"]); ;
-            enableSSL = bool.Parse(@System.Configuration.ConfigurationManager.AppSettings["enableSSL"]); ;
-            userName = @System.Configuration.ConfigurationManager.AppSettings["userName"]; ;
-            password = @System.Configuration.ConfigurationManager.AppSettings["password"]; ;
-            sender = @System.Configuration.ConfigurationManager.AppSettings["sender"]; ;
-            receipient = @System.Configuration.ConfigurationManager.AppSettings["emailreceipients"]; ;
+            smtpPort = Convert.ToInt32(@System.Configuration.ConfigurationManager.AppSettings["smtpPort"]);
+            enableSSL = bool.Parse(@System.Configuration.ConfigurationManager.AppSettings["enableSSL"]);
+            userName = @System.Configuration.ConfigurationManager.AppSettings["userName"];
+            password = @System.Configuration.ConfigurationManager.AppSettings["password"];
+            sender = @System.Configuration.ConfigurationManager.AppSettings["sender"];
+            receipient = @System.Configuration.ConfigurationManager.AppSettings["emailreceipients"];
         }
 
         public void Send(IIdentity user, int request, string additionalMessage)
@@ -62,7 +62,7 @@ namespace SAMPortal
                 var checkInDateTo = data[5].Split(':')[1].Substring(0, data[5].Split(':')[1].Length - 2);
 
                 WebMail.Send(to: email, subject: "[NOTIFICATION] A NEW REQUEST HAS BEEN MADE!", body:
-                user.Name + " sent a request (On Site Accommodation Request). <br/>MNNo: " + mnno + "<br/>Reservation Type: " + reservationtype + "<br/>Room Type: " + roomType +
+                user.Name + " sent a request (On Site Accommodation Request). <br/>MNNo: " + mnno + "<br/>Reservation Type: " + (reservationtype == "1" ? "New Booking" : "Extension") + "<br/>Room Type: " + (roomType == "1" ? "Dorm - Standard" : "Dorm - Superior") +
                 "<br/>Classification: " + classification + "<br/>From(dd/MM/yyyy): " + checkInDateFrom + "<br/>To(dd/MM/yyyy): " + checkInDateTo, cc: "", bcc: "", isBodyHtml: true);
 
             }

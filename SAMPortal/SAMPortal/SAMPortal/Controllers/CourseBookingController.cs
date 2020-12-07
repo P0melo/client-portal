@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace SAMPortal.Controllers
 {
-    [Authorize]
+    [AccountController.CustomAuthorize]
     public class CourseBookingController : Controller
     {
         private officecadetprogramEntities _context;

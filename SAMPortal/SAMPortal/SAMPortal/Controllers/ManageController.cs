@@ -13,7 +13,7 @@ using SAMPortal.Enum;
 
 namespace SAMPortal.Controllers
 {
-    [Authorize]
+    [AccountController.CustomAuthorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

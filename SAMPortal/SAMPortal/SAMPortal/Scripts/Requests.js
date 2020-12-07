@@ -351,8 +351,11 @@
                     let checkInDate = data[i].CheckInDate.split('T');
                     let checkOutDate = data[i].CheckOutDate.split('T');
 
-                    content += "<tr><td><a id='" + data[i].Id + "'>" + data[i].MNNO + "</a></td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td>" +
+                    //content += "<tr><td><a id='" + data[i].Id + "'>" + data[i].MNNO + "</a></td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td>" +
+                    //    "<td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] + "</td><td>" + (data[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + data[i].Status + "</td></tr> ";
+                    content += "<tr><td>" + data[i].MNNO + "</td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") + "</td>" +
                         "<td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + fixDateFormat(checkInDate[0]) + ' ' + checkInDate[1] + "</td><td>" + fixDateFormat(checkOutDate[0]) + ' ' + checkOutDate[1] + "</td><td>" + (data[i].Payment == 0 ? "Company Sponsored" : "Personal Account") + "</td><td>" + data[i].Status + "</td></tr> ";
+
                 }
 
                 $('#on_site_accommodation_requests_tbl tbody').html(content);
@@ -414,9 +417,11 @@
                     //$('.modal_airport_transportation .modal-body #attachment').html('<button title="View Attachment" id="view_attachment" rid="' + transportationRequestRecordId + '" class="btn btn-default"><i class="fa fa-paperclip"></i></button>');
                     $('.modal_airport_transportation .modal-body #attachment').html('<img width="555" height="320" class="img img-responsive" id="imgForZoom" src="" />');
                     //$('.modal_airport_transportation .modal-body #attachment').html('<img style="margin-left: auto; margin-right: auto;" class="img-responsive" id="crewPhoto" src="data:image/jpeg;base64,' + result.data.Attachment + '" />');
-                    renderImageForZoom(transportationRequestRecordId);
+                    renderImageForZoom(transportationRequestRecordId, "View");
 
                     $('.modal_airport_transportation .modal-title').html(mnno + " - " + name);
+                    $('.modal_airport_transportation').modal();
+
                 }
                 //$('.modal_transportation .modal-body #company').html(result[0].CompanyName);
                 //$('.modal_transportation .modal-body #type').html(type);
