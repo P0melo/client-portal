@@ -234,6 +234,7 @@
     });
 
     $(document).on('click', '#transportation_rates_btn', function () {
+        getTransportationRates();
         $('#transportation_rates_modal').modal();
     });
 

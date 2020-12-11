@@ -272,5 +272,13 @@ namespace SAMPortal.Controllers.Api
 
             return Ok(data);
         }
+
+        public IHttpActionResult GetTransportationRates()
+        {
+            var data = _context.Database.SqlQuery<GetTransportationRatesModel>("SELECT transpo_fee_id AS Id, transpo_type AS Type, vehicle_type AS Vehicle, destination AS Destination, rate_usd AS Price " +
+                            "FROM tbltransportation_fee").ToList();
+
+            return Ok(data);
+        }
     }
 }

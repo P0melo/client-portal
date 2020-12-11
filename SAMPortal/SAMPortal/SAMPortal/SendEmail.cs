@@ -35,12 +35,8 @@ namespace SAMPortal
         public void Send(IIdentity user, int request, string additionalMessage)
         {
             WebMail.SmtpServer = smtpServer;
-            // port to send emails
             WebMail.SmtpPort = smtpPort;
-            //WebMail.SmtpUseDefaultCredentials = true;
-            //sending email with secure protocol
             WebMail.EnableSsl = enableSSL;
-            // email id used to send emails from application
             WebMail.UserName = userName;
             WebMail.Password = password;
             WebMail.From = sender;
@@ -297,20 +293,6 @@ namespace SAMPortal
                   "Vehicle: " + vehicle + "<br />" +
                   "Date Requested: " + dateRequested + "<br />" +
                   "Notes: " + Notes + "<br />" +
-                  //"Outbound: " + outbound + "<br />" +
-                  //"One Trip: " + oneTrip + "<br />" +
-                  //"Two Trips: " + twoTrips + "<br />" +
-                  //"Status: " + status + "<br />" +
-                  //"Pick Up: " + pickUp + "<br /><br />" +
-                  //"Date and Time of Pick Up: " + dateTimeOfPickUp + "<br />" +
-                  //"Drop Off: " + dropOff + "<br />" +
-                  //"Second Pick Up: " + secondPickUp + "<br />" +
-                  //"Second Date and Time of Pick Up: " + secondDateTimeOfPickUp + "<br />" +
-                  //"Second Drop Off: " + secondDropOff + "<br />" +
-                  //"Remarks: " + notes + "<br />" +
-                  //"Reference ID: " + referenceId + "<br />" +
-                  //"Date Booked: " + dateBooked + "<br />" +
-                  //"Requested By: " + requestedBy + "<br /><br />" + 
                   "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
                   "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged." +
                   "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>", cc: "", bcc: "", isBodyHtml: true);

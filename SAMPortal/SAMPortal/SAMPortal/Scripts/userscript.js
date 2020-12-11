@@ -23,6 +23,22 @@ function openToNewTab(actionName, traineeNo, rank, name, schedId) {
     window.open(protocol + "//" + hostName + "/SAMPortal/Forms/" + actionName + "?" + traineeNo + "+" + rank + "+" + name + "+" + schedId);
 }
 
+function getTransportationRates() {
+    $.ajax({
+        url: '/SAMPortal/Api/Forms/GetTransportationRates',
+        dataType: 'JSON',
+        type: 'GET',
+        success: function(result) {
+            let content = "";
+
+            for (let i = 0; i < result.length; i++) {
+                
+            }
+        }
+    });
+}
+
+
 $(document).on('click', '#onSite_lnkbtn', function () {
     let traineeNo = $(this).parent().prev().prev().prev().html();
     let rank = $(this).parent().prev().prev().html();

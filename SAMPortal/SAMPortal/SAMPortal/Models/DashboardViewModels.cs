@@ -204,4 +204,13 @@ namespace SAMPortal.Models
         public string SecondDropOffPlace { get; set; }
         public int DtId { get; set; }
     }
+
+    public class GetTransportationRatesModel
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Vehicle { get; set; }
+        public string Destination { get; set; }
+        public int Price { get; set; }
+    }
 }
