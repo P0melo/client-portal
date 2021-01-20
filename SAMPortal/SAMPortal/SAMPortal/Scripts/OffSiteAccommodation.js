@@ -90,6 +90,8 @@
 
     var offSiteAccommodationParameters = [];
     $(document).on('click', '#save_off_site_btn', function () {
+        let schedId = "";
+
         var mnno = $('#mnno_input').val();
         var rank = $('#rank_input').val();
 
@@ -116,7 +118,11 @@
             $('#modal_offSiteAccommodation_submit .modal-body p').html("Are you sure you want to submit?");
             $('#modal_offSiteAccommodation_submit').modal();
 
-            offSiteAccommodationParameters = [mnno, rank, lastName, firstName, date, hotel, room_type, payment, reason, remarks];
+            if (typeof (hrefSplit) !== 'undefined') {
+                schedId = hrefSplit.split('+')[3];
+            } 
+
+            offSiteAccommodationParameters = [mnno, rank, lastName, firstName, date, hotel, room_type, payment, reason, remarks, schedId];
         }
     });
 

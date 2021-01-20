@@ -16,6 +16,8 @@ using System.Text.RegularExpressions;
 using SAMPortal.Enum;
 using MySql.Data.MySqlClient;
 using System.Web.Routing;
+using System.Net.Mail;
+using System.Net;
 
 namespace SAMPortal.Controllers
 {
@@ -315,32 +317,11 @@ namespace SAMPortal.Controllers
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                //smtp server
-                //WebMail.SmtpServer = "smtp.gmail.com";
-                //WebMail.SmtpServer = "mail.umtc.com.ph";
-                WebMail.SmtpServer = "172.16.16.11";
-                // port to send emails
-                WebMail.SmtpPort = 25;
-                //WebMail.SmtpUseDefaultCredentials = true;
-                //sending email with secure protocol
-                WebMail.EnableSsl = false;
-                // email id used to send emails from application
-                WebMail.UserName = "no-reply@umtc.com.ph";
-                WebMail.Password = "Norep6682";
+                SendEmail sendEmail = new SendEmail();
+                sendEmail.SendForgotPassword(model.Email, callbackUrl);
 
-                // sender email address
-                WebMail.From = "no-reply@umtc.com.ph";
-
-                // send email
-                WebMail.Send(to: user.Email, subject: "Reset your Password", body: "Please reset your password by clicking the link below: <br/><br/>" +
-                    "<a href=\"" + callbackUrl + "\" >Reset my password</a><br/><br/>" +
-                    "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
-                        "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged. " +
-                        "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>"
-
-                    , cc: "", bcc: "", isBodyHtml: true);
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
@@ -417,8 +398,6 @@ namespace SAMPortal.Controllers
                         _context.useroldpasswords.Remove(oldestPassword);
                         _context.SaveChanges();
                     }
-
-
 
                     var pass = Hasher.HashPassword(model.ConfirmPassword);
 

@@ -30,10 +30,14 @@ function getTransportationRates() {
         type: 'GET',
         success: function(result) {
             let content = "";
+            let dtr = result.dailyTransferRate;
+            let atr = result.airportTransferRate;
 
-            for (let i = 0; i < result.length; i++) {
-                
+            for (let i = 0; i < dtr.length; i++) {
+                content += "<tr><td>" + dtr[i].VehicleType + "</td><td>" + dtr[i].Manila + "</td><td>" + dtr[i].Makati + "</td><td>" + dtr[i].Pasay + "</td><td>" + atr[i].Rate + "</td></</tr>";
             }
+
+            $('#transportation_rates_tbl tbody').append(content);
         }
     });
 }
@@ -643,10 +647,10 @@ $(document).on('click', '#course_list_tbl tr td a', function () {
             $('.modal-body #message').html('Number of enrollees from other company: ' + numberOfEnrollees);
             //}
 
-            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
-                '<button class="btn btn-default" id="offSite_lnkbtn" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
-                '<button class="btn btn-default" id="meals_lnkbtn" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
-                '<button class="btn btn-default" id="transportation_lnkbtn" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
+            let linkButtons = '<button class="btn btn-default" id="onSite_lnkbtn" sched_id="' + schedId + '" title="On Site Accommodation" style= "width: 25%;"><i class="fa fa-hotel"></i></button>' +
+                '<button class="btn btn-default" id="offSite_lnkbtn" sched_id="' + schedId + '" title="Off Site Accommodation" style="width: 25%;"><i class="fa fa-suitcase"></i></button>' +
+                '<button class="btn btn-default" id="meals_lnkbtn" sched_id="' + schedId + '" title="Meals" style="width: 25%;"><i class="fa fa-spoon"></i></button>' +
+                '<button class="btn btn-default" id="transportation_lnkbtn" sched_id="' + schedId + '" title="Transportation" style="width: 25%;"><i class="fa fa-bus"></i></button>';
 
                 $.ajax({
                     url: '/SAMPortal/api/CourseBooking/GetEnrollees',
@@ -873,14 +877,12 @@ function saveAccomodation(parameters) {
         success: function (result) {
             $.unblockUI();
             if (result.data === 1) {
-                //$('#modal_success .modal-body p').html("Accommodation Request Successful!");
-                //$('#modal_success').modal();
                 generateSuccessModal("save_accomodation_success", 2, "", "Accommodation Request Successful!");
+
             } else if (result.data == "Rooms") {
                 var fixedFormatting = result.data2.substring(0, result.data2.length - 2);
-                //$('#modal_warning_booking_reservation .modal-body p').html("Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting);
-                //$('#modal_warning_booking_reservation').modal();
                 generateWarningModal("rooms_full_warning", 2, "", "Reservation was not successful. Rooms are full during this/these date/s: " + fixedFormatting)
+
             } else if (result.data == "Duplicates") {
                 var data = result.data2;
                 var content = "";
@@ -888,14 +890,14 @@ function saveAccomodation(parameters) {
                     content += "<tr><td>" + data[i].Mnno + "</td><td>" + data[i].Rank + "</td><td>" + (data[i].LastName + ", " + data[i].FirstName) + "</td><td>" + (data[i].ReservationType == 1 ? "New Booking" : "Extension") +
                         "</td><td>" + (data[i].RoomType == 1 ? "Dorm - Standard" : "Dorm - Superior") + "</td><td>" + formatDate(data[i].CheckInDate) + "</td><td>" + formatDate(data[i].CheckOutDate) + "</td><td>" + data[i].Status + "</td></tr>";
                 }
-
+                  
                 $('#duplicate_booking_modal .modal-body p').html("Our system found out that there is already an existing reservation in our database.");
                 $('#duplicate_booking_modal_tbl tbody').html(content);
                 $('#duplicate_booking_modal').modal();
+
             } else {
-                //$('.modal-danger .modal-body p').html("Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
-                //$('.modal-danger').modal();
                 generateDangerModal("save_accommodation_error", "Please send the this error ID (" + result.data + ") to the Sales and Marketing Team. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph");
+
             }
 
             $('#modal_warning_accommodation_submit_yes').attr('disabled', false);
@@ -908,8 +910,6 @@ function fixDateFormat(date) {
     let dateSplit = date.split('-');
     return dateSplit[2] + "/" + dateSplit[1] + "/" + dateSplit[0];
 }
-
-
 
 $(document).ready(function () {
 

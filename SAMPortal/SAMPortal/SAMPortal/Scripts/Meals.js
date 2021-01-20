@@ -46,6 +46,25 @@
 
     });
 
+    $(document).on('click', '#meals_rates_btn', function () { 
+        $.ajax({
+            url: '/SAMPortal/Api/Forms/GetMealsRates',
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (result) {
+                let content = "";
+
+                for (let i = 0; i < result.length; i++) {
+                    content += "<tr><td>" + result[i].Meal + "</td><td>" + result[i].MealDescription  + "</td><td>" + result[i].Price + "</td></tr>"
+                }
+
+                $('#meals_rates_tbl tbody').append(content);
+
+                $('#meals_rates_modal').modal();
+            }
+        })
+    });
+
     $(document).on('change', '#mnno_input', function () {
         getMealProvisionLog($('#mnno_input').val()/*mnno*/);
     });

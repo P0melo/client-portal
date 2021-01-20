@@ -54,7 +54,8 @@ namespace SAMPortal.Enum
         UpdateOffSiteAccommodation = 16,
         CancelTransportationRequest = 17,
         UpdateDailyTransfer = 18,
-        UpdateAirportTransfer = 19
+        UpdateAirportTransfer = 19,
+        ForgotPassword = 20
     }
 
     public enum ApprovalStatus

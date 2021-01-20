@@ -532,7 +532,7 @@ namespace SAMPortal.Controllers
             var payment = parameters[7];
             var reason = parameters[8];
             var remarks = parameters[9];
-
+            var schedId = parameters[10];
 
             DateTime checkInDate = DateTime.ParseExact(date[0].Trim() + " 13:00:00", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -553,9 +553,9 @@ namespace SAMPortal.Controllers
                 {
 
                     _context.Database.ExecuteSqlCommand("INSERT INTO tbloff_site_reservation(MNNO, `Rank`, LastName, FirstName, HotelName, RoomType, Classification, Status, CheckInDate, CheckOutDate, CompanyId," +
-                        "ModeOfPayment, ReasonOfStay, Remarks, CrewBatch, BookerRemarks, ReservationBy, ReservationDate, LastUpdatedBy, LastUpdated)" +
+                        "ModeOfPayment, ReasonOfStay, Remarks, CrewBatch, BookerRemarks, ReservationBy, ReservationDate, LastUpdatedBy, LastUpdated, SchedId)" +
                         "VALUE (@mnno, @rank, @lastName, @firstName, @hotelName, @roomType, @classification, @status, @checkInDate, @checkOutDate, @companyId," +
-                        "@modeOfPayment, @reasonOfStay, @remarks, @crewBatch, @bookerremarks, @reservationBy, @reservationDate, @lastUpdatedBy, @lastUpdated)",
+                        "@modeOfPayment, @reasonOfStay, @remarks, @crewBatch, @bookerremarks, @reservationBy, @reservationDate, @lastUpdatedBy, @lastUpdated, @schedId)",
                         new MySqlParameter("@mnno", mnno),
                         new MySqlParameter("@rank", rank),
                         new MySqlParameter("@lastName", lastName),
@@ -575,7 +575,8 @@ namespace SAMPortal.Controllers
                         new MySqlParameter("@reservationBy", user),
                         new MySqlParameter("@reservationDate", DateTime.Now),
                         new MySqlParameter("@lastUpdatedBy", user),
-                        new MySqlParameter("@lastUpdated", DateTime.Now));
+                        new MySqlParameter("@lastUpdated", DateTime.Now),
+                        new MySqlParameter("@schedId", schedId));
 
                     //for logging
                     string[] logparameters = { "mnno:"+mnno, "rank:"+rank, "lastName:"+lastName, "firstName:"+firstName, "hotelName:"+hotel, "roomType:"+roomType, "classification:"+classification,

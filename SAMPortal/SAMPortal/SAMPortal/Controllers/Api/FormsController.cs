@@ -27,17 +27,25 @@ namespace SAMPortal.Controllers.Api
         {
             var company = GetCompany();
 
-            var data = _context.tblcrews.Where(m => m.Employer == company).Select(m => new Crew
-            {
-                Mnno = m.MNNO,
-                Position = m.Rank,
-                Name = string.Concat(m.LName, ", ", m.FName, " ", m.MName),
-                Nation = m.Nationality,
-                Birthday = m.BDate.ToString(),
-                BirthPlace = m.BPlace,
-                Contact = m.ContactNo,
-                Gender = m.Gender
-            }).ToList();
+            var companyGroupId = GetCompanyGroupId();
+
+            //var data = _context.tblcrews.Where(m => m.Employer == company).Select(m => new Crew
+            //{
+            //    Mnno = m.MNNO,
+            //    Position = m.Rank,
+            //    Name = string.Concat(m.LName, ", ", m.FName, " ", m.MName),
+            //    Nation = m.Nationality,
+            //    Birthday = m.BDate.ToString(),
+            //    BirthPlace = m.BPlace,
+            //    Contact = m.ContactNo,
+            //    Gender = m.Gender
+            //}).ToList();
+
+            List<Crew> data = new List<Crew>();
+
+            data = _context.Database.SqlQuery<Crew>("SELECT MNNO, Rank AS Position, CONCAT(COALESCE(LName, ''), ', ', COALESCE(FName, ''), ' ', COALESCE(LEFT(MName, 1), '')) AS Name, BDate AS Birthday, Gender, c.Employer " +
+                    "FROM tblcrew c JOIN tbltpcompany tp ON c.Employer = tp.companyID " +
+                    "WHERE tp.companygroupID = " + companyGroupId).ToList();
 
             return Ok(data);
         }
@@ -254,6 +262,15 @@ namespace SAMPortal.Controllers.Api
             return company;
         }
 
+        public int GetCompanyGroupId()
+        {
+            var companyGroupId = _context.Database.SqlQuery<int>("SELECT companyGroupId " +
+                "FROM dbidentity.users u JOIN officecadetprogram.tbltpcompany tp ON u.companyId = tp.companyID " +
+                "WHERE u.email = '" + User.Identity.Name + "' AND u.companyId = " + GetCompany()).FirstOrDefault();
+
+            return companyGroupId;
+        }
+
         public IHttpActionResult GetServerDate()
         {
             var data = _context.Database.SqlQuery<string>("SELECT DATE_FORMAT(CURDATE(), '%d-%m-%Y')").FirstOrDefault();
@@ -275,8 +292,27 @@ namespace SAMPortal.Controllers.Api
 
         public IHttpActionResult GetTransportationRates()
         {
-            var data = _context.Database.SqlQuery<GetTransportationRatesModel>("SELECT transpo_fee_id AS Id, transpo_type AS Type, vehicle_type AS Vehicle, destination AS Destination, rate_usd AS Price " +
-                            "FROM tbltransportation_fee").ToList();
+            //var data = _context.Database.SqlQuery<GetTransportationRatesModel>("SELECT transpo_fee_id AS Id, transpo_type AS Type, vehicle_type AS Vehicle, destination AS Destination, rate_usd AS Price " +
+            //                "FROM tbltransportation_fee").ToList();
+
+            var dailyTransferRate = _context.Database.SqlQuery<DailyTransportationRates>("SELECT vehicle_type AS VehicleType, sum(CASE WHEN destination = 'Manila' THEN rate_usd ELSE 0 END) AS Manila," +
+                "sum(CASE WHEN destination = 'Makati' THEN rate_usd ELSE 0 END) AS Makati," +
+                "sum(CASE WHEN destination = 'Pasay' THEN rate_usd ELSE 0 END) AS Pasay " +
+                "FROM tbltransportation_fee " +
+                "WHERE transpo_type = 'Daily Transfer' " +
+                "AND destination IN('Manila', 'Makati', 'Pasay') " +
+                "GROUP BY vehicle_type").ToList();
+
+            var airportTransferRate = _context.Database.SqlQuery<AirportTransportationRates>("SELECT rate_usd AS Rate " +
+                "FROM tbltransportation_fee " +
+                "WHERE transpo_type = 'Airport Transfer'").ToList();
+
+            return Json(new { dailyTransferRate, airportTransferRate });
+        }
+
+        public IHttpActionResult GetMealsRates()
+        {
+            var data = _context.Database.SqlQuery<MealsRates>("SELECT meal_description AS MealDescription, meal, price FROM tblmeal_fees").ToList();
 
             return Ok(data);
         }

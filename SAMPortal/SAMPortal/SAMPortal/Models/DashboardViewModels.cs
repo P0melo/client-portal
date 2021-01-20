@@ -205,6 +205,27 @@ namespace SAMPortal.Models
         public int DtId { get; set; }
     }
 
+    public class DailyTransportationRates
+    {
+        public string VehicleType { get; set; }
+        public int Manila { get; set; }
+        public int Makati { get; set; }
+        public int Pasay { get; set; }
+    }
+
+    public class AirportTransportationRates
+    {
+        public int Rate { get; set; }
+    }
+
+    public class MealsRates
+    {
+        public string MealDescription { get; set; }
+        public string Meal { get; set; }
+        public double Price { get; set; }
+    }
+
+
     public class GetTransportationRatesModel
     {
         public int Id { get; set; }

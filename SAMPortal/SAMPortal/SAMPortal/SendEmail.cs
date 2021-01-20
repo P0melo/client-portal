@@ -3,6 +3,7 @@ using SAMPortal.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Helpers;
@@ -389,6 +390,24 @@ namespace SAMPortal
 
         }
 
+        public void SendForgotPassword(string receipient, string callbackUrl)
+        {
+            WebMail.SmtpServer = smtpServer;
+            WebMail.SmtpPort = smtpPort;
+            WebMail.EnableSsl = enableSSL;
+            WebMail.UserName = userName;
+            WebMail.Password = password;
+            WebMail.From = sender;
+
+            WebMail.Send(to: receipient, subject: "Reset your Password", body: "Please reset your password by clicking the link below: <br/><br/>" +
+                       "<a href=\"" + callbackUrl + "\" >Reset my password</a><br/><br/>" +
+                       "For any inquiries, please email us at marketing@umtc.com.ph or call +63 2 981 6682 local 2128, 2144, 2131, 2133, 2141. <br /><br />" +
+                           "<i>*This is a system-generated email, please do not reply. This email and any attachments are confidential and may also be privileged. " +
+                           "If you are not the intended recipient, please delete all copies and notify the sender immediately.</i>"
+
+                       , cc: "", bcc: "", isBodyHtml: true);
+
+        }
 
         public string GetRequestType(int request)
         {

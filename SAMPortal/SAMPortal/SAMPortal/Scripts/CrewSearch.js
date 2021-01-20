@@ -44,7 +44,7 @@
                 }
 
                 for (var i = 0; i < result.length; i++) {
-                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + fixDateFormat(result[i].Birthday) +
+                    content += "<tr><td>" + result[i].Mnno + "</td><td>" + result[i].Position + "</td><td>" + result[i].Name + "</td><td>" + fixBirthDateFormatCrewSearch(result[i].Birthday) +
                         "</td><td>" + result[i].Gender + "</td><td style='padding: 1px'>" + buttonType + "</td></tr>";
                 }
 
@@ -58,6 +58,13 @@
                 });
             }
         });
+    }
+
+    function fixBirthDateFormatCrewSearch(date) {
+        let temp = date.split(' ');
+        let dateSplit = temp[0].split('/');
+
+        return dateSplit[0] + '/' + dateSplit[1] + '/' + dateSplit[2];
     }
 
     var chosenCrewMnno = "";
