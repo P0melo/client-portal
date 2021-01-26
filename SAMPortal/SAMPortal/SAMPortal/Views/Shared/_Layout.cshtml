@@ -282,11 +282,13 @@
         <!-- AdminLTE App -->
         <script src="dist/js/adminlte.min.js"></script>*@
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/signalr/hubs")
+    @*@Scripts.Render("~/signalr/hubs")*@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/adminlte/js")
     @RenderSection("scripts", required: false)
     @RenderSection("Head", false)
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. -->

@@ -9,6 +9,10 @@ if (typeof (hrefSplit) !== 'undefined') {
     let rank = hrefSplit.split('+')[1];
     let name = hrefSplit.split('+')[2].replaceAll('%20', ' ');
 
+    if (name.includes('%C3%91', 0)) {
+        name = name.replace('%C3%91', 'Ñ');
+    }
+
     //trying vanilla javascript
     document.getElementById('mnno_input').value = traineeNo;
     document.getElementById('rank_input').value = rank;
@@ -629,11 +633,17 @@ $(document).on('change', '#InputFile', function () {
 });
 
 
+var currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
 var course_enrollee_tbl = "";
 $(document).on('click', '#course_list_tbl tr td a', function () {
 
-    var schedId = $(this).parent().parent().attr('id');
-    var numberOfEnrollees = 0;
+    let schedId = $(this).parent().parent().attr('id');
+    let numberOfEnrollees = 0;
+    let courseTitle = $(this).html();
 
     $.ajax({
         url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
@@ -657,22 +667,256 @@ $(document).on('click', '#course_list_tbl tr td a', function () {
                     type: 'get',
                     dataType: 'json',
                     data: { schedId: schedId },
+                    beforeSend: function () {
+                        $.blockUI({ message: null });
+                    },
                     success: function (result) {
+                        $.unblockUI();
                         var content = "";
 
                         if (course_enrollee_tbl != "") {
                             course_enrollee_tbl.destroy();
                         }
 
-                        for (var i = 0; i < result.length; i++) {
-                            content += "<tr><td>" + result[i].MNNO + "</td><td>" + result[i].Rank + "</td><td>" + result[i].LName + ", " + result[i].FName + " " +
-                                (result[i].MName === null ? "" : result[i].MName) + "</td><td style='padding: 0px;'>" + linkButtons + "</td></tr>";
+                        for (var i = 0; i < result.data.length; i++) {
+                            content += "<tr><td>" + result.data[i].MNNO + "</td><td>" + result.data[i].Rank + "</td><td>" + result.data[i].LName + ", " + result.data[i].FName + " " +
+                                (result.data[i].MName === null ? "" : result.data[i].MName) + "</td><td style='padding: 0px;'>" + linkButtons + "</td></tr>";
                         }
 
+                        $('#cost_course_title').html(courseTitle);
+                        $('#course_fee').html(currencyFormatter.format(result.courseFee));
+                        $('#course_number_of_booking').html(result.data.length);
+                        $('#course_fee_total').html(currencyFormatter.format(result.courseFee * result.data.length));
+
+                        let total_course_fee = result.courseFee * result.data.length;
+                        $('#total_course_fee').html(currencyFormatter.format(total_course_fee));
+
+                        $('#dorm_standard_fee').html(currencyFormatter.format(result.dormPricesList[0]));
+                        $('#dorm_superios_fee').html(currencyFormatter.format(result.dormPricesList[1]))
+
+                        let standardBookings = 0;
+                        let superiorBookings = 0;
+
+                        if (typeof (result.onSiteAccommodationTotalCostData[0]) !== 'undefined') {
+                            standardBookings = result.onSiteAccommodationTotalCostData[0].NumberOfBooking;
+                        }
+                    
+                        if (typeof (result.onSiteAccommodationTotalCostData[1]) !== 'undefined') {
+                            superiorBookings = result.onSiteAccommodationTotalCostData[1].NumberOfBooking;
+                        }
+
+                        $('#number_of_people_standard').html(standardBookings);
+                        $('#number_of_people_superior').html(superiorBookings);
+
+                        let dorm_standard_fee_total = standardBookings * parseFloat(result.dormPricesList[0]);
+                        let dorm_superior_fee_total = superiorBookings * parseFloat(result.dormPricesList[1]);
+
+                        $('#dorm_standard_fee_total').html(currencyFormatter.format(dorm_standard_fee_total));
+                        $('#dorm_superior_fee_total').html(currencyFormatter.format(dorm_superior_fee_total));
+
+                        let total_dormitory_fee = dorm_standard_fee_total + dorm_superior_fee_total;
+                        $('#total_dormitory_fee').html(currencyFormatter.format(total_dormitory_fee));
+
+                        $('#breakfast_fee').html(currencyFormatter.format(result.mealPricesList[0].price));
+                        $('#lunch_fee').html(currencyFormatter.format(result.mealPricesList[1].price));
+                        $('#dinner_fee').html(currencyFormatter.format(result.mealPricesList[2].price));
+                        $('#amsnack_fee').html(currencyFormatter.format(result.mealPricesList[3].price));
+                        $('#pmsnack_fee').html(currencyFormatter.format(result.mealPricesList[4].price));
+
+                        $('#number_of_people_breakfast').html(result.mealCountArr[0] === null ? 0 : result.mealCountArr[0]);
+                        $('#number_of_people_lunch').html(result.mealCountArr[1] === null ? 0 : result.mealCountArr[1]);
+                        $('#number_of_people_dinner').html(result.mealCountArr[2] === null ? 0 : result.mealCountArr[2]);
+                        $('#number_of_people_amsnack').html(result.mealCountArr[3] === null ? 0 : result.mealCountArr[3]);
+                        $('#number_of_people_pmsnack').html(result.mealCountArr[4] === null ? 0 : result.mealCountArr[4]);
+
+                        let breakfast_fee_total = result.mealCountArr[0] * result.mealPricesList[0].price;
+                        let lunch_fee_total = result.mealCountArr[1] * result.mealPricesList[1].price;
+                        let dinner_fee_total = result.mealCountArr[2] * result.mealPricesList[2].price;
+                        let amsnack_fee_total = result.mealCountArr[3] * result.mealPricesList[3].price;
+                        let pmsnack_fee_total = result.mealCountArr[4] * result.mealPricesList[4].price;
+
+                        $('#breakfast_fee_total').html(currencyFormatter.format(breakfast_fee_total));
+                        $('#lunch_fee_total').html(currencyFormatter.format(lunch_fee_total));
+                        $('#dinner_fee_total').html(currencyFormatter.format(dinner_fee_total));
+                        $('#amsnack_fee_total').html(currencyFormatter.format(amsnack_fee_total));
+                        $('#pmsnack_fee_total').html(currencyFormatter.format(pmsnack_fee_total));
+
+                        let total_meals_fee = breakfast_fee_total + lunch_fee_total + dinner_fee_total + amsnack_fee_total + pmsnack_fee_total;
+                        $('#total_meals_fee').html(currencyFormatter.format(total_meals_fee));
+
+                        $('#at_car_fee').html(currencyFormatter.format(result.airportTransportationFee[0].Price));
+                        $('#at_minivan_fee').html(currencyFormatter.format(result.airportTransportationFee[1].Price));
+                        $('#at_van_fee').html(currencyFormatter.format(result.airportTransportationFee[2].Price));
+
+                        let atBookingsTotalCost = 0;
+                        let carBookings = 0;
+                        let minivanBookings = 0;
+                        let vanBookings = 0;
+
+                        if (typeof result.atBookingAndCosts[0] !== 'undefined') {
+                            carBookings = result.atBookingAndCosts[0].NumberOfBooking
+                        }
+
+                        if (typeof result.atBookingAndCosts[1] !== 'undefined') {
+                            minivanBookings = result.atBookingAndCosts[1].NumberOfBooking
+                        }
+
+                        if (typeof result.atBookingAndCosts[2] !== 'undefined') {
+                            vanBookings = result.atBookingAndCosts[2].NumberOfBooking
+                        }
+
+                        $('#number_of_people_car').html(carBookings);
+                        $('#number_of_people_minivan').html(minivanBookings);
+                        $('#number_of_people_van').html(vanBookings);
+
+                        let at_car_fee_total = result.airportTransportationFee[0].Price * carBookings;
+                        let at_minivan_fee_total = result.airportTransportationFee[1].Price * minivanBookings;
+                        let at_van_fee_total = result.airportTransportationFee[2].Price * vanBookings;
+
+                        $('#at_car_fee_total').html(currencyFormatter.format(at_car_fee_total));
+                        $('#at_minivan_fee_total').html(currencyFormatter.format(at_minivan_fee_total));
+                        $('#at_van_fee_total').html(currencyFormatter.format(at_van_fee_total));
+
+                        let total_at_transportation_fee = at_car_fee_total + at_minivan_fee_total + at_van_fee_total;
+                        $('#total_at_transportation_fee').html(currencyFormatter.format(total_at_transportation_fee));
+
+                        $('#manila_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[0].Price));
+                        $('#manila_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[1].Price));
+                        $('#manila_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[2].Price));
+                        $('#makati_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[3].Price));
+                        $('#makati_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[4].Price));
+                        $('#makati_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[5].Price));
+                        $('#pasay_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[6].Price));
+                        $('#pasay_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[7].Price));
+                        $('#pasay_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[8].Price));
+
+                        let manilaNumberOfBookingCar = 0;
+                        let manilaNumberOfBookingMiniVan = 0;
+                        let manilaNumberOfBookingVan = 0;
+                        let makatiNumberOfBookingCar = 0;
+                        let makatiNumberOfBookingMiniVan = 0;
+                        let makatiNumberOfBookingVan = 0;
+                        let pasayNumberOfBookingCar = 0;
+                        let pasayNumberOfBookingMiniVan = 0;
+                        let pasayNumberOfBookingVan = 0;
+
+                        for (let i = 0; i < result.dtVehicleAndNumberOfBookings.length; i++) {
+                            if (result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Manila') {
+                                if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        manilaNumberOfBookingCar += 2;
+                                    } else {
+                                        manilaNumberOfBookingCar += 1;
+                                    }
+                                } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        manilaNumberOfBookingMiniVan += 2;
+                                    } else {
+                                        manilaNumberOfBookingMiniVan += 1;
+                                    }
+
+                                } else {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        manilaNumberOfBookingVan += 2;
+                                    } else {
+                                        manilaNumberOfBookingVan += 1;
+                                    }
+                                }
+                            } else if (result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Makati') {
+                                if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        makatiNumberOfBookingCar += 2;
+                                    } else {
+                                        makatiNumberOfBookingCar += 1;
+                                    }
+                                } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        makatiNumberOfBookingMiniVan += 2;
+                                    } else {
+                                        makatiNumberOfBookingMiniVan += 1;
+                                    }
+                                } else {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        makatiNumberOfBookingVan += 2;
+                                    } else {
+                                        makatiNumberOfBookingVan += 1;
+                                    }
+                                }
+                            } else if(result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Pasay') {
+                                if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        pasayNumberOfBookingCar += 2;
+                                    } else {
+                                        pasayNumberOfBookingCar += 1;
+                                    }
+                                } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        pasayNumberOfBookingMiniVan += 2;
+                                    } else {
+                                        pasayNumberOfBookingMiniVan += 1;
+                                    }
+                                } else {
+                                    if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                        pasayNumberOfBookingVan += 2;
+                                    } else {
+                                        pasayNumberOfBookingVan += 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        $('#manila_number_of_people_car').html(manilaNumberOfBookingCar);
+                        $('#manila_number_of_people_minivan').html(manilaNumberOfBookingMiniVan);
+                        $('#manila_number_of_people_van').html(manilaNumberOfBookingVan);
+                        $('#makati_number_of_people_car').html(makatiNumberOfBookingCar);
+                        $('#makati_number_of_people_minivan').html(makatiNumberOfBookingMiniVan);
+                        $('#makati_number_of_people_van').html(makatiNumberOfBookingVan);
+                        $('#pasay_number_of_people_car').html(pasayNumberOfBookingCar);
+                        $('#pasay_number_of_people_minivan').html(pasayNumberOfBookingMiniVan);
+                        $('#pasay_number_of_people_van').html(pasayNumberOfBookingVan);
+
+                        let dailyTransferTotalCost = 0;
+
+                        let manila_dt_car_fee = result.dtPricesAndDestination[0].Price * manilaNumberOfBookingCar;
+                        let manila_dt_minivan_fee = result.dtPricesAndDestination[1].Price * manilaNumberOfBookingMiniVan;
+                        let manila_dt_van_fee = result.dtPricesAndDestination[2].Price * manilaNumberOfBookingVan;
+                        let makati_dt_car_fee = result.dtPricesAndDestination[3].Price * makatiNumberOfBookingCar;
+                        let makati_dt_minivan_fee = result.dtPricesAndDestination[4].Price * makatiNumberOfBookingMiniVan;
+                        let makati_dt_van_fee = result.dtPricesAndDestination[5].Price * makatiNumberOfBookingVan;
+                        let pasay_dt_car_fee = result.dtPricesAndDestination[6].Price * pasayNumberOfBookingCar;
+                        let pasay_dt_minivan_fee = result.dtPricesAndDestination[7].Price * pasayNumberOfBookingMiniVan;
+                        let pasay_dt_van_fee = result.dtPricesAndDestination[8].Price * pasayNumberOfBookingVan;
+
+                        $('#manila_dt_car_fee_total').html(currencyFormatter.format( manila_dt_car_fee));
+                        $('#manila_dt_minivan_fee_total').html(currencyFormatter.format(manila_dt_minivan_fee));
+                        $('#manila_dt_van_fee_total').html(currencyFormatter.format(manila_dt_van_fee));
+                        $('#makati_dt_car_fee_total').html(currencyFormatter.format(makati_dt_car_fee));
+                        $('#makati_dt_minivan_fee_total').html(currencyFormatter.format(makati_dt_minivan_fee));
+                        $('#makati_dt_van_fee_total').html(currencyFormatter.format(makati_dt_van_fee));
+                        $('#pasay_dt_car_fee_total').html(currencyFormatter.format(pasay_dt_car_fee));
+                        $('#pasay_dt_minivan_fee_total').html(currencyFormatter.format(pasay_dt_minivan_fee));
+                        $('#pasay_dt_van_fee_total').html(currencyFormatter.format(pasay_dt_van_fee));
+                        //$('#dt_total_fee').html(manila_dt_car_fee + manila_dt_minivan_fee + manila_dt_van_fee + makati_dt_car_fee + makati_dt_minivan_fee + makati_dt_van_fee + 
+                        //    pasay_dt_car_fee + pasay_dt_minivan_fee + pasay_dt_van_fee);
+
+                        let total_dt_transportation_fee = manila_dt_car_fee + manila_dt_minivan_fee + manila_dt_van_fee + makati_dt_car_fee + makati_dt_minivan_fee + makati_dt_van_fee +
+                            pasay_dt_car_fee + pasay_dt_minivan_fee + pasay_dt_van_fee;
+
+                        $('#total_dt_transportation_fee').html(currencyFormatter.format(total_dt_transportation_fee));
+
+
+                        let grandTotalCost = total_dt_transportation_fee + total_at_transportation_fee + total_meals_fee + total_dormitory_fee + total_course_fee;
+
+                        $('#grand_total_cost').html(currencyFormatter.format(grandTotalCost));
+
                         $('#course_enrollee_tbl_body').html(content);
-                        $('#enrollees_modal').modal();
 
                         course_enrollee_tbl = $('#course_enrollee_tbl').DataTable({ "bProcessing": true });
+
+                        $('#enrollees_modal h4.modal-title').html(schedId + " - " + courseTitle + " Enrollees");
+                        $('#enrollees_modal').attr('schedId', schedId);
+                        $('#enrollees_modal').modal();
+
                     }
                 });
         }
@@ -682,6 +926,7 @@ $(document).on('click', '#course_list_tbl tr td a', function () {
 $(document).on('click', '#o_course_list_tbl tr td a', function () {
     var schedId = $(this).parent().parent().attr('id');
     var o_numberOfEnrollees = 0;
+    let courseTitle = $(this).html();
 
     $.ajax({
         url: '/SAMPortal/api/CourseBooking/GetNumberOfEnrollees',
@@ -708,87 +953,251 @@ $(document).on('click', '#o_course_list_tbl tr td a', function () {
                 },
                 success: function (result) {
                     $.unblockUI();
-                    let content = "";
-                    let data = result;
-                    //let data = result.data;
-
+                    var content = "";
 
                     if (course_enrollee_tbl != "") {
                         course_enrollee_tbl.destroy();
                     }
 
-                    for (var i = 0; i < data.length; i++) {
-                        content += "<tr><td>" + data[i].MNNO + "</td><td>" + data[i].Rank + "</td><td>" + data[i].LName + ", " + data[i].FName + " " +
-                            (data[i].MName === null ? "" : data[i].MName) + "</td><td>" + linkButtons + "</td></tr>";
+                    for (var i = 0; i < result.data.length; i++) {
+                        content += "<tr><td>" + result.data[i].MNNO + "</td><td>" + result.data[i].Rank + "</td><td>" + result.data[i].LName + ", " + result.data[i].FName + " " +
+                            (result.data[i].MName === null ? "" : result.data[i].MName) + "</td><td style='padding: 0px;'>" + linkButtons + "</td></tr>";
                     }
+
+                    $('#cost_course_title').html(courseTitle);
+                    $('#course_fee').html(currencyFormatter.format(result.courseFee));
+                    $('#course_number_of_booking').html(result.data.length);
+                    $('#course_fee_total').html(currencyFormatter.format(result.courseFee * result.data.length));
+
+                    let total_course_fee = result.courseFee * result.data.length;
+                    $('#total_course_fee').html(currencyFormatter.format(total_course_fee));
+
+                    $('#dorm_standard_fee').html(currencyFormatter.format(result.dormPricesList[0]));
+                    $('#dorm_superios_fee').html(currencyFormatter.format(result.dormPricesList[1]));
+
+                    let standardBookings = 0;
+                    let superiorBookings = 0;
+
+                    if (typeof (result.onSiteAccommodationTotalCostData[0]) !== 'undefined') {
+                        standardBookings = result.onSiteAccommodationTotalCostData[0].NumberOfBooking;
+                    }
+
+                    if (typeof (result.onSiteAccommodationTotalCostData[1]) !== 'undefined') {
+                        superiorBookings = result.onSiteAccommodationTotalCostData[1].NumberOfBooking;
+                    }
+
+                    $('#number_of_people_standard').html(standardBookings);
+                    $('#number_of_people_superior').html(superiorBookings);
+
+                    let dorm_standard_fee_total = standardBookings * parseFloat(result.dormPricesList[0]);
+                    let dorm_superior_fee_total = superiorBookings * parseFloat(result.dormPricesList[1]);
+
+                    $('#dorm_standard_fee_total').html(currencyFormatter.format(dorm_standard_fee_total));
+                    $('#dorm_superior_fee_total').html(currencyFormatter.format(dorm_superior_fee_total));
+
+                    let total_dormitory_fee = dorm_standard_fee_total + dorm_superior_fee_total;
+                    $('#total_dormitory_fee').html(currencyFormatter.format(total_dormitory_fee));
+
+                    $('#breakfast_fee').html(currencyFormatter.format(result.mealPricesList[0].price));
+                    $('#lunch_fee').html(currencyFormatter.format(result.mealPricesList[1].price));
+                    $('#dinner_fee').html(currencyFormatter.format(result.mealPricesList[2].price));
+                    $('#amsnack_fee').html(currencyFormatter.format(result.mealPricesList[3].price));
+                    $('#pmsnack_fee').html(currencyFormatter.format(result.mealPricesList[4].price));
+
+                    $('#number_of_people_breakfast').html(result.mealCountArr[0] === null ? 0 : result.mealCountArr[0]);
+                    $('#number_of_people_lunch').html(result.mealCountArr[1] === null ? 0 : result.mealCountArr[1]);
+                    $('#number_of_people_dinner').html(result.mealCountArr[2] === null ? 0 : result.mealCountArr[2]);
+                    $('#number_of_people_amsnack').html(result.mealCountArr[3] === null ? 0 : result.mealCountArr[3]);
+                    $('#number_of_people_pmsnack').html(result.mealCountArr[4] === null ? 0 : result.mealCountArr[4]);
+
+                    let breakfast_fee_total = result.mealCountArr[0] * result.mealPricesList[0].price;
+                    let lunch_fee_total = result.mealCountArr[1] * result.mealPricesList[1].price;
+                    let dinner_fee_total = result.mealCountArr[2] * result.mealPricesList[2].price;
+                    let amsnack_fee_total = result.mealCountArr[3] * result.mealPricesList[3].price;
+                    let pmsnack_fee_total = result.mealCountArr[4] * result.mealPricesList[4].price;
+
+                    $('#breakfast_fee_total').html(currencyFormatter.format(breakfast_fee_total));
+                    $('#lunch_fee_total').html(currencyFormatter.format(lunch_fee_total));
+                    $('#dinner_fee_total').html(currencyFormatter.format(dinner_fee_total));
+                    $('#amsnack_fee_total').html(currencyFormatter.format(amsnack_fee_total));
+                    $('#pmsnack_fee_total').html(currencyFormatter.format(pmsnack_fee_total));
+
+                    let total_meals_fee = breakfast_fee_total + lunch_fee_total + dinner_fee_total + amsnack_fee_total + pmsnack_fee_total;
+                    $('#total_meals_fee').html(currencyFormatter.format(total_meals_fee));
+
+                    $('#at_car_fee').html(currencyFormatter.format(result.airportTransportationFee[0].Price));
+                    $('#at_minivan_fee').html(currencyFormatter.format(result.airportTransportationFee[1].Price));
+                    $('#at_van_fee').html(currencyFormatter.format(result.airportTransportationFee[2].Price));
+
+                    let atBookingsTotalCost = 0;
+                    let carBookings = 0;
+                    let minivanBookings = 0;
+                    let vanBookings = 0;
+
+                    if (typeof result.atBookingAndCosts[0] !== 'undefined') {
+                        carBookings = result.atBookingAndCosts[0].NumberOfBooking
+                    }
+
+                    if (typeof result.atBookingAndCosts[1] !== 'undefined') {
+                        minivanBookings = result.atBookingAndCosts[1].NumberOfBooking
+                    }
+
+                    if (typeof result.atBookingAndCosts[2] !== 'undefined') {
+                        vanBookings = result.atBookingAndCosts[2].NumberOfBooking
+                    }
+
+                    $('#number_of_people_car').html(carBookings);
+                    $('#number_of_people_minivan').html(minivanBookings);
+                    $('#number_of_people_van').html(vanBookings);
+
+                    let at_car_fee_total = result.airportTransportationFee[0].Price * carBookings;
+                    let at_minivan_fee_total = result.airportTransportationFee[1].Price * minivanBookings;
+                    let at_van_fee_total = result.airportTransportationFee[2].Price * vanBookings;
+
+                    $('#at_car_fee_total').html(currencyFormatter.format(at_car_fee_total));
+                    $('#at_minivan_fee_total').html(currencyFormatter.format(at_minivan_fee_total));
+                    $('#at_van_fee_total').html(currencyFormatter.format(at_van_fee_total));
+
+                    let total_at_transportation_fee = at_car_fee_total + at_minivan_fee_total + at_van_fee_total;
+                    $('#total_at_transportation_fee').html(currencyFormatter.format(total_at_transportation_fee));
+
+                    $('#manila_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[0].Price));
+                    $('#manila_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[1].Price));
+                    $('#manila_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[2].Price));
+                    $('#makati_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[3].Price));
+                    $('#makati_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[4].Price));
+                    $('#makati_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[5].Price));
+                    $('#pasay_dt_car_fee').html(currencyFormatter.format(result.dtPricesAndDestination[6].Price));
+                    $('#pasay_dt_minivan_fee').html(currencyFormatter.format(result.dtPricesAndDestination[7].Price));
+                    $('#pasay_dt_van_fee').html(currencyFormatter.format(result.dtPricesAndDestination[8].Price));
+
+                    let manilaNumberOfBookingCar = 0;
+                    let manilaNumberOfBookingMiniVan = 0;
+                    let manilaNumberOfBookingVan = 0;
+                    let makatiNumberOfBookingCar = 0;
+                    let makatiNumberOfBookingMiniVan = 0;
+                    let makatiNumberOfBookingVan = 0;
+                    let pasayNumberOfBookingCar = 0;
+                    let pasayNumberOfBookingMiniVan = 0;
+                    let pasayNumberOfBookingVan = 0;
+
+                    for (let i = 0; i < result.dtVehicleAndNumberOfBookings.length; i++) {
+                        if (result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Manila') {
+                            if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    manilaNumberOfBookingCar += 2;
+                                } else {
+                                    manilaNumberOfBookingCar += 1;
+                                }
+                            } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    manilaNumberOfBookingMiniVan += 2;
+                                } else {
+                                    manilaNumberOfBookingMiniVan += 1;
+                                }
+
+                            } else {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    manilaNumberOfBookingVan += 2;
+                                } else {
+                                    manilaNumberOfBookingVan += 1;
+                                }
+                            }
+                        } else if (result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Makati') {
+                            if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    makatiNumberOfBookingCar += 2;
+                                } else {
+                                    makatiNumberOfBookingCar += 1;
+                                }
+                            } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    makatiNumberOfBookingMiniVan += 2;
+                                } else {
+                                    makatiNumberOfBookingMiniVan += 1;
+                                }
+                            } else {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    makatiNumberOfBookingVan += 2;
+                                } else {
+                                    makatiNumberOfBookingVan += 1;
+                                }
+                            }
+                        } else if (result.dtVehicleAndNumberOfBookings[i].AreaOfDestination == 'Pasay') {
+                            if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Car') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    pasayNumberOfBookingCar += 2;
+                                } else {
+                                    pasayNumberOfBookingCar += 1;
+                                }
+                            } else if (result.dtVehicleAndNumberOfBookings[i].Vehicle == 'Mini-Van') {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    pasayNumberOfBookingMiniVan += 2;
+                                } else {
+                                    pasayNumberOfBookingMiniVan += 1;
+                                }
+                            } else {
+                                if (result.dtVehicleAndNumberOfBookings[i].IsRoundTrip == 1) {
+                                    pasayNumberOfBookingVan += 2;
+                                } else {
+                                    pasayNumberOfBookingVan += 1;
+                                }
+                            }
+                        }
+                    }
+
+                    $('#manila_number_of_people_car').html(manilaNumberOfBookingCar);
+                    $('#manila_number_of_people_minivan').html(manilaNumberOfBookingMiniVan);
+                    $('#manila_number_of_people_van').html(manilaNumberOfBookingVan);
+                    $('#makati_number_of_people_car').html(makatiNumberOfBookingCar);
+                    $('#makati_number_of_people_minivan').html(makatiNumberOfBookingMiniVan);
+                    $('#makati_number_of_people_van').html(makatiNumberOfBookingVan);
+                    $('#pasay_number_of_people_car').html(pasayNumberOfBookingCar);
+                    $('#pasay_number_of_people_minivan').html(pasayNumberOfBookingMiniVan);
+                    $('#pasay_number_of_people_van').html(pasayNumberOfBookingVan);
+
+                    let dailyTransferTotalCost = 0;
+
+                    let manila_dt_car_fee = result.dtPricesAndDestination[0].Price * manilaNumberOfBookingCar;
+                    let manila_dt_minivan_fee = result.dtPricesAndDestination[1].Price * manilaNumberOfBookingMiniVan;
+                    let manila_dt_van_fee = result.dtPricesAndDestination[2].Price * manilaNumberOfBookingVan;
+                    let makati_dt_car_fee = result.dtPricesAndDestination[3].Price * makatiNumberOfBookingCar;
+                    let makati_dt_minivan_fee = result.dtPricesAndDestination[4].Price * makatiNumberOfBookingMiniVan;
+                    let makati_dt_van_fee = result.dtPricesAndDestination[5].Price * makatiNumberOfBookingVan;
+                    let pasay_dt_car_fee = result.dtPricesAndDestination[6].Price * pasayNumberOfBookingCar;
+                    let pasay_dt_minivan_fee = result.dtPricesAndDestination[7].Price * pasayNumberOfBookingMiniVan;
+                    let pasay_dt_van_fee = result.dtPricesAndDestination[8].Price * pasayNumberOfBookingVan;
+
+                    $('#manila_dt_car_fee_total').html(currencyFormatter.format(manila_dt_car_fee));
+                    $('#manila_dt_minivan_fee_total').html(currencyFormatter.format(manila_dt_minivan_fee));
+                    $('#manila_dt_van_fee_total').html(currencyFormatter.format(manila_dt_van_fee));
+                    $('#makati_dt_car_fee_total').html(currencyFormatter.format(makati_dt_car_fee));
+                    $('#makati_dt_minivan_fee_total').html(currencyFormatter.format(makati_dt_minivan_fee));
+                    $('#makati_dt_van_fee_total').html(currencyFormatter.format(makati_dt_van_fee));
+                    $('#pasay_dt_car_fee_total').html(currencyFormatter.format(pasay_dt_car_fee));
+                    $('#pasay_dt_minivan_fee_total').html(currencyFormatter.format(pasay_dt_minivan_fee));
+                    $('#pasay_dt_van_fee_total').html(currencyFormatter.format(pasay_dt_van_fee));
+                    //$('#dt_total_fee').html(manila_dt_car_fee + manila_dt_minivan_fee + manila_dt_van_fee + makati_dt_car_fee + makati_dt_minivan_fee + makati_dt_van_fee + 
+                    //    pasay_dt_car_fee + pasay_dt_minivan_fee + pasay_dt_van_fee);
+
+                    let total_dt_transportation_fee = manila_dt_car_fee + manila_dt_minivan_fee + manila_dt_van_fee + makati_dt_car_fee + makati_dt_minivan_fee + makati_dt_van_fee +
+                        pasay_dt_car_fee + pasay_dt_minivan_fee + pasay_dt_van_fee;
+
+                    $('#total_dt_transportation_fee').html(currencyFormatter.format(total_dt_transportation_fee));
+
+
+                    let grandTotalCost = total_dt_transportation_fee + total_at_transportation_fee + total_meals_fee + total_dormitory_fee + total_course_fee;
+
+                    $('#grand_total_cost').html(currencyFormatter.format(grandTotalCost));
+
 
                     $('#course_enrollee_tbl_body').html(content);
 
                     course_enrollee_tbl = $('#course_enrollee_tbl').DataTable();
 
-                    //$('#course_fee').html(result.courseFee);
-                    //$('#course_total_cost').html(result.courseFee * data.length);
-                    //$('#on_site_accommodation_total_cost').html(result.onSiteAccommodationTotalCost);
-
-                    //$('#dorm_standard_fee').html(result.data2[0].PricePerPax);
-                    //$('#total_standard_fee').html(result.data2[0].TotalCost)
-                    //$('#dorm_superior_fee').html(result.data2[1].PricePerPax);
-                    //$('#total_superior_fee').html(result.data2[1].TotalCost)
-
-                    //$('#number_of_people_standard').html("(" + result.data2[0].NumberOfBooking + ")");
-                    //$('#number_of_people_superior').html("(" + result.data2[1].NumberOfBooking + ")");
-
-                    //$('#breakfast_fee').html(result.mealPricesList[0].price);
-                    //$('#lunch_fee').html(result.mealPricesList[1].price);
-                    //$('#dinner_fee').html(result.mealPricesList[2].price);
-                    //$('#am_snack_fee').html(result.mealPricesList[3].price);
-                    //$('#pm_snack_fee').html(result.mealPricesList[4].price);
-
-                    //$('#number_of_people_b').html("(" + result.mealCountAndTotalCost[0].BreakfastCount + ")");
-                    //$('#number_of_people_l').html("(" + result.mealCountAndTotalCost[0].LunchCount + ")");
-                    //$('#number_of_people_d').html("(" + result.mealCountAndTotalCost[0].DinnerCount + ")");
-                    //$('#number_of_people_am').html("(" + result.mealCountAndTotalCost[0].MorningSnackCount + ")");
-                    //$('#number_of_people_pm').html("(" + result.mealCountAndTotalCost[0].AfternoonSnackCount + ")");
-                    //$('#meals_cost').html(result.mealCountAndTotalCost[0].BreakfastCount + result.mealCountAndTotalCost[0].LunchCost +
-                    //    result.mealCountAndTotalCost[0].DinnerCost + result.mealCountAndTotalCost[0].MorningSnackCost + result.mealCountAndTotalCost[0].AfternoonSnackCost);
-
-                    //$('#car_fee').html(result.airportTransportationFee[0].Price);
-                    //$('#mini_van_fee').html(result.airportTransportationFee[1].Price);
-                    //$('#van_fee').html(result.airportTransportationFee[2].Price);
-
-                    //$('#number_of_people_car').html("(" + result.atBookingAndCosts[0].NumberOfBooking + ")");
-                    //$('#number_of_people_minivan').html("(" + result.atBookingAndCosts[1].NumberOfBooking + ")");
-                    //$('#number_of_people_van').html("(" + result.atBookingAndCosts[2].NumberOfBooking + ")");
-
-                    //$('#transportation_cost').html((result.atBookingAndCosts[0].NumberOfBooking * result.airportTransportationFee[0].Price) +
-                    //    (result.atBookingAndCosts[1].NumberOfBooking * result.airportTransportationFee[1].Price) +
-                    //    (result.atBookingAndCosts[2].NumberOfBooking * result.airportTransportationFee[2].Price));
-
-                    //$('#dt_mn_car_fee').html(result.dtPricesAndDestination[0].Price);
-                    //$('#dt_mn_mini_van_fee').html(result.dtPricesAndDestination[1].Price);
-                    //$('#dt_mn_van_fee').html(result.dtPricesAndDestination[2].Price);
-
-                    //$('#dt_mk_car_fee').html(result.dtPricesAndDestination[3].Price);
-                    //$('#dt_mk_mini_van_fee').html(result.dtPricesAndDestination[4].Price);
-                    //$('#dt_mk_van_fee').html(result.dtPricesAndDestination[5].Price);
-
-                    //$('#dt_pa_car_fee').html(result.dtPricesAndDestination[6].Price);
-                    //$('#dt_pa_mini_van_fee').html(result.dtPricesAndDestination[7].Price);
-                    //$('#dt_pa_van_fee').html(result.dtPricesAndDestination[8].Price);
-
+                    $('#enrollees_modal h4.modal-title').html(schedId + " - " + courseTitle + " Enrollees");
+                    $('#enrollees_modal').attr('schedId', schedId);
                     $('#enrollees_modal').modal();
-
-                    //signalR.client.updateOffSiteAccommodationFee = function (courseFee, onSiteAccommodationFee) {
-                    //    $('#course_fee').html(courseFee);
-                    //    alert(courseFee * data.length);
-                    //    $('#course_total_cost').html(courseFee * data.length);
-                  
-                    //    
-                    //};
-
-                    //$.connection.hub.start().done(function () {
-                    //    signalR.server.updateOffSiteAccommodationTotalFee(result.courseFee, result.onSiteAccomodationTotalCost, signalR.connection.id);
-                    //});
 
                 }
             });
@@ -1072,5 +1481,4 @@ $(document).ready(function () {
             $(selector.management).next().slideUp("fast");
         });
     });
-
 });

@@ -274,10 +274,10 @@
     <Compile Include="esdi_vtblcbtrecords_logs.cs">
       <DependentUpon>officecadetprogramEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="MyHub.cs" />
     <Compile Include="keygennoyear.cs">
       <DependentUpon>officecadetprogramEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="MyHub.cs" />
     <Compile Include="officecadetprogramEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

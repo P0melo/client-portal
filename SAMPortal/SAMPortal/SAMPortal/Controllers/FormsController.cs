@@ -847,6 +847,7 @@ namespace SAMPortal.Controllers
             var flag = 0;
             if (ModelState.IsValid)
             {
+
                 try
                 {
 
@@ -1082,18 +1083,20 @@ namespace SAMPortal.Controllers
                         var pickUp2 = items[4];
                         var dropOff2 = items[5];
                         var pickup_date_time2 = items[6];
+                        var areaOfDestination = items[8];
 
-                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + "),";
+
+                        stringToAppend += "(" + dtType + ",'" + pickUp + "','" + pickup_date_time + "','" + dropOff + "','" + pickUp2 + "','" + pickup_date_time2 + "','" + dropOff2 + "'," + transportationId + ",'" + areaOfDestination + "'),";
                     }
 
                     stringToAppend = stringToAppend.Remove(stringToAppend.Length - 1, 1);
 
-                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId) " +
+                    _context.Database.ExecuteSqlCommand("INSERT INTO tbldaily_transfer_details (IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, TransportationId, AreaOfDestination) " +
                            "VALUES " + stringToAppend);
 
                     //for logging
                     string[] logparameters = { "mnno:"+mnno, "rank:"+rank, "lastName:"+lastName, "firstName:"+firstName, "company:"+company, "type:" + type, "vehicle:" + vehicle, "status:" + status, "referenceId: " + dateBooked,
-                        "foreign key in tbldaily_transfer_details:" + transportationId};
+                        "foreign key in tbldaily_transfer_details:" + transportationId };
 
                     string data = logging.ConvertToLoggingParameter(logparameters);
                     logging.Log(user, "SaveDailyTransportation", data);
@@ -1491,7 +1494,7 @@ namespace SAMPortal.Controllers
 
             if (typeAndNotes.Type.Equals("Daily Transfer"))
             {
-                var data = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace " +
+                var data = _context.Database.SqlQuery<DailyTransportationModel>("SELECT IsRoundTrip, PickUpPlace, DateTimeOfPickUp, DropOffPlace, SecondPickUpPlace, SecondDateTimeOfPickUp, SecondDropOffPlace, AreaOfDestination " +
                                                                        "FROM tbldaily_transfer_details " +
                                                                        "WHERE TransportationId = @id", new MySqlParameter("@id", recordId)).ToList();
 

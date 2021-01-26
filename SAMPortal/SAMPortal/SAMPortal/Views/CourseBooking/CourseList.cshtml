@@ -91,7 +91,7 @@
         <div class="col-xs-12">
             <div class="col-xs-4 form-group">
                 @*<label>Month</label>
-        <select id="o_month_select" class="form-control"></select>*@
+                    <select id="o_month_select" class="form-control"></select>*@
                 <label>Month</label>
                 &nbsp;
                 &nbsp;
@@ -240,87 +240,288 @@
                     <tbody id="course_enrollee_tbl_body"></tbody>
                 </table>
 
-                @*<span>Course fee: <span id="course_fee"></span> per pax</span>
-                <br />
-                <span>Total cost: <span id="course_total_cost"></span></span>
-                <hr />
-                <span>Dorm - Standard: <span id="dorm_standard_fee"></span> per pax <span id="number_of_people_standard"></span></span>
-                <br />
-                <span>Total Dorm - Standard Cost: <span id="total_standard_fee"></span></span>
-                <br />
-                <br />
-                <span>Dorm - Superior: <span id="dorm_superior_fee"></span> per pax <span id="number_of_people_superior"></span></span>
-                <br />
-                <span>Total Dorm - Superior Cost: <span id="total_superior_fee"></span></span>
-                <br />
-                <br />
-                <span>Total cost: <span id="on_site_accommodation_total_cost"></span></span>
-                <hr />
-                <span>Off-site Accomomdation fee: <span id="off_site_accommodation_fee"></span> per pax</span>
-                <br />
-                <span>Total cost: <span id="off_site_accommodation_total_cost"></span></span>
-                <hr />
-                <span>Breakfast: <span id="breakfast_fee"></span> per pax <span id="number_of_people_b"></span></span>
-                <br />
-                <span>Lunch: <span id="lunch_fee"></span> per pax <span id="number_of_people_l"></span></span>
-                <br />
-                <span>Dinner: <span id="dinner_fee"></span> per pax <span id="number_of_people_d"></span></span>
-                <br />
-                <span>AM Snack: <span id="am_snack_fee"></span> per pax <span id="number_of_people_am"></span></span>
-                <br />
-                <span>PM Snack: <span id="pm_snack_fee"></span> per pax <span id="number_of_people_pm"></span></span>
-                <br />
-                <br />
-                <span>Total cost: <span id="meals_cost"></span></span>
-                <hr />
-
-                <span>Airport Transportation</span>
-                <br />
-                <span>Car: <span id="car_fee"></span> per pax <span id="number_of_people_car"></span></span>
-                <br />
-                <span>Mini-van: <span id="mini_van_fee"></span> per pax <span id="number_of_people_minivan"></span></span>
-                <br />
-                <span>Van: <span id="van_fee"></span> per pax <span id="number_of_people_van"></span></span>
-                <br />
-                <br />
-                <span>Total cost: <span id="transportation_cost"></span></span>
-                <br />
-                <hr />
-                <span>Daily Transportation</span>
-                <br />
-                <span>Manila</span>
-                <br />
-                <span>Car: <span id="dt_mn_car_fee"></span> per pax <span id="dt_mn_number_of_people_car"></span></span>
-                <br />
-                <span>Mini-van: <span id="dt_mn_mini_van_fee"></span> per pax <span id="dt_mn_number_of_people_minivan"></span></span>
-                <br />
-                <span>Van: <span id="dt_mn_van_fee"></span> per pax <span id="dt_mn_number_of_people_van"></span></span>
-                <br />
-                <br />
-                <span>Makati</span>
-                <br />
-                <span>Car: <span id="dt_mk_car_fee"></span> per pax <span id="dt_mk_number_of_people_car"></span></span>
-                <br />
-                <span>Mini-van: <span id="dt_mk_mini_van_fee"></span> per pax <span id="dt_mk_number_of_people_minivan"></span></span>
-                <br />
-                <span>Van: <span id="dt_mk_van_fee"></span> per pax <span id="dt_mk_number_of_people_van"></span></span>
-                <br />
-                <br />
-                <span>Pasay</span>
-                <br />
-                <span>Car: <span id="dt_pa_car_fee"></span> per pax <span id="dt_pa_number_of_people_car"></span></span>
-                <br />
-                <span>Mini-van: <span id="dt_pa_mini_van_fee"></span> per pax <span id="dt_pa_number_of_people_minivan"></span></span>
-                <br />
-                <span>Van: <span id="dt_pa_van_fee"></span> per pax <span id="dt_pa_number_of_people_van"></span></span>
-                <br />
-                <br />
-                <span>Total cost: <span id="dt_transportation_cost"></span></span>
-                <hr />
-                <span>Overall cost: <span id="dt_overall_cost"></span></span>
-                <hr />*@
-
                 <span id="message"></span>
+
+                <div class="col-xs-12" id="div_course_cost_breakdown">
+                    <hr style="border-top: 1px solid white !important"/>
+                    <h4>Course</h4>
+                    @*<div class="col-xs-4">
+                        <label class="control-label">Course Fee: </label>
+                        <span><span id="course_fee"></span></span>
+                        <br />
+                        <label class="control-label">Total Course Fee: </label>
+                        <span id="course_fee_total"></span>
+                    </div>*@
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Service Details</th>
+                                <th style="width: 16.67%">Price per pax</th>
+                                <th style="width: 16.67%">Number of Bookings</th>
+                                <th style="width: 16.67%">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="cost_course_title"></td>
+                                <td id="course_fee"></td>
+                                <td id="course_number_of_booking"></td>
+                                <td id="course_fee_total"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <label class="control-label pull-right">Total Cost: </label>
+                        </div>
+                        <div class="col-xs-2">
+                            <u class="pull-right" id="total_course_fee"></u>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12" id="div_dormitory_cost_breakdown">
+                    <hr />
+                    <h4>Dormitory</h4>
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Service Details</th>
+                                <th style="width: 16.67%">Price per Pax</th>
+                                <th style="width: 16.67%">Number of Bookings</th>
+                                <th style="width: 16.67%">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dorm - Standard</td>
+                                <td id="dorm_standard_fee"></td>
+                                <td id="number_of_people_standard"></td>
+                                <td id="dorm_standard_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Dorm - Superior</td>
+                                <td id="dorm_superios_fee"></td>
+                                <td id="number_of_people_superior"></td>
+                                <td id="dorm_superior_fee_total"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <label class="control-label pull-right">Total Cost: </label>
+                        </div>
+                        <div class="col-xs-2">
+                            <u class="pull-right" id="total_dormitory_fee"></u>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12" id="div_meals_cost_breakdown">
+                    <hr />
+                    <h4>Meals</h4>
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Service Details</th>
+                                <th style="width: 16.67%">Price per Pax</th>
+                                <th style="width: 16.67%">Number of Bookings</th>
+                                <th style="width: 16.67%">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Breakfast</td>
+                                <td id="breakfast_fee"></td>
+                                <td id="number_of_people_breakfast"></td>
+                                <td id="breakfast_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Lunch</td>
+                                <td id="lunch_fee"></td>
+                                <td id="number_of_people_lunch"></td>
+                                <td id="lunch_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Dinner</td>
+                                <td id="dinner_fee"></td>
+                                <td id="number_of_people_dinner"></td>
+                                <td id="dinner_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Morning Snack</td>
+                                <td id="amsnack_fee"></td>
+                                <td id="number_of_people_amsnack"></td>
+                                <td id="amsnack_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Afternoon Snack</td>
+                                <td id="pmsnack_fee"></td>
+                                <td id="number_of_people_pmsnack"></td>
+                                <td id="pmsnack_fee_total"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <label class="control-label pull-right">Total Cost: </label>
+                        </div>
+                        <div class="col-xs-2">
+                            <u class="pull-right" id="total_meals_fee"></u>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12" id="div_airport_transportation_cost_breakdown">
+                    <hr />
+                    <h4>Transportation - Airport Transportation</h4>
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Service Details</th>
+                                <th style="width: 16.67%">Price per Pax</th>
+                                <th style="width: 16.67%">Number of Bookings</th>
+                                <th style="width: 16.67%">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>NAIA-UMTC & VICE VERSA -- Car</td>
+                                <td id="at_car_fee"></td>
+                                <td id="number_of_people_car"></td>
+                                <td id="at_car_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>NAIA-UMTC & VICE VERSA -- Mini-Van</td>
+                                <td id="at_minivan_fee"></td>
+                                <td id="number_of_people_minivan"></td>
+                                <td id="at_minivan_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>NAIA-UMTC & VICE VERSA -- Van</td>
+                                <td id="at_van_fee"></td>
+                                <td id="number_of_people_van"></td>
+                                <td id="at_van_fee_total"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <label class="control-label pull-right">Total Cost: </label>
+                        </div>
+                        <div class="col-xs-2">
+                            <u class="pull-right" id="total_at_transportation_fee"></u>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12" id="div_daily_transportation_cost_breakdown">
+                    <hr />
+                    <h4>Transportation - Daily Transportation</h4>
+                    <span style="font-size: smaller">*Please be advised that Round Trips are considered 2 bookings</span>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">Service Details</th>
+                                <th style="width: 16.67%">Price per Pax</th>
+                                <th style="width: 16.67%">Number of Bookings</th>
+                                <th style="width: 16.67%">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Manila -- Car</td>
+                                <td id="manila_dt_car_fee"></td>
+                                <td id="manila_number_of_people_car"></td>
+                                <td id="manila_dt_car_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Manila -- Mini-Van</td>
+                                <td id="manila_dt_minivan_fee"></td>
+                                <td id="manila_number_of_people_minivan"></td>
+                                <td id="manila_dt_minivan_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Manila -- Van</td>
+                                <td id="manila_dt_van_fee"></td>
+                                <td id="manila_number_of_people_van"></td>
+                                <td id="manila_dt_van_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Makati -- Car</td>
+                                <td id="makati_dt_car_fee"></td>
+                                <td id="makati_number_of_people_car"></td>
+                                <td id="makati_dt_car_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Makati -- Mini-Van</td>
+                                <td id="makati_dt_minivan_fee"></td>
+                                <td id="makati_number_of_people_minivan"></td>
+                                <td id="makati_dt_minivan_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Makati -- Van</td>
+                                <td id="makati_dt_van_fee"></td>
+                                <td id="makati_number_of_people_van"></td>
+                                <td id="makati_dt_van_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Pasay -- Car</td>
+                                <td id="pasay_dt_car_fee"></td>
+                                <td id="pasay_number_of_people_car"></td>
+                                <td id="pasay_dt_car_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Pasay -- Mini-Van</td>
+                                <td id="pasay_dt_minivan_fee"></td>
+                                <td id="pasay_number_of_people_minivan"></td>
+                                <td id="pasay_dt_minivan_fee_total"></td>
+                            </tr>
+                            <tr>
+                                <td>Pasay -- Van</td>
+                                <td id="pasay_dt_van_fee"></td>
+                                <td id="pasay_number_of_people_van"></td>
+                                <td id="pasay_dt_van_fee_total"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <label class="control-label pull-right">Total Cost: </label>
+                        </div>
+                        <div class="col-xs-2">
+                            <u class="pull-right" id="total_dt_transportation_fee"></u>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12" id="grand_total">
+                    <hr />
+                    <div class="col-xs-12">
+                        <div class="col-xs-10">
+                            <h4 class="pull-right">Grand Total: </h4>
+                        </div>
+                        <div class="col-xs-2">
+                            <h4 class="pull-right"><u id="grand_total_cost"></u></h4>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <span style="font-size: smaller">For off-site hotel bookings breakdown, please contact the Sales and Marketing team.</span>
+                    </div>
+                    <div class="col-xs-12">
+                        <span style="font-size: smaller">E:  bookings@umtc.com.ph</span>
+                    </div>
+                    <div class="col-xs-12">
+                        <span style="font-size: smaller">T:  +63 8981 6682 local 2147, 2133, 2141, 2128 </span>
+                    </div>
+                </div>
+
+                @* v divider v*@
+                <div class="col-xs-12">
+                    <hr />
+                </div>
+                @*===============*@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>

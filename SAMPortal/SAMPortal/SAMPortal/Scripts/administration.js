@@ -538,9 +538,10 @@
                         let pickUp2 = result.data[i].SecondPickUpPlace;
                         let dropOff2 = result.data[i].SecondDropOffPlace;
                         let dateTimePickUp2 = result.data[i].SecondDateTimeOfPickUp;
+                        let areaOfDestination = result.data[i].AreaOfDestination;
 
                         content += "<tr><td>" + type + "</td><td>" + pickUp + "</td><td>" + dropOff + "</td><td>" + dateTimePickUp + "</td>" +
-                            "<td>" + pickUp2 + "</td><td>" + dropOff2 + "</td><td>" + dateTimePickUp2 + "</td></tr>"
+                            "<td>" + pickUp2 + "</td><td>" + dropOff2 + "</td><td>" + dateTimePickUp2 + "</td><td>" + areaOfDestination + "</td></tr>"
                     }
 
                     $('.modal_daily_transportation table tbody').append(content);

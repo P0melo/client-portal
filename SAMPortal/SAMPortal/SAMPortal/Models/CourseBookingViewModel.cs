@@ -52,16 +52,16 @@ namespace SAMPortal.Models
 
     public class MealCountAndTotalCostModel
     {
-        public int BreakfastCount { get; set; }
-        public int BreakfastCost { get; set; }
-        public int LunchCount { get; set; }
-        public int LunchCost { get; set; }
-        public int DinnerCount { get; set; }
-        public int DinnerCost { get; set; }
-        public int MorningSnackCount { get; set; }
-        public int MorningSnackCost { get; set; }
-        public int AfternoonSnackCount { get; set; }
-        public int AfternoonSnackCost { get; set; }
+        public int? BreakfastCount { get; set; }
+        public decimal? BreakfastCost { get; set; }
+        public int? LunchCount { get; set; }
+        public decimal? LunchCost { get; set; }
+        public int? DinnerCount { get; set; }
+        public decimal? DinnerCost { get; set; }
+        public int? MorningSnackCount { get; set; }
+        public decimal? MorningSnackCost { get; set; }
+        public int? AfternoonSnackCount { get; set; }
+        public decimal? AfternoonSnackCost { get; set; }
     }
 
     public class AirportTransportationFees
@@ -84,6 +84,14 @@ namespace SAMPortal.Models
         public string VehicleType { get; set; }
         public int Price { get; set; }
         public string Destination { get; set; }
+    }
+
+    public class DailyTransportationNumberOfBookings
+    {
+        public string Vehicle { get; set; }
+        public int NumberOfBookings { get; set; }
+        public string AreaOfDestination { get; set; }
+        public int IsRoundTrip { get; set; }
     }
 
     public class CourseNames

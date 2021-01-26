@@ -266,7 +266,7 @@
         let type = $('#transportation_type option:selected').val();
         let vehicle = $('#transportation_vehicle').val();
         let notes = $('#transportation_details').val();
-        //let areaOfDestination = $('#area_dropdown').val();
+        //let areaOfDestination = $('#pickup_to_destination_value').html();
         let schedId = "";
 
         if (typeof (hrefSplit) !== 'undefined') {
@@ -422,13 +422,15 @@
 
     $(document).on('change', '#pickup_input', function () {
         if ($('input[name=dt_optradio]:checked').val() == 2) {
-            $('#2ndpickup_input').val($(this).val());
+            $('#2nddropoff_input').val($(this).val());
+
         }
     });
 
     $(document).on('change', '#dropoff_input', function () {
         if ($('input[name=dt_optradio]:checked').val() == 2) {
-            $('#2nddropoff_input').val($(this).val());
+            $('#2ndpickup_input').val($(this).val());
+
         }
     });
 
@@ -458,7 +460,7 @@
 
     $(document).on('click', '#add_daily_transfer', function () {
         let editModalVisible = $('#edit_daily_transfer_modal').css('display') == 'block';
-        //let areaOfDestination = $('#area_dropdown').val();
+        let areaOfDestination = $('#pickup_to_destination_value').html();
         let type = "";
         let pickups = "";
         let dropoff = "";
@@ -517,7 +519,7 @@
 
 
         let details = "<tr><td>" + type + "</td><td>" + pickup + "</td><td>" + dropoff + "</td><td>" + pickup_date + " " + pickup_time + "</td><td>" + pickup_2 + "</td><td>" + dropoff_2 + "</td>" +
-            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
+            "<td>" + pickup_date_2 + " " + pickup_time_2 + "</td><td>" + areaOfDestination + "</td><td style='padding: 1px;'><button id='remove_daily_transfer_entry' dtid = '" + dailyTransferCounter + "' class='btn btn-default' style='width: 100%'><i class='fa fa-times'></i></button></td></tr > ";
 
         if (editModalVisible) {
             $('#e_daily_transfer_table div table tbody').append(details);
@@ -533,7 +535,7 @@
         entry[5] = dropoff_2;
         entry[6] = pickup_2 != '' ? pickup_date_2 + " " + pickup_time_2 : "";
         entry[7] = dailyTransferCounter;
-        //entry[8] = areaOfDestination;
+        entry[8] = areaOfDestination;
 
         dailyTransferDetails.push(entry);
 
@@ -838,4 +840,18 @@
             $('body').addClass('modal-open');
         }
     });
+
+    //$(document).on('click', '.pickup_from_destination', function () {
+    //    $('#pickup_from_destination_value').html($(this).html());
+    //});
+
+    $(document).on('click', '.pickup_to_destination', function () {
+        $('#pickup_to_destination_value').html($(this).html());
+        $('#pickup_to_destination_value').trigger('change');
+    });
+
+    $(document).on('change', '#pickup_to_destination_value', function () {
+        $('#dropoff_input').removeAttr('disabled');
+    });
+
 });

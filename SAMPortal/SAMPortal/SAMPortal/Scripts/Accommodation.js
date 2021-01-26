@@ -155,12 +155,13 @@
     });
 
     $(document).on('click', '#cancel_accommodation_btn', function () {
-
+        let thisButton = $(this);
         getServerDate().then(function (data) {
 
             // Run this when your request was successful
             let serverDate = data;//fixServerDateFormat(data);
-            let checkInDate = $('#cancel_accommodation_btn').parent().parent().children(':eq(2)').html().split(' ')[0];
+            //let checkInDate = $('#cancel_accommodation_btn').parent().parent().children(':eq(2)').html().split(' ')[0];
+            let checkInDate = thisButton.parent().parent().children(':eq(2)').html().split(' ')[0];
 
             let validatedSchedule = validateSchedule(checkInDate, serverDate);
 
@@ -169,7 +170,7 @@
                 let modalMessage = "You are no longer allowed to cancel because your accommodation will start next week. <br />If you really need to CANCEL, kindly contact our Sales and Marketing Team instead. <br /><br />T:  +63 2 981 6682 local 2133, 2141, 2144, 2133 <br />E:  marketing@umtc.com.ph";
                 generateWarningModal('cancel_reservation_not_allowed', 2, '', modalMessage);
             } else {
-                recordId = $('#cancel_accommodation_btn').attr('reservation_id');
+                recordId = thisButton.attr('reservation_id');
                 let modalMessage = "Are you sure you want to CANCEL this reservation?";
 
                 generateWarningModal('cancel_accommodation_warning_modal', 1, 'cancel_accommodation_warning_modal_yes', modalMessage);

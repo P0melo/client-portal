@@ -150,6 +150,7 @@ namespace SAMPortal.Models
         public string SecondDateTimeOfPickUp { get; set; }
         public string SecondDropOffPlace { get; set; }
         public string Notes { get; set; }
+        public string AreaOfDestination { get; set; }
 
     }
 
